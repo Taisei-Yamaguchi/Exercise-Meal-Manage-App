@@ -1,15 +1,33 @@
 import { useState, useEffect } from 'react';
+import {BrowserRouter,Route,Routes} from 'react-router-dom';
+
 import './App.css';
-import AccountCreateForm from './CreateAccount';
-import AccountList from './AccountList';
+import AccountCreateForm from './components/accounts/CreateAccount';
+import AccountList from './components/accounts/AccountList';
+import SignUp from './components/accounts/SignUp';
+import Login from './components/accounts/Login';
+import Meal from './components/meal/Meal';
 
 function App() {
   
 
   return (
     <div>
-      <AccountList />
-      <AccountCreateForm />
+
+    <BrowserRouter>
+      <Routes>
+        <Route path='accounts/list' element={<AccountList />}/>
+        <Route path='/accounts/create' element={<AccountCreateForm />}/>
+        <Route path='/accounts/signup' element={<SignUp />}/>
+        <Route path='/accounts/login' element={<Login />}/>
+        <Route path='/meals' element={<Meal />}/>
+        
+        
+      </Routes>
+    </BrowserRouter>
+      
+      
+      
     </div>
   );
 }

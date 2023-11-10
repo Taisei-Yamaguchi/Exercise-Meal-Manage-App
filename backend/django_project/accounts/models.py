@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 class CustomUser(AbstractUser):
     """Extension User Model"""
     
+    name=models.CharField(default='unkown',null=False,max_length=100)
     metabolism = models.FloatField(default=0.0)
     picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     birthday = models.DateField(null=True, blank=True)

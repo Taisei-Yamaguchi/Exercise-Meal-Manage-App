@@ -6,7 +6,7 @@ SECRET_KEY = "django-insecure-p%--f)6an-r%5&ja&3woh6g*+#2ruc1us0r7*+tvx0=5jj!!s9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 #setting of LOGGING
 LOGGING={
@@ -51,6 +51,7 @@ LOGGING={
 
 EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False
 CSRF_COOKIE_SAMESITE = None
 CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = False

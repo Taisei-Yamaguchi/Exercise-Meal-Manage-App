@@ -21,4 +21,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/', include('manage_app.urls')),
     path('accounts/', include('accounts.urls')),  # ルーティングをインクルード
+    path('meal/',include('meal.urls')),
 ]

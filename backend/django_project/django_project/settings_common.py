@@ -33,14 +33,15 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     
     "manage_app.apps.ManageAppConfig",
-    'corsheaders',
-    
     "accounts.apps.AccountsConfig",
+    "meal.apps.MealConfig",
+    
     "django.contrib.sites",
     "allauth",
     "allauth.account",
     'rest_framework',
-    
+    'corsheaders',
+    'rest_framework.authtoken',
 ]
 
 # django-allauthで利用するdjango.contirb.sitesを使うためにサイト識別用IDを設定
@@ -49,6 +50,7 @@ SITE_ID=1
 AUTHENTICATION_BACKENDS=(
     'allauth.account.auth_backends.AuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
+    # 'accounts.backends.CustomUserAuthBackend',
 )
 
 # メールアドレス認証に変更する設定
@@ -183,3 +185,21 @@ CORS_ALLOW_METHODS = [
 ]
 
 CSRF_COOKIE_HTTPONLY = False
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_DB_ALIAS = 'default'  # 使用するデータベースエイリアスを指定（デフォルトは'default'）
+SESSION_COOKIE_AGE = 900  # 15分 × 60秒
+SESSION_COOKIE_NAME = 'sessionid'
+
+CORS_ALLOWED_HEADERS = [
+    'x-userid',
+    # ... 他のヘッダー
+]
+
+# これを追加することで認証のエラーが解決した
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        # 他の認証クラスも追加できます
+    ],
+}

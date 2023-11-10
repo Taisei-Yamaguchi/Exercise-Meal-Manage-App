@@ -1,0 +1,45 @@
+// Navigation.jsx
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { useState } from 'react';
+import { useEffect } from 'react';
+
+function Navigation() {
+    const [showNav, setShowNav] = useState(false);
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+    
+        window.addEventListener('resize', handleResize);
+    
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+    
+    const handleNavClick = () => {
+        setShowNav(!showNav);
+    };
+
+
+    return (
+        <nav>
+            <h1 onClick={windowWidth <= 765 ? handleNavClick : null}>EMMA</h1>
+            <ul className={showNav ? 'show' : ''}>
+                <li>
+                    <p><NavLink to="/accounts/signup" className='nav-link' activeClassName="active">Sign Up</NavLink></p>
+                </li>
+                <li>
+                    <p><NavLink to="/accounts/login" className='nav-link' activeClassName="active">Log In</NavLink></p>
+                </li>
+                
+            </ul>
+        </nav>
+    );
+}
+
+export default Navigation;
