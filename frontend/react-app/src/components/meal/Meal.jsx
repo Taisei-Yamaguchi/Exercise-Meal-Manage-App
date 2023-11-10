@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+// import LogoutButton from './LogoutButton';
 
 
 const Meal = () => {
@@ -11,7 +11,7 @@ const Meal = () => {
         const yourAuthToken = localStorage.getItem('authToken'); // localStorage や state からトークンを取得する
         if (!yourAuthToken) {
             console.log('Token Error')
-            // navigate('../accounts/login'); // トークンがない場合はログインページにリダイレクト
+            navigate('../accounts/login'); // トークンがない場合はログインページにリダイレクト
         } else {
             fetchMeals(yourAuthToken); // トークンを使用して食事情報を取得
         }
@@ -20,8 +20,9 @@ const Meal = () => {
 
     // API経由でログインユーザーのmealを取得
     const fetchMeals = async(yourAuthToken) => {
-        const user_id = localStorage.getItem('user_id'); // ユーザーIDをlocalStorageから取得
-
+        // const user_id = localStorage.getItem'user_id'); // ユーザーIDをlocalStorageから取得
+        console.log("Fetch is called.")
+        setMeals([]); // 既存のデータをクリア
         fetch('http://127.0.0.1:8000/meal/meals/', {
             method: 'GET',
             headers: {
@@ -60,10 +61,28 @@ const Meal = () => {
         
 
     // 例：ログアウト処理
-    const handleLogout = () => {
-        // ログアウト処理を行い、ログインページにリダイレクトする
-        // ...（ログアウトの処理を実装）
-        
+    const handleLogout = async () => {
+        try {
+            const yourAuthToken = localStorage.getItem('authToken');
+    
+            // バックエンドのログアウトAPIにPOSTリクエストを送信
+            await fetch('http://127.0.0.1:8000/accounts/logout/', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Token ${yourAuthToken}`,
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                credentials: 'include',
+            });
+    
+            // ローカルで保持していた認証情報をクリア
+            localStorage.removeItem('authToken');
+    
+            // ログインページにリダイレクト
+            navigate('../accounts/login');
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
     };
 
     return (
@@ -73,12 +92,13 @@ const Meal = () => {
 
             <div>
                 {meals.map((meal, index) => (
-                    <div key={index}>
+                    <div className={`each-meal ${meal.meal_type}`} key={index}>
                         <p>Meal Date: {meal.meal_date}</p>
-                        <p>Food: {meal.food}</p>
+                        <p>Food: {meal.food.name}</p>
+                        <p>Cal: {meal.food.cal}</p>
                         <p>Meal Type: {meal.meal_type}</p>
                         <p>Meal Serving: {meal.meal_serving}</p>
-                        <p>Grams: {meal.grams}</p>
+                        
                     </div>
                 ))}
             </div>

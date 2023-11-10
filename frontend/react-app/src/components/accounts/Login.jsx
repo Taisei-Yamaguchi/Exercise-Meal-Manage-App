@@ -30,7 +30,7 @@ const Login = () => {
                 console.log(userData.token)
                 setAuthToken(userData.token);
                 localStorage.setItem('authToken', userData.token);
-                localStorage.setItem('user_id', userData.id);
+                
                 navigate('/meals');
             } else {
                 // ログイン失敗時の処理

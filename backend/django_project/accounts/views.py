@@ -9,6 +9,8 @@ from rest_framework import status
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
+
 
 
 class CustomUserCreateView(CreateAPIView):
@@ -74,6 +76,16 @@ class LoginView(APIView):
             # 認証失敗
             return Response({'username': username,'password':password}, status=status.HTTP_401_UNAUTHORIZED)
         
+        
+        
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        # トークンを無効化したり、セッションを削除したりする必要がある場合はここで処理を追加
+        request.auth.delete()  # トークンの無効化
+
+        return Response({'message': 'Logout successful.'}, status=status.HTTP_200_OK)
         
 # login check
 class UserAuthenticationView(APIView):
