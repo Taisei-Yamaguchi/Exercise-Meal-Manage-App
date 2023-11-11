@@ -78,6 +78,7 @@ class LoginView(APIView):
         
         
         
+# LogOut 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
