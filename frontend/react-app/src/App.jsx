@@ -7,6 +7,7 @@ import AccountList from './components/accounts/AccountList';
 import SignUp from './components/accounts/SignUp';
 import Login from './components/accounts/Login';
 import Meal from './components/meal/Meal';
+import ConfirmationPage from './components/accounts/ConfirmationPage';
 
 function App() {
   
@@ -21,6 +22,7 @@ function App() {
         <Route path='/accounts/signup' element={<SignUp />}/>
         <Route path='/accounts/login' element={<Login />}/>
         <Route path='/meals' element={<Meal />}/>
+        <Route path="/confirm/:uid/:token" element={<ConfirmationPage />}/>
         
         
       </Routes>

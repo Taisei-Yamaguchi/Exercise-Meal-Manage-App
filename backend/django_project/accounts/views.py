@@ -16,7 +16,9 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-
+from django.contrib.auth import get_user_model
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 
 class CustomUserCreateView(CreateAPIView):
     queryset = CustomUser.objects.all()
@@ -52,31 +54,46 @@ class SignupAPIView(APIView):
         if serializer.is_valid():
             user = serializer.save()
 
-            # トークン生成
-            email_confirmation = EmailConfirmation.create(user)
-            email_confirmation.sent = timezone.now()
-            email_confirmation.save()
-
             # トークンを含んだURLを構築
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
-            confirm_url = f"http://your-frontend-url/confirm/{uid}/{token}"
+            confirm_url = f"http://localhost:5173/confirm/{uid}/{token}"
 
-            # メール本文を作成
-            message = render_to_string('account/email/confirmation_signup_message.txt', {
-                'user': user,
-                'confirm_url': confirm_url,
-            })
+            # とりあえず、ターミナルから確認
+            print(confirm_url)
+            # # メール本文を作成
+            # message = render_to_string('account/email/confirmation_signup_message.txt', {
+            #     'user': user,
+            #     'confirm_url': confirm_url,
+            # })
 
-            # メール送信
-            send_mail('Confirm your email', message, 'from@example.com', [user.email])
+            # # メール送信
+            # send_mail('Confirm your email', message, 'from@example.com', [user.email])
 
             return Response({'detail': 'Check your email for confirmation.'}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     
-    
+# Signup Confirmation via email.
+class ConfirmEmailAPIView(APIView):
+    def post(self, request):
+        uidb64 = request.data.get('uid')
+        token = request.data.get('token')
+
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = get_user_model().objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            # トークンが有効な場合、email_check を True に変更
+            user.email_check = True
+            user.save()
+            return Response({'detail': 'Email confirmed successfully.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'Invalid token or user not found.'}, status=status.HTTP_400_BAD_REQUEST)
     
     
     
@@ -96,12 +113,7 @@ class LoginView(APIView):
         ):
             # 認証成功
             login(request, user)
-            print(user.id)
-            request.session['user_id']=user.id
-            # request.session['test']='session_test'
-            print(request.user)
-            # print(request.session['test'])
-            
+
             token, created = Token.objects.get_or_create(user=user)  # トークンを取得
 
             user_details = {
@@ -117,10 +129,12 @@ class LoginView(APIView):
             }
             
             request.user = user
-            print('login done')
+
             return Response(user_details, status=status.HTTP_200_OK)
         else:
             # 認証失敗
+            if(user.email_check==False):
+                print('not eamil check yet')
             return Response({'username': username,'password':password}, status=status.HTTP_401_UNAUTHORIZED)
         
         
