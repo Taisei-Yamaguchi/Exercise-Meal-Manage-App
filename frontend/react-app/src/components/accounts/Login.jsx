@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navigation from '../Navigation';
 import { useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -58,7 +59,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
             />
             <button onClick={handleLogin}>Login</button>
-
+            <p><NavLink to="../accounts/password_reset_request">Did you forget your password?</NavLink></p>
             {/* ログインユーザー情報を表示
             <div>
                 {loginUser && (

@@ -19,6 +19,9 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth import get_user_model
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from django.http import Http404
 
 class CustomUserCreateView(CreateAPIView):
     queryset = CustomUser.objects.all()
@@ -57,7 +60,7 @@ class SignupAPIView(APIView):
             # トークンを含んだURLを構築
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
-            confirm_url = f"http://localhost:5173/confirm/{uid}/{token}"
+            confirm_url = f"http://localhost:5173/accounts/confirm/{uid}/{token}"
 
             # とりあえず、ターミナルから確認
             print(confirm_url)
@@ -81,8 +84,12 @@ class ConfirmEmailAPIView(APIView):
         uidb64 = request.data.get('uid')
         token = request.data.get('token')
 
+        
         try:
-            uid = force_str(urlsafe_base64_decode(uidb64))
+            if uidb64 is None:
+                return Response({'detail': 'uid is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            uid = urlsafe_base64_decode(uidb64).decode('utf-8')
             user = get_user_model().objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist):
             user = None
@@ -97,7 +104,77 @@ class ConfirmEmailAPIView(APIView):
     
     
     
-    
+# Pasword Reset Request
+class PasswordResetRequestAPIView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        user = get_object_or_404(CustomUser, email=email)
+
+        # Create a password reset token
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+
+        user.password_reset_token = token
+        user.password_reset_sent = timezone.now()
+        user.save()
+
+        # Send the reset link to the user's email (replace with your email sending logic)
+        reset_url = f"http://localhost:5173/accounts/password_reset/{uid}/{token}"
+        print(reset_url)  # For testing purposes
+
+        return Response({'detail': 'Password reset link sent successfully.'}, status=status.HTTP_200_OK)
+
+
+
+# Passowrd Reset system
+class PasswordResetConfirmAPIView(APIView):
+    def post(self, request):
+        uidb64 = request.data.get('uid')
+        token = request.data.get('token')
+        new_password = request.data.get('new_password')
+        
+        print('uidb64',uidb64)
+        print('token',token)
+        # hashed_password = make_password(new_password)
+        # ハッシュ化したパスワードをセット
+        # new_password = hashed_password
+
+        try:
+            # uid = force_str(urlsafe_base64_decode(uidb64))
+            # user = get_object_or_404(CustomUser, pk=uid)
+            
+            uid = urlsafe_base64_decode(uidb64).decode('utf-8')
+            user = get_user_model().objects.get(pk=uid)
+            print(uid)
+        
+
+            # Check if the token is valid and not expired
+            if (
+                user is not None 
+                and default_token_generator.check_token(user, token) 
+                # and (timezone.now() - user.password_reset_sent).days < 1
+            ):
+                # Set the new password. ここでhash化モスル
+                user.set_password(new_password)
+                user.save()
+
+                # Invalidate the token
+                user.password_reset_token = None
+                user.password_reset_sent = None
+                user.save()
+
+                return Response({'detail': 'Password reset successful.'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'detail': 'Invalid or expired token.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+            return Response({'detail': 'Invalid uid.'}, status=status.HTTP_400_BAD_REQUEST)
+        except get_user_model().DoesNotExist:
+            return Response({'detail': 'Invalid uid.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+        
+        
 # Login
 class LoginView(APIView):
     def post(self, request):
