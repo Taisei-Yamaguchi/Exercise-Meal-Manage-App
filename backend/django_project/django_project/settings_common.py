@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "allauth",
     "allauth.account",
+    'allauth.socialaccount',
     'rest_framework',
     'corsheaders',
     'rest_framework.authtoken',
@@ -55,12 +56,12 @@ AUTHENTICATION_BACKENDS=(
 
 # メールアドレス認証に変更する設定
 ACCOUNT_AUTHENTICATION_METHOD= 'email'
-ACCOUNT_USERNAME_REQUIRED= False
+ACCOUNT_USERNAME_REQUIRED= True
 
 #サインアップにメールアドレス確認を挟むよう設定尾
 ACCOUNT_EMAIL_VERIFICATION= 'mandatory'
 ACCOUNT_EMAIL_REQUIRED= True
-
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 # ログイン/ログアウトの遷移先を設定
 LOGIN_REDIRECT_URL= 'diary:diary_list'
 ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
@@ -191,10 +192,6 @@ SESSION_DB_ALIAS = 'default'  # 使用するデータベースエイリアスを
 SESSION_COOKIE_AGE = 900  # 15分 × 60秒
 SESSION_COOKIE_NAME = 'sessionid'
 
-CORS_ALLOWED_HEADERS = [
-    'x-userid',
-    # ... 他のヘッダー
-]
 
 # これを追加することで認証のエラーが解決した
 REST_FRAMEWORK = {

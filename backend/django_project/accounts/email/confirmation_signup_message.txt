@@ -1,0 +1,2 @@
+Please click thi link
+{{activate_url}}

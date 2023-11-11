@@ -9,6 +9,7 @@ class CustomUser(AbstractUser):
     picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     birthday = models.DateField(null=True, blank=True)
     sex = models.BooleanField(default=False) # 0 is male, 1 is female.
+    email_check = models.BooleanField(default=False, null=True, blank=True) #email_check
     
     class Meta:
         verbose_name_plural ='CustomUser'
