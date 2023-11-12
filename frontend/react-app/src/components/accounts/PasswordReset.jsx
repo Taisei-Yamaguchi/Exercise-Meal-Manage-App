@@ -3,10 +3,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const PasswordResetPage = () => {
   const [newPassword, setNewPassword] = useState('');
   const { uid, token} = useParams();
+  const navigation=useNavigate();
 
   const handlePasswordReset = async () => {
     try {
@@ -17,6 +19,8 @@ const PasswordResetPage = () => {
       });
       console.log(response.data);  // バックエンドからのレスポンスを確認
       // パスワードリセットが成功したら適切な処理を行う
+      navigation('/accounts/login')
+
     } catch (error) {
       console.error(error);
       // エラー処理を行う

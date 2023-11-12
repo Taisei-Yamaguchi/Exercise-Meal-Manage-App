@@ -23,29 +23,6 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.http import Http404
 
-class CustomUserCreateView(CreateAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
-
-
-class CustomUserList(generics.ListAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
-    
-# Sign Up
-# class SignupAPIView(APIView):
-#     def post(self, request):
-#         # ユーザーが送信したパスワードをハッシュ化
-#         hashed_password = make_password(request.data['password'])
-#         # ハッシュ化したパスワードをセット
-#         request.data['password'] = hashed_password
-        
-#         serializer = CustomUserSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
 #Sign Up with Email Confirm
 class SignupAPIView(APIView):
@@ -70,7 +47,7 @@ class SignupAPIView(APIView):
             #     'confirm_url': confirm_url,
             # })
 
-            # # メール送信
+            # # 実際にはここでメール送信
             # send_mail('Confirm your email', message, 'from@example.com', [user.email])
 
             return Response({'detail': 'Check your email for confirmation.'}, status=status.HTTP_201_CREATED)
@@ -114,12 +91,13 @@ class PasswordResetRequestAPIView(APIView):
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         token = default_token_generator.make_token(user)
 
-        user.password_reset_token = token
+        # user.password_reset_token = token
         user.password_reset_sent = timezone.now()
         user.save()
 
         # Send the reset link to the user's email (replace with your email sending logic)
         reset_url = f"http://localhost:5173/accounts/password_reset/{uid}/{token}"
+        # 実際にはここでemail送信をする。
         print(reset_url)  # For testing purposes
 
         return Response({'detail': 'Password reset link sent successfully.'}, status=status.HTTP_200_OK)
@@ -133,33 +111,23 @@ class PasswordResetConfirmAPIView(APIView):
         token = request.data.get('token')
         new_password = request.data.get('new_password')
         
-        print('uidb64',uidb64)
-        print('token',token)
-        # hashed_password = make_password(new_password)
-        # ハッシュ化したパスワードをセット
-        # new_password = hashed_password
-
         try:
-            # uid = force_str(urlsafe_base64_decode(uidb64))
-            # user = get_object_or_404(CustomUser, pk=uid)
             
             uid = urlsafe_base64_decode(uidb64).decode('utf-8')
             user = get_user_model().objects.get(pk=uid)
-            print(uid)
-        
-
+            
             # Check if the token is valid and not expired
             if (
                 user is not None 
                 and default_token_generator.check_token(user, token) 
-                # and (timezone.now() - user.password_reset_sent).days < 1
+                and (timezone.now() - user.password_reset_sent).days < 1
             ):
-                # Set the new password. ここでhash化モスル
+                # Set the new password. ここでhash化もする
                 user.set_password(new_password)
                 user.save()
 
                 # Invalidate the token
-                user.password_reset_token = None
+                
                 user.password_reset_sent = None
                 user.save()
 
@@ -231,11 +199,3 @@ class LogoutView(APIView):
         
         
         
-        
-# # login check
-# class UserAuthenticationView(APIView):
-#     def post(self, request):
-#         if request.user.is_authenticated:
-#             return Response("User is authenticated.", status=status.HTTP_200_OK)
-#         else:
-#             return Response("Authentication required.", status=status.HTTP_401_UNAUTHORIZED)

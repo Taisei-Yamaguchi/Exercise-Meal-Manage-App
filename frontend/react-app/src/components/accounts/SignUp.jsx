@@ -11,6 +11,7 @@ const SignUp = () => {
         sex: 0,
         birthday: '',
     });
+    const [mes,setMes]=useState('')
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -32,7 +33,8 @@ const SignUp = () => {
             });
             const data = await response.json();
             console.log(data); // サーバーからのレスポンスをログ出力
-            // リダイレクトまたは他の処理を行う
+            
+            setMes('We sent the link to yur email. Please check and avtivate your account. Your account is not available yet.')
         } catch (error) {
             console.error('Error:', error);
             // エラーハンドリング
@@ -98,6 +100,7 @@ const SignUp = () => {
                 <input type="date" name="birthday" value={userData.birthday} onChange={handleChange} />
                 <button type="submit">Sign Up</button>
             </form>
+            {mes}
         </div>
     );
 };
