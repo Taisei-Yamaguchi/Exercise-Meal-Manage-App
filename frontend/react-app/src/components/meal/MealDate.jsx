@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '../Navigation';
 import MealCreateForm from './MealCreate';
+import { useParams } from 'react-router-dom';
 // import LogoutButton from './LogoutButton';
 
 
-const Meal = () => {
+const MealDate = () => {
+    const { date } = useParams();
     const [meals, setMeals] = useState([]);
     const navigate=useNavigate()
     const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack'];
@@ -17,17 +19,22 @@ const Meal = () => {
             console.log('Token Error')
             navigate('../accounts/login'); // トークンがない場合はログインページにリダイレクト
         } else {
-            fetchMeals(yourAuthToken); // トークンを使用して食事情報を取得
+            console.log(date)
+            fetchMealsByDate(yourAuthToken); // トークンを使用して食事情報を取得
         }
-    }, []);
+    }, [MealCreateForm]);
     
 
     // API経由でログインユーザーのmealを取得
-    const fetchMeals = async(yourAuthToken) => {
+    const fetchMealsByDate = async(yourAuthToken) => {
         // const user_id = localStorage.getItem'user_id'); // ユーザーIDをlocalStorageから取得
         console.log("Fetch is called.")
+        
         setMeals([]); // 既存のデータをクリア
-        fetch('http://127.0.0.1:8000/meal/meals/', {
+
+        const url = `http://127.0.0.1:8000/meal/meals/date/?meal_date=${date}`;
+
+        fetch(url, {
             method: 'GET',
             headers: {
                 'Authorization': `Token ${yourAuthToken}`, // トークンを設定
@@ -98,7 +105,7 @@ const Meal = () => {
             {mealTypes.map((type) => (
                 <div key={type} className='meal-group'>
                 <h2>{type} Meals</h2>
-                
+                <MealCreateForm meal_type={type} meal_date={date}/>
                 {/* Filter meals based on the current type */}
                 {meals
                     .filter((meal) => meal.meal_type === type)
@@ -118,4 +125,4 @@ const Meal = () => {
         
 };
 
-export default Meal;
+export default MealDate;

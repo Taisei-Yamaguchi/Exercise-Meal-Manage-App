@@ -9,6 +9,12 @@ function Navigation() {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
 
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
+
+
     useEffect(() => {
         const handleResize = () => {
             setWindowWidth(window.innerWidth);
@@ -44,6 +50,9 @@ function Navigation() {
                 </li>
                 <li>
                     <p><NavLink to="/meal/food-list" className='nav-link' activeclassname="active">Food List</NavLink></p>
+                </li>
+                <li>
+                    <p><NavLink to={`/meals/date/${formattedDate}`} className='nav-link' activeclassname="active">Meals Today</NavLink></p>
                 </li>
             </ul>
         </nav>

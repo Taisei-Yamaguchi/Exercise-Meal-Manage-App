@@ -13,6 +13,8 @@ import PasswordResetPage from './components/accounts/PasswordReset';
 import FoodForm from './components/meal/FoodPost';
 import FoodList from './components/meal/FoodList';
 
+import MealDate from './components/meal/MealDate';
+
 function App() {
   
 
@@ -30,6 +32,7 @@ function App() {
         <Route path="/accounts/password_reset/:uid/:token" element={<PasswordResetPage/>}/>
         <Route path="/meal/food" element={<FoodForm />}/>
         <Route path="/meal/food-list" element={<FoodList />}/>
+        <Route path="/meals/date/:date" element={<MealDate />}/>
 
       </Routes>
     </BrowserRouter>
