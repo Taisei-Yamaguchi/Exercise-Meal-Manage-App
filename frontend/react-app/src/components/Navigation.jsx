@@ -36,7 +36,15 @@ function Navigation() {
                 <li>
                     <p><NavLink to="/accounts/login" className='nav-link' activeclassname="active">Log In</NavLink></p>
                 </li>
-                
+                <li>
+                    <p><NavLink to="/meals" className='nav-link' activeclassname="active">Meals</NavLink></p>
+                </li>
+                <li>
+                    <p><NavLink to="/meal/food" className='nav-link' activeclassname="active">Food Post</NavLink></p>
+                </li>
+                <li>
+                    <p><NavLink to="/meal/food-list" className='nav-link' activeclassname="active">Food List</NavLink></p>
+                </li>
             </ul>
         </nav>
     );

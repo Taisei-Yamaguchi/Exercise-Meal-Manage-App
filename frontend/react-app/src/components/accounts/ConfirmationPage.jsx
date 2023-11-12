@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Navigation from '../Navigation';
 
 const ConfirmationPage = () => {
     const { uid, token } = useParams();
@@ -19,6 +20,7 @@ const ConfirmationPage = () => {
     
         return (
         <div>
+            <Navigation />
             <p>Confirmation in progress...</p>
             {/* Add a button to trigger the confirmEmail function */}
             <button onClick={confirmEmail}>Confirm Email</button>

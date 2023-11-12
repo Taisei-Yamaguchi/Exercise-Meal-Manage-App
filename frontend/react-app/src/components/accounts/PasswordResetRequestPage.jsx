@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
+import Navigation from '../Navigation';
 
 const PasswordResetRequestPage = () => {
   const [email, setEmail] = useState('');
@@ -24,6 +25,7 @@ const PasswordResetRequestPage = () => {
 
   return (
     <div>
+      <Navigation />
       <h2>Password Reset Request</h2>
       {requestSent ? (
         <p>Check your email for the password reset link.</p>

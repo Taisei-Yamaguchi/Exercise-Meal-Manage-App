@@ -11,6 +11,7 @@ import PasswordResetRequestPage from './components/accounts/PasswordResetRequest
 import PasswordResetPage from './components/accounts/PasswordReset';
 
 import FoodForm from './components/meal/FoodPost';
+import FoodList from './components/meal/FoodList';
 
 function App() {
   
@@ -28,7 +29,8 @@ function App() {
         <Route path="/accounts/password_reset_request" element={<PasswordResetRequestPage/>}/>
         <Route path="/accounts/password_reset/:uid/:token" element={<PasswordResetPage/>}/>
         <Route path="/meal/food" element={<FoodForm />}/>
-        
+        <Route path="/meal/food-list" element={<FoodList />}/>
+
       </Routes>
     </BrowserRouter>
       

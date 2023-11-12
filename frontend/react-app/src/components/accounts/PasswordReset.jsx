@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import Navigation from '../Navigation';
 
 const PasswordResetPage = () => {
   const [newPassword, setNewPassword] = useState('');
@@ -29,6 +30,7 @@ const PasswordResetPage = () => {
 
   return (
     <div>
+      <Navigation />
       <h2>Password Reset</h2>
       <label htmlFor="new-password">New Password:</label>
       <input

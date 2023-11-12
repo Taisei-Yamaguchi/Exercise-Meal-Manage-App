@@ -33,6 +33,21 @@ class FoodPostView(APIView):
         
     
     
+# Food List 自分が登録したFoodを確認する。
+class FoodListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # ログインユーザーに関連するFoodを取得
+        user_id = request.user.id
+        if user_id is not None:
+            
+            foods = Food.objects.filter(account=user_id)
+            
+            serialized_foods = FoodSerializer(foods, many=True)
+            return Response({'foods':serialized_foods.data})
+        else:
+            return Response({'detail': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
     
     
     

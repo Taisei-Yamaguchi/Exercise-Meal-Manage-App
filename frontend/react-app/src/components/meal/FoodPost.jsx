@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-
+import { useNavigate } from 'react-router-dom';
+import Navigation from '../Navigation';
 
 const FoodForm = () => {
+    const navigate= useNavigate()
     const [name, setName] = useState('');
     const [cal, setCal] = useState('');
     const [amount_per_serving,setAmount_per_servnig] =useState('');
@@ -68,6 +70,7 @@ const FoodForm = () => {
 
     return (
         <div>
+            <Navigation />
             <div className='food-form'>
                 <label>Name:<input type="text" value={name} onChange={(e) => setName(e.target.value)} /></label>
                 <label>Cal (kcal):<input type="number" value={cal} onChange={(e) => setCal(e.target.value)} /></label>
