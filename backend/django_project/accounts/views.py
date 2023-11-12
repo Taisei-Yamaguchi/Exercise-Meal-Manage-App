@@ -43,7 +43,7 @@ class SignupAPIView(APIView):
             print(confirm_url)
             # # メール本文を作成
             # message = render_to_string('account/email/confirmation_signup_message.txt', {
-            #     'user': user,
+            #     'user': user.name,
             #     'confirm_url': confirm_url,
             # })
 
@@ -97,8 +97,17 @@ class PasswordResetRequestAPIView(APIView):
 
         # Send the reset link to the user's email (replace with your email sending logic)
         reset_url = f"http://localhost:5173/accounts/password_reset/{uid}/{token}"
-        # 実際にはここでemail送信をする。
+        
         print(reset_url)  # For testing purposes
+        # # メール本文を作成
+        # message = render_to_string('account/email/reset_password_message.txt', {
+        #     'user': user.name,
+        #     'rest_url': reset_url,
+        # })
+
+        # # 実際にはここでメール送信
+        # send_mail('Confirm your email', message, 'from@example.com', [user.email])
+
 
         return Response({'detail': 'Password reset link sent successfully.'}, status=status.HTTP_200_OK)
 
@@ -193,9 +202,4 @@ class LogoutView(APIView):
         request.auth.delete()  # トークンの無効化
 
         return Response({'message': 'Logout successful.'}, status=status.HTTP_200_OK)
-        
-        
-        
-        
-        
         
