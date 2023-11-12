@@ -9,6 +9,33 @@ from .serializers import MealSerializer, FoodSerializer
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
+
+#post food, save food information. ユーザーが自分用のfoodを登録し後で、mealの記録をつける際に使えるようにする。
+class FoodPostView(APIView):
+    permission_classes = [IsAuthenticated]  # ユーザーが認証されていることを確認
+    
+    def post(self, request):
+        # ログインユーザーを取得
+        user = self.request.user
+        if user.is_authenticated:
+            # POSTデータをシリアライザに渡す
+            request.data['account'] = user.id
+            serializer = FoodSerializer(data=request.data)
+            if serializer.is_valid():
+                # ログインユーザーに紐付けて保存
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                print(serializer.errors)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'detail': 'Authentication credentials were not provided.'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+    
+    
+    
+    
+    
 class MealAccessView(APIView):
     permission_classes = [IsAuthenticated]  # ユーザーが認証されていることを確認
 

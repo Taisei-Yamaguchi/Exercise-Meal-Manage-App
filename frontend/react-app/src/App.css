@@ -61,3 +61,8 @@
 .snack{
   background-color: aqua;
 }
+
+.food-form{
+  display: flex;
+  flex-direction: column;
+}
