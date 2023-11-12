@@ -1,0 +1,4 @@
+Hello, {{user}}.
+
+Please click this link and activate your new account.
+{{confirm_url}}

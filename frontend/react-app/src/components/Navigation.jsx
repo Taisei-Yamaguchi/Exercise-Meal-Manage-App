@@ -31,10 +31,10 @@ function Navigation() {
             <h1 onClick={windowWidth <= 765 ? handleNavClick : null}>EMMA</h1>
             <ul className={showNav ? 'show' : ''}>
                 <li>
-                    <p><NavLink to="/accounts/signup" className='nav-link' activeClassName="active">Sign Up</NavLink></p>
+                    <p><NavLink to="/accounts/signup" className='nav-link' activeclassname="active">Sign Up</NavLink></p>
                 </li>
                 <li>
-                    <p><NavLink to="/accounts/login" className='nav-link' activeClassName="active">Log In</NavLink></p>
+                    <p><NavLink to="/accounts/login" className='nav-link' activeclassname="active">Log In</NavLink></p>
                 </li>
                 
             </ul>
