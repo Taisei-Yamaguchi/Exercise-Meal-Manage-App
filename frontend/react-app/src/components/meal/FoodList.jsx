@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '../Navigation';
-import getCookie from '../helpers/getCookie';
-import MealCreateForm from './MealCreate';
 // import LogoutButton from './LogoutButton';
 
 
-const Meal = () => {
-    const [meals, setMeals] = useState([]);
+const FoodList = () => {
+    const [foods, setFoods] = useState([]);
     const navigate=useNavigate()
-    const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack'];
-
 
     useEffect(() => {
         const yourAuthToken = localStorage.getItem('authToken'); // localStorage や state からトークンを取得する
@@ -18,17 +14,17 @@ const Meal = () => {
             console.log('Token Error')
             navigate('../accounts/login'); // トークンがない場合はログインページにリダイレクト
         } else {
-            fetchMeals(yourAuthToken); // トークンを使用して食事情報を取得
+            fetchFoods(yourAuthToken); // トークンを使用して食事情報を取得
         }
     }, []);
     
 
     // API経由でログインユーザーのmealを取得
-    const fetchMeals = async(yourAuthToken) => {
+    const fetchFoods = async(yourAuthToken) => {
         // const user_id = localStorage.getItem'user_id'); // ユーザーIDをlocalStorageから取得
         console.log("Fetch is called.")
-        setMeals([]); // 既存のデータをクリア
-        fetch('http://127.0.0.1:8000/meal/meals/', {
+        setFoods([]); // 既存のデータをクリア
+        fetch('http://127.0.0.1:8000/meal/food/list/', {
             method: 'GET',
             headers: {
                 'Authorization': `Token ${yourAuthToken}`, // トークンを設定
@@ -43,15 +39,23 @@ const Meal = () => {
             }
             throw new Error('Failed to fetch meals');
         })
-        .then(mealData => {
-            setMeals(mealData.meals);
-            console.log(mealData)
+        .then(FoodData => {
+            setFoods(FoodData.foods);
+            console.log(FoodData)
         })
         .catch(error => {
             console.error('Error:', error);
         });
     };
 
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        
+        if (parts.length === 2) {
+            return parts.pop().split(';').shift();
+        }
+    }
     
     
 
@@ -85,30 +89,24 @@ const Meal = () => {
     return (
         <div>
             <Navigation />
-            <h1>Meal Page</h1>
+            <h1>Fodd List</h1>
             <button onClick={handleLogout}>Logout</button>
-        
-            {mealTypes.map((type) => (
-                <div key={type} className='meal-group'>
-                <h2>{type} Meals</h2>
-                
-                {/* Filter meals based on the current type */}
-                {meals
-                    .filter((meal) => meal.meal_type === type)
-                    .map((meal, index) => (
-                    <div className={`each-meal ${meal.meal_type}`} key={index}>
-                        <p>Meal Date: {meal.meal_date}</p>
-                        <p>Food: {meal.food.name}</p>
-                        <p>Cal: {meal.food.cal}</p>
-                        <p>Meal Type: {meal.meal_type}</p>
-                        <p>Meal Serving: {meal.meal_serving}</p>
+
+            <div>
+                {foods.map((food, index) => (
+                    <div className={`each-meal ${food.id}`} key={index}>
+                        <p>Name: {food.name}</p>
+                        <p>Cal: {food.cal} cal</p>
+                        <p>Amount Per Serving: {food.amount_per_serving}</p>
+                        <p>Carbohydrate: {food.carbohydrate} g</p>
+                        <p>Fat: {food.fat} g</p>
+                        <p>Protein: {food.protein} g</p>
+                        
                     </div>
-                    ))}
-                </div>
-            ))}
+                ))}
             </div>
-        );
-        
+        </div>
+    );
 };
 
-export default Meal;
+export default FoodList;
