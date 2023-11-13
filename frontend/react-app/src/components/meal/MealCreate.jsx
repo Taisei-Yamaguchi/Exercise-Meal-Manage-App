@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function MealCreateForm({meal_type,meal_date}) {
     
     const [foods, setFoods] = useState([]);
     const [selectedFood, setSelectedFood] = useState('');
     const [serving, setServing] = useState(1);
-
+    const navigate=useNavigate()
     
     
     useEffect(() => {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '../Navigation';
+import getCookie from '../helpers/getCookie';
 import MealCreateForm from './MealCreate';
 // import LogoutButton from './LogoutButton';
 
@@ -51,14 +52,6 @@ const Meal = () => {
         });
     };
 
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        
-        if (parts.length === 2) {
-            return parts.pop().split(';').shift();
-        }
-    }
     
     
 

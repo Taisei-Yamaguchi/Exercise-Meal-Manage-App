@@ -10,6 +10,10 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 import logging
+from rest_framework.generics import DestroyAPIView
+
+
+
 
 #post food, save food information. ユーザーが自分用のfoodを登録し後で、mealの記録をつける際に使えるようにする。
 class FoodPostView(APIView):
@@ -32,6 +36,8 @@ class FoodPostView(APIView):
         else:
             return Response({'detail': 'Authentication credentials were not provided.'}, status=status.HTTP_401_UNAUTHORIZED)
         
+    
+    
     
     
 # Food List 自分が登録したFoodを確認する。
@@ -146,3 +152,45 @@ class MealAccessView(APIView):
         else:
             print('認証失敗')
             return Response({'error': 'Authentication required.'}, status=401)
+        
+        
+        
+        
+# update meal, mainly serving and grams.
+class MealUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, meal_id):
+        user = self.request.user
+
+        if user.is_authenticated:
+            meal = get_object_or_404(Meal, id=meal_id, account=user.id)
+            serializer = MealSerializer(instance=meal, data=request.data, partial=True)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                print(serializer.errors)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'detail': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+        
+        
+        
+        
+# Meal Delete
+class MealDeleteView(DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Meal.objects.all()
+    serializer_class = MealSerializer
+    
+
+    def perform_destroy(self, instance):
+        # ログインユーザーと meal の所有者が一致するか確認
+        if self.request.user == instance.account:
+            instance.delete()
+        else:
+            # 一致しない場合は権限エラーを返す
+            return Response({'detail': 'You do not have permission to delete this meal.'}, status=status.HTTP_403_FORBIDDEN)

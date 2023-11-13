@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import Navigation from '../Navigation';
 import MealCreateForm from './MealCreate';
 import { useParams } from 'react-router-dom';
+import MealUpdate from './MealUpdate';
+import MealDelete from './MealDelete';
+import getCookie from '../helpers/getCookie';
 // import LogoutButton from './LogoutButton';
 
 
@@ -22,7 +25,7 @@ const MealDate = () => {
             console.log(date)
             fetchMealsByDate(yourAuthToken); // トークンを使用して食事情報を取得
         }
-    }, [MealCreateForm]);
+    }, []);
     
 
     // API経由でログインユーザーのmealを取得
@@ -57,16 +60,6 @@ const MealDate = () => {
             console.error('Error:', error);
         });
     };
-
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        
-        if (parts.length === 2) {
-            return parts.pop().split(';').shift();
-        }
-    }
-    
     
 
         
@@ -99,7 +92,7 @@ const MealDate = () => {
     return (
         <div>
             <Navigation />
-            <h1>Meal Page</h1>
+            <h1>Meal {date}</h1>
             <button onClick={handleLogout}>Logout</button>
         
             {mealTypes.map((type) => (
@@ -111,11 +104,24 @@ const MealDate = () => {
                     .filter((meal) => meal.meal_type === type)
                     .map((meal, index) => (
                     <div className={`each-meal ${meal.meal_type}`} key={index}>
-                        <p>Meal Date: {meal.meal_date}</p>
-                        <p>Food: {meal.food.name}</p>
-                        <p>Cal: {meal.food.cal}</p>
-                        <p>Meal Type: {meal.meal_type}</p>
-                        <p>Meal Serving: {meal.meal_serving}</p>
+                        <MealUpdate mealId={meal.id} />
+                        <MealDelete mealId={meal.id}/>
+                        {/* <p>Meal Date: {meal.meal_date}</p> */}
+                        <p>{meal.food.name}</p>
+                        {/* <p>Cal: {meal.food.cal}</p> */}
+                        
+                        {meal.meal_serving !== null && meal.meal_serving !== 0 ? (
+                            <div>
+                                <p>{meal.meal_serving} servings</p>
+                                <p>{meal.food.cal * meal.meal_serving} (kcal)</p>
+                            </div>
+                            ) : (
+                            <div>
+                                <p>{meal.grams} (g)</p>
+                                <p>{meal.food.cal * (meal.grams / meal.food.amount_per_serving)} kcal</p>
+                            </div>
+                        )}
+                        
                     </div>
                     ))}
                 </div>
