@@ -55,6 +55,12 @@ function Navigation() {
                     <p><NavLink to={`/meals/date/${formattedDate}`} className='nav-link' activeclassname="active">Meals Today</NavLink></p>
                 </li>
                 <li>
+                    <p><NavLink to="/exercise/workout-create" className='nav-link' activeclassname="active">Workout Post</NavLink></p>
+                </li>
+                <li>
+                    <p><NavLink to="/exercise/workout-list" className='nav-link' activeclassname="active">WorkoutList</NavLink></p>
+                </li>
+                <li>
                     <p><NavLink to="/user_info" className='nav-link' activeclassname="active">User Info</NavLink></p>
                 </li>
             </ul>
