@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Workout,Exercise
-from .serializers import WorkoutSerializer,ExerciseSerializer
+from .serializers import WorkoutSerializer,ExerciseSerializer,DExerciseSerializer,WExerciseSerializer
 from rest_framework.permissions import IsAuthenticated
 from .default_workout import default_workout_data
 from django.shortcuts import get_object_or_404
@@ -50,6 +50,32 @@ class WorkoutCreateView(APIView):
 
 
 #get Exercise By Date
+class ExerciseGetByDateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = self.request.user
+
+        if user.is_authenticated:
+            # クエリパラメータから日付を取得
+            exercise_date = self.request.query_params.get('date', None)
+
+            if not exercise_date:
+                return Response({'detail': 'exercise_date parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # 指定された日付と一致するExercise(workoutをもつもの)を取得
+            workout_exercise = Exercise.objects.filter(account=user.id, exercise_date=exercise_date,workout__isnull=False)
+            default_workout_exercise= Exercise.objects.filter(account=user.id, exercise_date=exercise_date,default_workout__isnull=False)
+            # シリアライザを使ってデータを整形
+            w_exercise_serializer = WExerciseSerializer(workout_exercise, many=True).data
+            d_exercise_serializer = DExerciseSerializer(default_workout_exercise, many=True).data
+            return Response({'w_exercise':w_exercise_serializer,'d_exercise':d_exercise_serializer}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'Authentication credentials were not provided.'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        
+        
+        
 
 #create new Exercise
 class ExerciseCreateView(APIView):
@@ -64,15 +90,18 @@ class ExerciseCreateView(APIView):
                 workout_id = request.data['workout_id']
 
                 # workout_idが数字の場合はworkoutに関連付け
-                if isinstance(workout_id, int):
+                if workout_id.isdigit():
                     #workoutが存在しかつ、workoutのaccountがログインユーザーと一致するかチェック
+                    print(workout_id)
                     workout = get_object_or_404(Workout, id=workout_id, account=user.id)
                     if workout is not None: 
                         request.data['workout']=workout_id
+                        request.data['workout_id'] =None
 
                 # workout_idが文字列の場合はdefault_workoutに関連付け
                 elif isinstance(workout_id, str):
                     # workout_idと一致するIDを持つ要素を抽出
+                    print(workout_id)
                     matching_default_workout = next(
                         (item for item in default_workout_data if item['id'] == workout_id),
                         None
@@ -80,6 +109,7 @@ class ExerciseCreateView(APIView):
                     
                     if matching_default_workout:
                         request.data['default_workout']=matching_default_workout
+                        request.data['workout_id'] =None
                     else:
                         # 一致するIDが見つからなかった場合のエラー処理を追加
                         return Response({'detail': 'Matching default workout not found.'}, status=status.HTTP_400_BAD_REQUEST)

@@ -44,7 +44,7 @@ class Exercise(models.Model):
     distance = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     
     mets = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
-    memos = models.TextField(blank=True)
+    memos = models.TextField(blank=True,null=True)
 
     def __str__(self):
         return f"Exercise {self.id} ({self.account.name}) on {self.exercise_date}"
@@ -57,3 +57,5 @@ class Exercise(models.Model):
         # workout と default_workout のどちらか一方しか指定できない
         if self.workout and self.default_workout:
             raise ValidationError("Only one of 'workout' or 'default_workout' should be provided.")
+
+        

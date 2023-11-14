@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import getCookie from '../helpers/getCookie';
+
 
 function MealCreateForm({meal_type,meal_date}) {
     
@@ -48,15 +50,6 @@ function MealCreateForm({meal_type,meal_date}) {
             console.error('Error:', error);
         });
     };
-
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        
-        if (parts.length === 2) {
-            return parts.pop().split(';').shift();
-        }
-    }
 
 
 

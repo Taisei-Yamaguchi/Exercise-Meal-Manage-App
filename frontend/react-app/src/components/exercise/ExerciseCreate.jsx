@@ -4,19 +4,14 @@ import { useParams } from 'react-router-dom';
 import getCookie from '../helpers/getCookie';
 
 
-const ExerciseCreate = () => {
+const ExerciseCreate = ({workoutType,exercise_date}) => {
     const navigate=useNavigate()
-    const { date } = useParams();
-
-    
-
-    // const [loading, setLoading] = useState(false);
-    // const [error, setError] = useState('');
-
-    
+    // const { date } = useParams();
+    const [workouts,setWorkouts]= useState([])
+    const [default_workouts,setDefaultWorkouts]= useState([])
     const [formData, setFormData] = useState({
-        workout_id: 1,
-        exercise_date: date,
+        workout_id: '',
+        exercise_date: exercise_date,
 
         sets: null,
         reps: null,
@@ -28,20 +23,49 @@ const ExerciseCreate = () => {
         memos: null
     });
 
+    // const [loading, setLoading] = useState(false);
+    // const [error, setError] = useState('');
+
     useEffect(() => {
         const yourAuthToken = localStorage.getItem('authToken'); // localStorage や state からトークンを取得する
         if (!yourAuthToken) {
             console.log('Token Error')
             navigate('../accounts/login'); // トークンがない場合はログインページにリダイレクト
-        } 
+        }else{
+            fetchWorkouts()
+        }
     }, []);
 
+    useEffect(()=>{
+        console.log(formData.workout_id)
+    },[formData])
 
 
 
+    // fetch workouts and use in form.
+    const fetchWorkouts = async () => {
+        try {
+            const authToken = localStorage.getItem('authToken');
+            const response = await fetch('http://127.0.0.1:8000/exercise/get-workout/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${authToken}`,
+                'X-CSRFToken': getCookie('csrftoken') ,
+            },
+            });
+
+            const data = await response.json();
+            setWorkouts(data.workout);
+            setDefaultWorkouts(data.default_workout)
+        } catch (error) {
+            console.error('Error fetching workouts:', error);
+        }
+    };
+
+
+    // post exercise
     const handleCreateExercise = async () => {
-        
-
         try {
             const authToken = localStorage.getItem('authToken');
             const response = await fetch('http://127.0.0.1:8000/exercise/post-exercise/', {
@@ -65,6 +89,9 @@ const ExerciseCreate = () => {
         } 
     };
 
+
+
+    // detect change of form.
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         console.log(name,value)
@@ -72,18 +99,15 @@ const ExerciseCreate = () => {
 
         // If the value is an empty string, set it to null
         if(name === 'workout_id'){
-            const sanitizedValue = value==='' ? null :parseInt(value)
+            const sanitizedValue = parseInt(value) ? parseInt(value) : value;
             setFormData((prevData) => ({ ...prevData, [name]: sanitizedValue }));
+            
         }else{
             const sanitizedValue = value === '' ? null : value;
             if (name !== 'date') {
                 setFormData((prevData) => ({ ...prevData, [name]: sanitizedValue }));
             }
         }
-        
-        
-        
-    
     };
 
 
@@ -96,14 +120,89 @@ const ExerciseCreate = () => {
 
             <label>
                 Workout ID:
-                <input 
-                name='workout_id'
-                type="number" 
-                value={formData.workout_id ===null?'':formData.workout_id} 
-                onChange={handleInputChange} />
+                <select
+                    name='workout_id'
+                    value={formData.workout_id === null ? '' : formData.workout_id}
+                    onChange={handleInputChange}
+                >
+                    <option value='' disabled>Select a workout</option>
+                    {workouts
+                    .filter((workout)=>workout.workout_type===workoutType)
+                    .map((workout) => (
+                        <div><option key={workout.id} value={workout.id}>
+                        {workout.name}
+                    </option>
+                    <p>{workout.workout_type}</p></div>
+                        
+                    ))}
+                    {default_workouts
+                    .filter((workout)=>workout.workout_type===workoutType)
+                    .map((workout) => (
+                        <option key={workout.id} value={workout.id}>
+                            {workout.name}
+                        </option>
+                    ))}
+                </select>
             </label>
 
-            <label>
+
+        {workoutType === 'Aerobic' ? (
+            <>
+                <label>
+                    Distance:
+                    <input
+                        name='distance'
+                        type="number"
+                        value={formData.distance === null ? '' : formData.distance}
+                        onChange={handleInputChange}
+                    />
+                </label>
+
+                <label>
+                    Duration (minutes):
+                    <input
+                        name="duration_minutes"
+                        type="number"
+                        value={formData.duration_minutes === null ? '' : formData.duration_minutes}
+                        onChange={handleInputChange}
+                    />
+                </label>
+            </>
+        ) : (
+            <>
+                <label>
+                    Sets:
+                    <input
+                        name='sets'
+                        type="number"
+                        value={formData.sets === null ? '' : formData.sets}
+                        onChange={handleInputChange}
+                    />
+                </label>
+
+                <label>
+                    Reps:
+                    <input
+                        name='reps'
+                        type="number"
+                        value={formData.reps === null ? '' : formData.reps}
+                        onChange={handleInputChange}
+                    />
+                </label>
+
+                <label>
+                    Weight (kg):
+                    <input
+                        name='weight_kg'
+                        type="number"
+                        value={formData.weight_kg === null ? '' : formData.weight_kg}
+                        onChange={handleInputChange}
+                    />
+                </label>
+            </>
+        )}
+
+            {/* <label>
                 Sets:
                 <input 
                 name='sets'
@@ -146,7 +245,7 @@ const ExerciseCreate = () => {
                 type="number" 
                 value={formData.distance ===null?'':formData.distance} 
                 onChange={handleInputChange} />
-            </label>
+            </label> */}
 
             <label>
                 METs:

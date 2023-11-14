@@ -20,6 +20,7 @@ import UserInfoForm from './components/user_info/UserInfoFrom';
 import WorkoutForm from './components/exercise/WorkoutForm';
 import WorkoutList from './components/exercise/WorkoutList';
 import ExerciseCreate from './components/exercise/ExerciseCreate';
+import ExerciseDate from './components/exercise/ExerciseDate';
 
 function App() {
   
@@ -43,6 +44,7 @@ function App() {
         <Route path="/exercise/workout-create" element={<WorkoutForm />}/>
         <Route path="/exercise/workout-list" element={<WorkoutList/>}/>
         <Route path="/exercise/exercise-create/:date" element={<ExerciseCreate />}/>
+        <Route path="/exercise/date/:date" element={<ExerciseDate />}/>
         
 
       </Routes>
