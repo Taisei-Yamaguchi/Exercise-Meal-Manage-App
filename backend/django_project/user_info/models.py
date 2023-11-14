@@ -6,8 +6,9 @@ class UserInfo(models.Model):
     account = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # ユーザーに関連付ける外部キー
     date = models.DateField()  
     
-    height = models.FloatField(null=True, blank=True, validators=[MinValueValidator(1)])
-    weight = models.FloatField(null=True, blank=True, validators=[MinValueValidator(1)])
+    height = models.FloatField( validators=[MinValueValidator(1)])
+    weight = models.FloatField( validators=[MinValueValidator(1)])
+    
     body_fat_percentage = models.FloatField(null=True, blank=True, validators=[MinValueValidator(1)])
     muscle_mass = models.FloatField(null=True, blank=True, validators=[MinValueValidator(1)])
     metabolism = models.FloatField(null=True, blank=True, validators=[MinValueValidator(1)])
@@ -17,5 +18,5 @@ class UserInfo(models.Model):
     
 
     def __str__(self):
-        return f'{self.user.username} - {self.date}-UserInfo'
+        return f'{self.account.username} - {self.date}-UserInfo'
 

@@ -70,3 +70,8 @@
 .meal-group{
   border:solid;
 }
+
+.user-info-form{
+  display: flex;
+  flex-direction: column;
+}
