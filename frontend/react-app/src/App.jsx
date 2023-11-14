@@ -15,6 +15,8 @@ import FoodList from './components/meal/FoodList';
 
 import MealDate from './components/meal/MealDate';
 
+import UserInfoForm from './components/user_info/UserInfoFrom';
+
 function App() {
   
 
@@ -33,6 +35,7 @@ function App() {
         <Route path="/meal/food" element={<FoodForm />}/>
         <Route path="/meal/food-list" element={<FoodList />}/>
         <Route path="/meals/date/:date" element={<MealDate />}/>
+        <Route path="/user_info" element={<UserInfoForm />}/>
 
       </Routes>
     </BrowserRouter>
