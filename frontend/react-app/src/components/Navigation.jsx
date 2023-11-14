@@ -58,10 +58,13 @@ function Navigation() {
                     <p><NavLink to="/exercise/workout-create" className='nav-link' activeclassname="active">Workout Post</NavLink></p>
                 </li>
                 <li>
-                    <p><NavLink to="/exercise/workout-list" className='nav-link' activeclassname="active">WorkoutList</NavLink></p>
+                    <p><NavLink to="/exercise/workout-list" className='nav-link' activeclassname="active">Workout List</NavLink></p>
                 </li>
                 <li>
                     <p><NavLink to="/user_info" className='nav-link' activeclassname="active">User Info</NavLink></p>
+                </li>
+                <li>
+                    <p><NavLink to={`/exercise/exercise-create/${formattedDate}`} className='nav-link' activeclassname="active">Exercise Create</NavLink></p>
                 </li>
             </ul>
         </nav>
