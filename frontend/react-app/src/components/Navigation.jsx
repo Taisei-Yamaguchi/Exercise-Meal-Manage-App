@@ -64,9 +64,6 @@ function Navigation() {
                     <p><NavLink to="/user_info" className='nav-link' activeclassname="active">User Info</NavLink></p>
                 </li>
                 <li>
-                    <p><NavLink to={`/exercise/exercise-create/${formattedDate}`} className='nav-link' activeclassname="active">Exercise Create</NavLink></p>
-                </li>
-                <li>
                     <p><NavLink to={`/exercise/date/${formattedDate}`} className='nav-link' activeclassname="active">Exercise List</NavLink></p>
                 </li>
             </ul>

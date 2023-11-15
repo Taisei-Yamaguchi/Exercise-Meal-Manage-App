@@ -58,4 +58,4 @@ class Exercise(models.Model):
         if self.workout and self.default_workout:
             raise ValidationError("Only one of 'workout' or 'default_workout' should be provided.")
 
-        
+    

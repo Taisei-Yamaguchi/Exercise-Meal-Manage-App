@@ -99,9 +99,13 @@ const ExerciseCreate = ({workoutType,exercise_date}) => {
 
         // If the value is an empty string, set it to null
         if(name === 'workout_id'){
-            const sanitizedValue = parseInt(value) ? parseInt(value) : value;
-            setFormData((prevData) => ({ ...prevData, [name]: sanitizedValue }));
-            
+            const isNumeric = /^\d+$/.test(value); // 数字かどうかチェック
+            console.log(isNumeric)
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: isNumeric ? Number(value) : value,
+                
+            }));
         }else{
             const sanitizedValue = value === '' ? null : value;
             if (name !== 'date') {
@@ -129,10 +133,10 @@ const ExerciseCreate = ({workoutType,exercise_date}) => {
                     {workouts
                     .filter((workout)=>workout.workout_type===workoutType)
                     .map((workout) => (
-                        <div><option key={workout.id} value={workout.id}>
+                        <option key={workout.id} value={workout.id}>
                         {workout.name}
                     </option>
-                    <p>{workout.workout_type}</p></div>
+
                         
                     ))}
                     {default_workouts

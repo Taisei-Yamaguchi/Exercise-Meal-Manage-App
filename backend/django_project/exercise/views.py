@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Workout,Exercise
-from .serializers import WorkoutSerializer,ExerciseSerializer,DExerciseSerializer,WExerciseSerializer
+from .serializers import WorkoutSerializer,POSTExerciseSerializer,DExerciseSerializer,WExerciseSerializer
 from rest_framework.permissions import IsAuthenticated
 from .default_workout import default_workout_data
 from django.shortcuts import get_object_or_404
@@ -90,18 +90,27 @@ class ExerciseCreateView(APIView):
                 workout_id = request.data['workout_id']
 
                 # workout_idが数字の場合はworkoutに関連付け
-                if workout_id.isdigit():
+                if isinstance(workout_id, int):
+                    print(f"Type of request.data: {type(request.data)}")
+                    print(f"Type of workout_id: {type(workout_id)}")
                     #workoutが存在しかつ、workoutのaccountがログインユーザーと一致するかチェック
-                    print(workout_id)
+                    print('workout_id=number',workout_id)
                     workout = get_object_or_404(Workout, id=workout_id, account=user.id)
+                    print('workout',workout)
+                    
                     if workout is not None: 
-                        request.data['workout']=workout_id
+                        print('workout.id',workout.id)
+                        request.data['workout']=workout.id
                         request.data['workout_id'] =None
+                        
+                        print('request.data[workout]',request.data['workout'])
+                    print(f"Type of workout: {type(request.data['workout'])}")
 
                 # workout_idが文字列の場合はdefault_workoutに関連付け
                 elif isinstance(workout_id, str):
                     # workout_idと一致するIDを持つ要素を抽出
-                    print(workout_id)
+                    print('workout_id=str',workout_id)
+                    
                     matching_default_workout = next(
                         (item for item in default_workout_data if item['id'] == workout_id),
                         None
@@ -122,7 +131,9 @@ class ExerciseCreateView(APIView):
                 request.data['account']=user.id
                 
                 # Exerciseを作成
-                serializer = ExerciseSerializer(data=request.data)
+                
+                print(f"Type of request.data: {type(request.data)}")
+                serializer = POSTExerciseSerializer(data=request.data)
                 if serializer.is_valid():
                     serializer.save()
                     return Response(serializer.data, status=status.HTTP_201_CREATED)

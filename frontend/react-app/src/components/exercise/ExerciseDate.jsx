@@ -53,6 +53,7 @@ const ExerciseDate = () => {
         <div>
             <Navigation />
             <h2>Exercise Data by Date</h2>
+            <h3>{date}</h3>
             <div>
                 {workoutTypes.map((workoutType)=>(
                     <div key={workoutType} className='exercise-group'>
