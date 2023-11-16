@@ -3,14 +3,17 @@ import getCookie from '../helpers/getCookie';
 import { useNavigate, useParams } from 'react-router-dom';
 import Navigation from '../Navigation';
 import ExerciseCreate from './ExerciseCreate';
+import ExerciseDeleteButton from './ExerciseDelete';
+import ExerciseUpdateForm from './ExerciseUpdate';
 
 const ExerciseDate = () => {
     const navigate = useNavigate();
     const { date } = useParams();
-    const [exerciseData, setExerciseData] = useState([]);
+    const [exerciseData, setExerciseData] = useState(null);
     const [defaultExerciseData, setDefaultExerciseData] = useState([]);
     const workoutTypes = ['Chest', 'Back', 'Shoulder', 'Arm','Leg','Abs','Other'];
     const workoutType_aerobic ='Aerobic';
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const yourAuthToken = localStorage.getItem('authToken');
@@ -21,6 +24,12 @@ const ExerciseDate = () => {
             fetchExerciseData();
         }
     }, []);
+
+    useEffect(() => {
+        // fetchExerciseDataが完了したら実行される
+        // exerciseDataとdefaultExerciseDataが設定された後に実行される
+        console.log('Data has been updated:', exerciseData, defaultExerciseData);
+    }, [exerciseData, defaultExerciseData]);
 
     
     const fetchExerciseData = async () => {
@@ -46,8 +55,15 @@ const ExerciseDate = () => {
 
         } catch (error) {
             console.error('Error fetching exercise data:', error);
+        } finally {
+            // fetchが完了したらloadingをfalseに設定
+            setLoading(false);
         }
     };
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div>
@@ -63,7 +79,9 @@ const ExerciseDate = () => {
                         .filter((exercise)=>exercise.workout.workout_type === workoutType)
                         .map((exercise)=>(
                             <div key={exercise.id} className={`each-exercise ${workoutType}`}>
-                                <p>Date : {exercise.exercise_date}</p>
+                                <ExerciseDeleteButton exerciseId={exercise.id}/>
+                                <ExerciseUpdateForm exerciseId={exercise.id} workoutType={workoutType} exerciseData={exercise}/>
+                                <p>ID: {exercise.id}</p>
                                 <p>Exercise : {exercise.workout.name}</p>
                                 
                             </div>
@@ -73,7 +91,9 @@ const ExerciseDate = () => {
                         .filter((exercise)=>exercise.default_workout.workout_type === workoutType)
                         .map((exercise)=>(
                             <div key={exercise.id} className={`each-exercise ${workoutType}`}>
-                                <p>Date : {exercise.exercise_date}</p>
+                                <ExerciseDeleteButton exerciseId={exercise.id}/>
+                                <ExerciseUpdateForm exerciseId={exercise.id} workoutType={workoutType} exerciseData={exercise}/>
+                                <p>ID : {exercise.id}</p>
                                 <p>Exercise : {exercise.default_workout.name}</p>
                                 
                             </div>
@@ -87,7 +107,9 @@ const ExerciseDate = () => {
                         .filter((exercise)=>exercise.workout.workout_type === workoutType_aerobic)
                         .map((exercise)=>(
                             <div key={exercise.id} className={`each-exercise ${workoutType_aerobic}`}>
-                                <p>Date : {exercise.exercise_date}</p>
+                                <ExerciseDeleteButton exerciseId={exercise.id}/>
+                                <ExerciseUpdateForm exerciseId={exercise.id} workoutType={workoutType_aerobic} exerciseData={exercise}/>
+                                <p>ID : {exercise.id}</p>
                                 <p>Exercise : {exercise.workout.name}</p>
                                 
                             </div>
@@ -97,7 +119,10 @@ const ExerciseDate = () => {
                         .filter((exercise)=>exercise.default_workout.workout_type === workoutType_aerobic)
                         .map((exercise)=>(
                             <div key={exercise.id} className={`each-exercise ${workoutType_aerobic}`}>
-                                <p>Date : {exercise.exercise_date}</p>
+                                
+                                <ExerciseDeleteButton exerciseId={exercise.id} />
+                                <ExerciseUpdateForm exerciseId={exercise.id} workoutType={workoutType_aerobic} exerciseData={exercise}/>
+                                <p>ID : {exercise.id}</p>
                                 <p>Exercise : {exercise.default_workout.name}</p>
                                 
                             </div>

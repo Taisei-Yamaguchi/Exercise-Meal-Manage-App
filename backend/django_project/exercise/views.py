@@ -7,6 +7,7 @@ from .serializers import WorkoutSerializer,POSTExerciseSerializer,DExerciseSeria
 from rest_framework.permissions import IsAuthenticated
 from .default_workout import default_workout_data
 from django.shortcuts import get_object_or_404
+from rest_framework.generics import  DestroyAPIView
 
 
 # get Workout
@@ -57,12 +58,13 @@ class ExerciseGetByDateView(APIView):
         user = self.request.user
 
         if user.is_authenticated:
-            # クエリパラメータから日付を取得
+            # クエリパラメータから日付を取得。日付におうじて返すデータを決める
             exercise_date = self.request.query_params.get('date', None)
 
             if not exercise_date:
                 return Response({'detail': 'exercise_date parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
+            # workoutをもつexerciseとえdfault_workoutをもつexerciseを別に返す。
             # 指定された日付と一致するExercise(workoutをもつもの)を取得
             workout_exercise = Exercise.objects.filter(account=user.id, exercise_date=exercise_date,workout__isnull=False)
             default_workout_exercise= Exercise.objects.filter(account=user.id, exercise_date=exercise_date,default_workout__isnull=False)
@@ -85,7 +87,8 @@ class ExerciseCreateView(APIView):
         user = self.request.user
         if user.is_authenticated:
 
-            # 受け取ったデータから適切な処理を行う
+            # 受け取ったデータから適切な処理を行う.
+            #　フロントからはworkoutかworkout_defaultかではなく、それを最初に判別するためのworkout_idが送られる
             if 'workout_id' in request.data:
                 workout_id = request.data['workout_id']
 
@@ -131,7 +134,7 @@ class ExerciseCreateView(APIView):
                 request.data['account']=user.id
                 
                 # Exerciseを作成
-                
+                # workoutモデルが必須ではないので、それと関連づけれていない専用のserializer classを使う。
                 print(f"Type of request.data: {type(request.data)}")
                 serializer = POSTExerciseSerializer(data=request.data)
                 if serializer.is_valid():
@@ -148,3 +151,44 @@ class ExerciseCreateView(APIView):
         else:
             return Response({'detail': 'Authentication credentials were not provided.'}, status=status.HTTP_401_UNAUTHORIZED)
         
+
+
+
+
+# exercise Update
+class ExerciseUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, exercise_id):
+        user = self.request.user
+
+        #指定されたexercise_idを、requestから渡されたデータで補完する形でuppdateする。
+        if user.is_authenticated:
+            exercise = get_object_or_404(Exercise, id=exercise_id, account=user.id)
+            serializer = POSTExerciseSerializer(exercise, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                print(serializer.errors)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        else:
+            return Response({'detail': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+
+
+#exercise Delete
+class ExerciseDeleteView(DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Exercise.objects.all()
+    serializer_class = POSTExerciseSerializer
+    
+
+    def perform_destroy(self, instance):
+        # ログインユーザーと exerciseのaccountが一致するか判定
+        if self.request.user == instance.account:
+            instance.delete()
+        else:
+            # 一致しない場合は権限エラーを返す
+            return Response({'detail': 'You do not have permission to delete this meal.'}, status=status.HTTP_403_FORBIDDEN)
