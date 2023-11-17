@@ -22,6 +22,8 @@ import WorkoutList from './components/exercise/WorkoutList';
 import ExerciseCreate from './components/exercise/ExerciseCreate';
 import ExerciseDate from './components/exercise/ExerciseDate';
 
+import WeightGraph from './components/graph/WeightGraph';
+
 function App() {
   
 
@@ -45,6 +47,7 @@ function App() {
         <Route path="/exercise/workout-list" element={<WorkoutList/>}/>
         <Route path="/exercise/exercise-create/:date" element={<ExerciseCreate />}/>
         <Route path="/exercise/date/:date" element={<ExerciseDate />}/>
+        <Route path="/graph/weight-graph" element={<WeightGraph />}/>
         
 
       </Routes>

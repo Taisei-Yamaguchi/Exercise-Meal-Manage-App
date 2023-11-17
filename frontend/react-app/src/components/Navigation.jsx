@@ -66,6 +66,9 @@ function Navigation() {
                 <li>
                     <p><NavLink to={`/exercise/date/${formattedDate}`} className='nav-link' activeclassname="active">Exercise List</NavLink></p>
                 </li>
+                <li>
+                <p><NavLink to="/graph/weight-graph" className='nav-link' activeclassname="active">Weight Graph</NavLink></p>
+                </li>
             </ul>
         </nav>
     );

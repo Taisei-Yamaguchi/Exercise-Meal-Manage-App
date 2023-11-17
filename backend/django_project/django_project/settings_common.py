@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "meal.apps.MealConfig",
     "user_info.apps.UserInfoConfig",
     "exercise.apps.ExerciseConfig",
+    "graph.apps.GraphConfig",
     
     "django.contrib.sites",
     "allauth",
