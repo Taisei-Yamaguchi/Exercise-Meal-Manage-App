@@ -28,6 +28,7 @@ function Navigation() {
         { to: "/graph/weight-graph", label: "Weight Graph" },
         { to: "/graph/body-fat-percentage-graph", label: "Body Fat Graph" },
         { to: "/graph/muscle-mass-graph", label: "Muscle Mass Graph" },
+        { to: "/graph/total-weight-graph", label: "Total Weight Graph" },
     ];
 
     return (

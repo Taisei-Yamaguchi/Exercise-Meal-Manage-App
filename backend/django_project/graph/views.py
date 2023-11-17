@@ -8,7 +8,12 @@ from user_info.models import UserInfo
 from .serializers import WeightDataSerializer,BodyFatDataSerializer,MuscleMassDataSerializer
 from rest_framework.permissions import IsAuthenticated
 from datetime import timedelta, date
-
+from django.db.models import Sum,F, ExpressionWrapper, fields, IntegerField,FloatField
+from django.db.models.functions import Coalesce
+from django.http import JsonResponse
+import json
+from exercise.models import Exercise,Workout
+from django.db.models.functions import Cast
 
 
 # weight data for creating weight graph. weightの毎日の変化を折れ線グラフにする。
@@ -126,3 +131,62 @@ class MuscleMassDataAPIView(APIView):
 
         return Response({'muscle_mass_data': serialized_data, 'latest_muscle_mass_target': latest_muscle_mass_target},
                         status=status.HTTP_200_OK)
+        
+        
+        
+        
+class ExerciseTotalWeightGraphDataAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # 筋トレ部位別総重量グラフのデータを取得
+        total_weight_data = Exercise.objects.filter(account=request.user,workout__isnull=False).exclude(workout__workout_type='Aerobic').values('workout__workout_type').annotate(
+            total_weight=Coalesce(
+                Cast(
+                    Sum(
+                    Cast(F('weight_kg'), FloatField()) *
+                    Cast(F('sets'), FloatField()) *
+                    Cast(F('reps'), FloatField()),
+                    output_field=FloatField()  
+                ),
+                FloatField()
+                ),
+                Cast(0, FloatField())
+            )
+        )
+
+        # デフォルトのワークアウトも取得
+        default_workout_weight = Exercise.objects.filter(account=request.user,default_workout__isnull=False).exclude(default_workout__isnull=True, default_workout__workout_type='Aerobic').values('default_workout__workout_type').annotate(
+            total_weight=Coalesce(
+                Cast(
+                    Sum(
+                    Cast(F('weight_kg'), FloatField()) *
+                    Cast(F('sets'), FloatField()) *
+                    Cast(F('reps'), FloatField()),
+                    output_field=FloatField()  
+                ),
+                FloatField()
+                ),
+                Cast(0, FloatField())
+            )
+        )
+        
+        print("total_weight_data:", total_weight_data)
+        print("default_workout_weight:", default_workout_weight)
+
+        #  それぞれの結果をディクショナリに格納
+        total_weight_data_dict = {item['workout__workout_type']: item['total_weight'] for item in total_weight_data}
+        default_workout_weight_dict = {item['default_workout__workout_type']: item['total_weight'] for item in default_workout_weight}
+
+        # ディクショナリを結合
+        result = {key: total_weight_data_dict.get(key, 0) + default_workout_weight_dict.get(key, 0) for key in set(total_weight_data_dict) | set(default_workout_weight_dict)}
+
+        print("result:", result)
+        # 結果をリストに変換
+        result_list = [{'workout__workout_type': key, 'total_weight': value} for key, value in result.items()]
+
+        # 総合計を計算
+        grand_total = sum(item['total_weight'] for item in result_list)
+        
+        # 結果と総合計を別々に返す
+        return Response({'result_list': result_list, 'grand_total': grand_total}, status=status.HTTP_200_OK)
