@@ -23,6 +23,8 @@ import ExerciseCreate from './components/exercise/ExerciseCreate';
 import ExerciseDate from './components/exercise/ExerciseDate';
 
 import WeightGraph from './components/graph/WeightGraph';
+import BodyFatPercentageGraph from './components/graph/BodyFatPercentage';
+import MuscleMassGraph from './components/graph/MuscleMassGraph';
 
 function App() {
   
@@ -48,7 +50,8 @@ function App() {
         <Route path="/exercise/exercise-create/:date" element={<ExerciseCreate />}/>
         <Route path="/exercise/date/:date" element={<ExerciseDate />}/>
         <Route path="/graph/weight-graph" element={<WeightGraph />}/>
-        
+        <Route path="/graph/body-fat-percentage-graph" element={<BodyFatPercentageGraph />}/>
+        <Route path="/graph/muscle-mass-graph" element={<MuscleMassGraph />}/>
 
       </Routes>
     </BrowserRouter>

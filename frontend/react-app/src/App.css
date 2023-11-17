@@ -119,3 +119,18 @@
 .Aerobic{
   background-color: burlywood;
 }
+
+
+.nav-menu{
+  display: none;
+}
+
+.show{
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-toggle{
+  cursor: pointer;
+
+}
