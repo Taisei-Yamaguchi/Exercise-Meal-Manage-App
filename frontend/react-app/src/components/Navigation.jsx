@@ -5,6 +5,8 @@ import { NavLink } from 'react-router-dom';
 function Navigation() {
     const [showNav, setShowNav] = useState(false);
 
+    const workout_type='Chest';
+
     const currentDate = new Date();
     const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
         .toString()
@@ -28,8 +30,9 @@ function Navigation() {
         { to: "/graph/weight-graph", label: "Weight Graph" },
         { to: "/graph/body-fat-percentage-graph", label: "Body Fat Graph" },
         { to: "/graph/muscle-mass-graph", label: "Muscle Mass Graph" },
-        { to: "/graph/total-weight-graph", label: "Total Weight Graph" },
+        { to: "/graph/total-weight-graph", label: "Exercise Total Weight Graph" },
         { to: `/graph/nutrients/${formattedDate}`, label: "Daily Nutrients Graph" },
+        { to: `/graph/daily-exercise-weight/${workout_type}`, label: "Daily Exercise Weight Graph" },
     ];
 
     return (

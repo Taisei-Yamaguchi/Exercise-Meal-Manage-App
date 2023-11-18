@@ -3,10 +3,13 @@ import getCookie from '../helpers/getCookie';
 import { Bar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import Navigation from '../Navigation';
+import { useParams } from 'react-router-dom';
 
-const TotalWeightGraph = () => {
-    const [totalWeightData, setTotalWeightData] = useState([]);
-    const [grandWeight,setGrandWeight]= useState('')
+const DailyExerciseWeightGraph = () => {
+    const [dailyExerciseWeightData, setDailyExerciseWeightData] = useState([]);
+    const {workout_type} =useParams();
+    const start_date='2023-11-12'
+    const end_date='2023-11-17'
     const [error, setError] = useState(null);
     // const chartRef = useRef(null); // チャートの参照
 
@@ -15,7 +18,10 @@ const TotalWeightGraph = () => {
         console.log('start fetch');
         try {
             const authToken = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:8000/graph/total-weight-graph/', {
+            const response = await fetch
+            (`http://127.0.0.1:8000/graph/daily-total-weight-graph/?workout_type=${workout_type}`, 
+            
+            {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,8 +35,9 @@ const TotalWeightGraph = () => {
             }
 
             const data = await response.json();
-            setTotalWeightData(data.result_list);
-            setGrandWeight(data.grand_total);
+            setDailyExerciseWeightData(data);
+            console.log(data)
+            
 
             // // Chartを破棄
             // if (chartRef.current) {
@@ -52,14 +59,14 @@ const TotalWeightGraph = () => {
     }, []); // 依存する変数はありません
 
     // Check if data is not yet fetched
-    if (!totalWeightData.length) {
+    if (!dailyExerciseWeightData.length) {
         return <p>Loading...</p>;
     }
 
     // // ラベルとデータを用意
     // Extracting labels and total weights from the data
-    const labels = totalWeightData.map(entry => entry.workout__workout_type);
-    const weights = totalWeightData.map(entry => entry.total_weight);
+    const labels = dailyExerciseWeightData.map(entry => entry.exercise_date);
+    const weights = dailyExerciseWeightData.map(entry => entry.total_weight);
 
      // Chart.js data
     const data = {
@@ -80,11 +87,12 @@ const TotalWeightGraph = () => {
     return (
         <div>
             <Navigation />
-            <h1>Total Weight Graph</h1>
+            <h1>Daily Weight Graph</h1>
+            <h2>{workout_type}</h2>
             <Bar data={data} height={300}/>
-            <h2>Grand Total Weight: {grandWeight} (kg)</h2>
+            
         </div>
     );
 };
 
-export default TotalWeightGraph;
+export default DailyExerciseWeightGraph;

@@ -7,7 +7,7 @@ from rest_framework import status
 from user_info.models import UserInfo
 from .serializers import WeightDataSerializer,BodyFatDataSerializer,MuscleMassDataSerializer
 from rest_framework.permissions import IsAuthenticated
-from datetime import timedelta, date
+from datetime import timedelta, datetime,date
 from django.db.models import Sum,F, ExpressionWrapper, fields, IntegerField,FloatField, Value,Case, When
 from django.db.models.functions import Coalesce
 from django.http import JsonResponse
@@ -16,6 +16,9 @@ from exercise.models import Exercise,Workout
 from django.db.models.functions import Cast
 from meal.models import Meal,Food
 from django.core.serializers.json import DjangoJSONEncoder
+from django.utils import timezone
+from django.db.models import Q
+from django.db.models import Min
 
 
 # weight data for creating weight graph. weightの毎日の変化を折れ線グラフにする。
@@ -226,3 +229,61 @@ class DailyNutrientsGraphDataAPIView(APIView):
         
         return Response(total_nutrients, status=status.HTTP_200_OK)
 
+
+
+
+
+class DailyExerciseWeightGraphDataAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        # フロントエンドから指定されたworkout_typeと日付の範囲
+        workout_type = request.query_params.get('workout_type', None)
+        start_date = request.query_params.get('start_date', None)
+        end_date = request.query_params.get('end_date', timezone.now().date())
+
+        # start_dateがNoneの場合、今日の日付から30日前の日付に設定
+        oldest_exercise_date = Exercise.objects.filter(account=request.user).aggregate(Min('exercise_date'))['exercise_date__min']
+        start_date = oldest_exercise_date if oldest_exercise_date else timezone.now().date()
+        
+        # 指定されたworkout_typeに対応するexerciseデータの抽出
+        if workout_type != 'All':
+            exercises = Exercise.objects.filter(
+                Q(account=request.user, workout__workout_type=workout_type, exercise_date__range=(start_date, end_date)) |
+                Q(account=request.user, workout=None, default_workout__workout_type=workout_type, exercise_date__range=(start_date, end_date))
+            )
+        else:
+            exercises = Exercise.objects.filter(
+                Q(account=request.user, exercise_date__range=(start_date, end_date))
+            )
+            
+
+        # 各日の合計重量の計算
+        daily_weights = exercises.values('exercise_date').annotate(
+            total_weight=Coalesce(
+                Cast(
+                    Sum(
+                    Cast(F('weight_kg'), FloatField()) *
+                    Cast(F('sets'), FloatField()) *
+                    Cast(F('reps'), FloatField()),
+                    output_field=FloatField()  
+                ),
+                FloatField()
+                ),
+                Cast(0, FloatField())
+            )
+        ).order_by('exercise_date')
+
+
+        # データが存在しない日の追加
+        existing_dates = set(item['exercise_date'] for item in daily_weights)
+        missing_dates = set(start_date + timezone.timedelta(days=x) for x in range((end_date - start_date).days + 1)) - existing_dates
+
+        for date in missing_dates:
+            daily_weights = list(daily_weights)
+            daily_weights.append({'exercise_date': date, 'total_weight': 0})
+
+        # 日付でソート
+        daily_weights = sorted(daily_weights, key=lambda x: x['exercise_date'])
+
+
+        return Response(daily_weights)
