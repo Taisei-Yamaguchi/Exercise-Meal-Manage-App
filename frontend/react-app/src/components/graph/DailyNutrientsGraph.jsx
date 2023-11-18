@@ -3,11 +3,12 @@ import getCookie from '../helpers/getCookie';
 import { Bar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import Navigation from '../Navigation';
+import { useParams } from 'react-router-dom';
 
-const TotalWeightGraph = () => {
-    const [totalWeightData, setTotalWeightData] = useState([]);
-    const [grandWeight,setGrandWeight]= useState('')
+const DailyNutrientsGraph = () => {
+    const [nutrientstData, setNutrientsData] = useState([]);
     const [error, setError] = useState(null);
+    const { date } = useParams();
     // const chartRef = useRef(null); // チャートの参照
 
     useEffect(() => {
@@ -15,7 +16,7 @@ const TotalWeightGraph = () => {
         console.log('start fetch');
         try {
             const authToken = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:8000/graph/total-weight-graph/', {
+            const response = await fetch(`http://127.0.0.1:8000/graph/daily-nutrients-graph/?date=${date}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,8 +30,8 @@ const TotalWeightGraph = () => {
             }
 
             const data = await response.json();
-            setTotalWeightData(data.result_list);
-            setGrandWeight(data.grand_total);
+            setNutrientsData(data);
+            console.log(data)
 
             // // Chartを破棄
             // if (chartRef.current) {
@@ -52,39 +53,42 @@ const TotalWeightGraph = () => {
     }, []); // 依存する変数はありません
 
     // Check if data is not yet fetched
-    if (!totalWeightData.length) {
+    if (!nutrientstData.length) {
         return <p>Loading...</p>;
     }
 
-    // // ラベルとデータを用意
-    // Extracting labels and total weights from the data
-    const labels = totalWeightData.map(entry => entry.workout__workout_type);
-    const weights = totalWeightData.map(entry => entry.total_weight);
+    // // // ラベルとデータを用意
+    const labels = nutrientstData.map(entry => entry.nutrient);
+    const dailyNutrients = nutrientstData.map(entry => entry.amount);
 
      // Chart.js data
     const data = {
         labels: labels,
         datasets: [
         {
-            label: 'Total Weight',
+            label: 'Daily Nutrient',
             backgroundColor: 'rgba(75,192,192,0.4)',
             borderColor: 'rgba(75,192,192,1)',
             borderWidth: 1,
             hoverBackgroundColor: 'rgba(75,192,192,0.6)',
             hoverBorderColor: 'rgba(75,192,192,1)',
-            data: weights,
+            data: dailyNutrients,
         },
         ],
+    };
+
+    const options = {
+        indexAxis: 'y', // y軸を使用して横向きに表示
     };
 
     return (
         <div>
             <Navigation />
-            <h1>Total Weight Graph</h1>
-            <Bar data={data} height={300}/>
-            <h2>Grand Total Weight: {grandWeight} (kg)</h2>
+            <h1>Daily Nutrients Graph</h1>
+            <Bar data={data} height={400} options={options}/>
+            
         </div>
     );
 };
 
-export default TotalWeightGraph;
+export default DailyNutrientsGraph;

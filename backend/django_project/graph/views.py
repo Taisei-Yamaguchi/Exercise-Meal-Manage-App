@@ -8,12 +8,14 @@ from user_info.models import UserInfo
 from .serializers import WeightDataSerializer,BodyFatDataSerializer,MuscleMassDataSerializer
 from rest_framework.permissions import IsAuthenticated
 from datetime import timedelta, date
-from django.db.models import Sum,F, ExpressionWrapper, fields, IntegerField,FloatField
+from django.db.models import Sum,F, ExpressionWrapper, fields, IntegerField,FloatField, Value
 from django.db.models.functions import Coalesce
 from django.http import JsonResponse
 import json
 from exercise.models import Exercise,Workout
 from django.db.models.functions import Cast
+from meal.models import Meal,Food
+from django.core.serializers.json import DjangoJSONEncoder
 
 
 # weight data for creating weight graph. weightの毎日の変化を折れ線グラフにする。
@@ -190,3 +192,61 @@ class ExerciseTotalWeightGraphDataAPIView(APIView):
         
         # 結果と総合計を別々に返す
         return Response({'result_list': result_list, 'grand_total': grand_total}, status=status.HTTP_200_OK)
+
+
+
+
+class DailyNutrientsGraphDataAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        # フロントエンドから指定された日付
+        selected_date =  request.query_params.get('date', None)
+
+        # ログインユーザーに関連するmealデータの抽出
+        meals = Meal.objects.filter(account=request.user, meal_date=selected_date)
+        # 各栄養素のフィールド名リスト
+        nutrient_fields = ['carbohydrate', 'fat', 'protein','sugars','dietary_fiber','salt','sodium','potassium','calcium','magnesium','iron','zinc','vitamin_a','vitamin_d','vitamin_e','vitamin_b1','vitamin_b2','vitamin_b12','vitamin_b6','vitamin_c','niacin','cholesterol','saturated_fat']
+        
+        # 各栄養素の総摂取量の計算
+        
+        total_nutrients = [{'nutrient': nutrient, 'amount': meals.values().aggregate(
+            total_nutrient=Coalesce(
+            Sum(
+                    F('serving') *
+                    F(f'food__{nutrient}')
+                    
+                ),Value(0, output_field=FloatField()))
+    
+            )
+            ['total_nutrient']} for nutrient in nutrient_fields]
+            
+            
+        # total_nutrients = [
+        #         {
+        #             'nutrient': nutrient,
+        #             'amount': sum(
+        #                 meal['serving'] * meal[f'food__{nutrient}'] if meal['serving'] is not None and meal[f'food__{nutrient}'] is not None else 0
+        #                 for meal in meals.values()
+        #             )
+        #         }
+        #         for nutrient in nutrient_fields
+        #     ]
+        # total_nutrients = [{'nutrient': nutrient, 'amount': meals.values(
+        #     nutrient=F(f'food__{nutrient}'),
+        #     total_nutrient=Sum(
+        #         F('food__amount_per_serving') * F('serving'),
+        #         output_field=FloatField()
+        #     )
+        # ).aggregate(total_nutrient=Sum('total_nutrient'))['total_nutrient'] or 0} for nutrient in nutrient_fields]
+        
+        # total_nutrients = [{'nutrient': nutrient, 'amount': meals.annotate(
+        #     total_nutrient=Sum(
+        #         F('food__amount_per_serving') * F('serving') * F(f'food__{nutrient}'),
+        #         output_field=FloatField()
+        #     )
+        # ).values('total_nutrient')[0]['total_nutrient'] or 0} for nutrient in nutrient_fields]
+        
+
+        
+        return Response(total_nutrients, status=status.HTTP_200_OK)
+

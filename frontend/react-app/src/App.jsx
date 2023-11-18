@@ -27,6 +27,8 @@ import BodyFatPercentageGraph from './components/graph/BodyFatPercentageGraph';
 import MuscleMassGraph from './components/graph/MuscleMassGraph';
 import TotalWeightGraph from './components/graph/TotalWeightGraph';
 
+import DailyNutrientsGraph from './components/graph/DailyNutrientsGraph';
+
 function App() {
   
 
@@ -54,6 +56,7 @@ function App() {
         <Route path="/graph/body-fat-percentage-graph" element={<BodyFatPercentageGraph />}/>
         <Route path="/graph/muscle-mass-graph" element={<MuscleMassGraph />}/>
         <Route path="/graph/total-weight-graph" element={<TotalWeightGraph />}/>
+        <Route path="/graph/nutrients/:date" element={<DailyNutrientsGraph />}/>
       </Routes>
     </BrowserRouter>
       

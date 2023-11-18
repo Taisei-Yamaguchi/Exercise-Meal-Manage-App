@@ -32,6 +32,16 @@ const FoodForm = () => {
 
 
     const handlePostFood = async () => {
+        if(carbohydrate===''){
+            setCarbohydrate(null)
+        }
+        if(fat===''){
+            setFat(null)
+        }
+        if(protein===''){
+            setProtein(null)
+        }
+
         const yourAuthToken = localStorage.getItem('authToken'); 
         const FoodCredentias ={
             name:name,

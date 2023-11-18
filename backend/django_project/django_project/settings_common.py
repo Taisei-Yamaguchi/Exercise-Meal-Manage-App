@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'rest_framework.authtoken',
+    'django.contrib.postgres',
 ]
 
 # django-allauthで利用するdjango.contirb.sitesを使うためにサイト識別用IDを設定
