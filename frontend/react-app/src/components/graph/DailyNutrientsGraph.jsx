@@ -79,6 +79,7 @@ const DailyNutrientsGraph = () => {
 
     const options = {
         indexAxis: 'y', // y軸を使用して横向きに表示
+        
     };
 
     return (

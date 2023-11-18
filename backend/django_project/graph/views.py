@@ -8,7 +8,7 @@ from user_info.models import UserInfo
 from .serializers import WeightDataSerializer,BodyFatDataSerializer,MuscleMassDataSerializer
 from rest_framework.permissions import IsAuthenticated
 from datetime import timedelta, date
-from django.db.models import Sum,F, ExpressionWrapper, fields, IntegerField,FloatField, Value
+from django.db.models import Sum,F, ExpressionWrapper, fields, IntegerField,FloatField, Value,Case, When
 from django.db.models.functions import Coalesce
 from django.http import JsonResponse
 import json
@@ -212,41 +212,17 @@ class DailyNutrientsGraphDataAPIView(APIView):
         total_nutrients = [{'nutrient': nutrient, 'amount': meals.values().aggregate(
             total_nutrient=Coalesce(
             Sum(
-                    F('serving') *
-                    F(f'food__{nutrient}')
+                    Case(
+                        When(serving__isnull=True, then=F('grams') * F(f'food__{nutrient}') / F('food__amount_per_serving')),
+                        When(serving=0, then=F('grams') * F(f'food__{nutrient}') / F('food__amount_per_serving')),
+                        default=F('serving') * F(f'food__{nutrient}'),
+                        output_field=FloatField()
+                    )
                     
                 ),Value(0, output_field=FloatField()))
     
             )
             ['total_nutrient']} for nutrient in nutrient_fields]
-            
-            
-        # total_nutrients = [
-        #         {
-        #             'nutrient': nutrient,
-        #             'amount': sum(
-        #                 meal['serving'] * meal[f'food__{nutrient}'] if meal['serving'] is not None and meal[f'food__{nutrient}'] is not None else 0
-        #                 for meal in meals.values()
-        #             )
-        #         }
-        #         for nutrient in nutrient_fields
-        #     ]
-        # total_nutrients = [{'nutrient': nutrient, 'amount': meals.values(
-        #     nutrient=F(f'food__{nutrient}'),
-        #     total_nutrient=Sum(
-        #         F('food__amount_per_serving') * F('serving'),
-        #         output_field=FloatField()
-        #     )
-        # ).aggregate(total_nutrient=Sum('total_nutrient'))['total_nutrient'] or 0} for nutrient in nutrient_fields]
-        
-        # total_nutrients = [{'nutrient': nutrient, 'amount': meals.annotate(
-        #     total_nutrient=Sum(
-        #         F('food__amount_per_serving') * F('serving') * F(f'food__{nutrient}'),
-        #         output_field=FloatField()
-        #     )
-        # ).values('total_nutrient')[0]['total_nutrient'] or 0} for nutrient in nutrient_fields]
-        
-
         
         return Response(total_nutrients, status=status.HTTP_200_OK)
 
