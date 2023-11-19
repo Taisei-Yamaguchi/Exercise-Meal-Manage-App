@@ -3,12 +3,10 @@ import getCookie from '../helpers/getCookie';
 import { Bar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import Navigation from '../Navigation';
-import { useParams } from 'react-router-dom';
 
-const DailyNutrientsGraph = () => {
-    const [nutrientstData, setNutrientsData] = useState([]);
+const CalsGraph = () => {
+    const [calsData, setCalsData] = useState([]);
     const [error, setError] = useState(null);
-    const { date } = useParams();
     // const chartRef = useRef(null); // チャートの参照
 
     useEffect(() => {
@@ -16,7 +14,7 @@ const DailyNutrientsGraph = () => {
         console.log('start fetch');
         try {
             const authToken = localStorage.getItem('authToken');
-            const response = await fetch(`http://127.0.0.1:8000/graph/daily-nutrients-graph/?date=${date}`, {
+            const response = await fetch('http://127.0.0.1:8000/graph/cals-graph/', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -30,7 +28,7 @@ const DailyNutrientsGraph = () => {
             }
 
             const data = await response.json();
-            setNutrientsData(data);
+            setCalsData(data);
             console.log(data)
 
             // // Chartを破棄
@@ -53,44 +51,39 @@ const DailyNutrientsGraph = () => {
     }, []); // 依存する変数はありません
 
     // Check if data is not yet fetched
-    if (!nutrientstData.length) {
-        return <p>Loading...</p>;
-    }
+    // if (!calsData.length) {
+    //     return <p>Loading...</p>;
+    // }
 
     // // // ラベルとデータを用意
-    const labels = nutrientstData.map(entry => entry.nutrient);
-    const dailyNutrients = nutrientstData.map(entry => entry.amount);
+    // // Extracting labels and total weights from the data
+    // const labels = totalWeightData.map(entry => entry.workout__workout_type);
+    // const weights = totalWeightData.map(entry => entry.total_weight);
 
-     // Chart.js data
-    const data = {
-        labels: labels,
-        datasets: [
-        {
-            label: 'Daily Nutrient',
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderWidth: 1,
-            hoverBackgroundColor: 'rgba(75,192,192,0.6)',
-            hoverBorderColor: 'rgba(75,192,192,1)',
-            data: dailyNutrients,
-        },
-        ],
-    };
-
-    const options = {
-        indexAxis: 'y', // y軸を使用して横向きに表示
-        
-    };
+    //  // Chart.js data
+    // const data = {
+    //     labels: labels,
+    //     datasets: [
+    //     {
+    //         label: 'Total Weight',
+    //         backgroundColor: 'rgba(75,192,192,0.4)',
+    //         borderColor: 'rgba(75,192,192,1)',
+    //         borderWidth: 1,
+    //         hoverBackgroundColor: 'rgba(75,192,192,0.6)',
+    //         hoverBorderColor: 'rgba(75,192,192,1)',
+    //         data: weights,
+    //     },
+    //     ],
+    // };
 
     return (
         <div>
             <Navigation />
-            <h1>Daily Nutrients Graph</h1>
-            <h2>{date}</h2>
-            <Bar data={data} height={400} options={options}/>
-            
+            <h1>Cals Graph</h1>
+            {/* <Bar data={data} height={300}/>
+             */}
         </div>
     );
 };
 
-export default DailyNutrientsGraph;
+export default CalsGraph;

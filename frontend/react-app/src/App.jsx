@@ -26,9 +26,10 @@ import WeightGraph from './components/graph/WeightGraph';
 import BodyFatPercentageGraph from './components/graph/BodyFatPercentageGraph';
 import MuscleMassGraph from './components/graph/MuscleMassGraph';
 import ExerciseTotalWeightGraph from './components/graph/ExerciseTotalWeightGraph';
-
 import DailyNutrientsGraph from './components/graph/DailyNutrientsGraph';
 import DailyExerciseWeightGraph from './components/graph/DailyExerciseWeightGraph';
+import CalsGraph from './components/graph/CalsGraph';
+
 
 function App() {
   
@@ -59,6 +60,7 @@ function App() {
         <Route path="/graph/total-weight-graph" element={<ExerciseTotalWeightGraph />}/>
         <Route path="/graph/nutrients/:date" element={<DailyNutrientsGraph />}/>
         <Route path="/graph/daily-exercise-weight/:workout_type" element={<DailyExerciseWeightGraph />}/>
+        <Route path="/graph/cals" element={<CalsGraph />}/>
       </Routes>
     </BrowserRouter>
       

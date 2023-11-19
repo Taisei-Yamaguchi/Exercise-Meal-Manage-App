@@ -19,6 +19,9 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import timezone
 from django.db.models import Q
 from django.db.models import Min
+from django.db.models import Max
+from user_info.models import UserInfo
+from django.db.models import Avg
 
 
 # weight data for creating weight graph. weightの毎日の変化を折れ線グラフにする。
@@ -230,9 +233,6 @@ class DailyNutrientsGraphDataAPIView(APIView):
         return Response(total_nutrients, status=status.HTTP_200_OK)
 
 
-
-
-
 class DailyExerciseWeightGraphDataAPIView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
@@ -241,7 +241,7 @@ class DailyExerciseWeightGraphDataAPIView(APIView):
         start_date = request.query_params.get('start_date', None)
         end_date = request.query_params.get('end_date', timezone.now().date())
 
-        # start_dateがNoneの場合、今日の日付から30日前の日付に設定
+        # start_dateがNoneの場合
         oldest_exercise_date = Exercise.objects.filter(account=request.user).aggregate(Min('exercise_date'))['exercise_date__min']
         start_date = oldest_exercise_date if oldest_exercise_date else timezone.now().date()
         
@@ -287,3 +287,169 @@ class DailyExerciseWeightGraphDataAPIView(APIView):
 
 
         return Response(daily_weights)
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+class CalGraphAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = self.request.user
+        start_date = request.query_params.get('start_date', None)
+        end_date = request.query_params.get('end_date', timezone.now().date())
+
+        # start_dateがNoneの場合
+        oldest_exercise_date = Exercise.objects.filter(account=user).aggregate(Min('exercise_date'))['exercise_date__min']
+        oldest_meal_date= Meal.objects.filter(account=user).aggregate(Min('meal_date'))['meal_date__min']
+        oldest_user_info_date= UserInfo.objects.filter(account=user).aggregate(Min('date'))['date__min']
+        
+        # それぞれの最古の日付を取得
+        oldest_dates = [oldest_exercise_date, oldest_meal_date, oldest_user_info_date]
+
+        # Noneでない最も古い日付をstart_dateにセット
+        start_date = min(date for date in oldest_dates if date is not None) if any(oldest_dates) else timezone.now().date()
+        
+        
+        #指定した日付全ての分のデータをとる。存在しない場合は0を返す
+        dates = [start_date + timedelta(days=x) for x in range((end_date - start_date).days + 1)]
+        
+        # Calculate total intake calories for each date
+        intake_cals = []
+        for date in dates:
+            # Calculate total calories for the specified date
+            total_calories = calc_daily_meal_cals(user,date)
+            
+            intake_cals.append({
+                "date": date,
+                "total_cal": total_calories,
+                
+            })
+        print(intake_cals)
+        
+        # Calculate total consuming calories for each date
+        consuming_cals = []
+        for entry in intake_cals:
+            date = entry["date"]
+            
+            bm_calories =calc_daily_bm_cals(user, date)
+            exercise_calories = calc_daily_exercise_cals(user, date)
+            food_cals = 0.1 * entry["total_cal"]
+            
+            consuming_cals.append({
+                "date": date,
+                "exercise_consuming_cals": exercise_calories,
+                "bm_consuming_cal": bm_calories,
+                "food_consuming_cal": food_cals,
+            })
+        
+
+        return Response({'intake_cals':intake_cals,'consumig_cals':consuming_cals}, status=status.HTTP_200_OK)
+    
+    
+    
+    
+    
+    
+    
+# カロリー計算　関数1
+#指定した日付以前で、最新の体重
+def get_user_weight_on_date(user, date):
+    # 指定された日付以前の最新のweightを取得
+    user_info=UserInfo.objects.filter(account=user, date__lte=date)
+    if user_info.exists():
+        latest_weight = user_info.aggregate(latest_weight=Max('weight')).get('latest_weight')
+    else:
+        # user_infoが存在しない場合は、平均値を計算
+        avg_weight = UserInfo.objects.filter(account=user).aggregate(avg_weight=Avg('weight')).get('avg_weight')
+        # 一度もuser_infoを登録していない場合のデフォルト値（例: 60）
+        latest_weight = avg_weight if avg_weight is not None else 60
+    return latest_weight
+
+
+
+# 個別のexerciseにおける運動消費カロリーを計算する関数
+# dateごとの合計の計算はまた別でやる
+def calculate_exercise_calories(exercise):
+    # duration_minutesがnullの場合はsetsとrepsから計算
+    if exercise.duration_minutes is None:
+        # 1 repあたりの時間（秒）を計算
+        rep_duration = 2  
+
+        # setsとrepsからトータルの運動時間（秒）を計算
+        total_duration = rep_duration * exercise.sets * exercise.reps
+    else:
+        total_duration = exercise.duration_minutes * 60  # 分を秒に変換
+
+    # exerciseのMetsが指定されていない場合はデフォルト値を使う
+    mets = float(exercise.mets) if exercise.mets is not None else 1.0
+
+    # exerciseの日付に対応するuser_infoのweightを取得
+    user_weight = get_user_weight_on_date(exercise.account, exercise.exercise_date)
+    # 運動消費カロリーの計算（MET * 体重 * 時間）
+    calories = mets * user_weight * (total_duration / 3600)
+    calories = calories if calories is not None else 0
+
+    return calories
+
+
+#その日の,exerciseのカロリーの合計を求める
+def calc_daily_exercise_cals(user,date):
+    # 指定した日付のExerciseモデルのデータを取得
+    exercises = Exercise.objects.filter(account=user, exercise_date=date)
+    cals=0
+    for exercise in  exercises:
+        cals+=calculate_exercise_calories(exercise)
+
+    return cals
+
+
+
+# 基礎代謝計算
+def calc_daily_bm_cals(user,date):
+    metabolism_info = UserInfo.objects.filter(account=user,date=date).values('metabolism').first()
+    
+    if metabolism_info is not None:
+        return metabolism_info['metabolism']
+    else:
+        # 指定した日付より前の最新の基礎代謝を取得
+        latest_metabolism = UserInfo.objects.filter(account=user, date__lt=date).aggregate(Max('date'))
+
+        if latest_metabolism['date__max'] is not None:
+            latest_metabolism_data = UserInfo.objects.filter(account=user, date=latest_metabolism['date__max']).first()
+            return latest_metabolism_data.metabolism
+        else:
+            # 過去のデータも存在しない場合はデフォルトで1500を返す
+            return 1500
+    
+# 摂取カロリー計算
+# 指定した日付の食事のそうカロリーを出す。
+# 全ての日付にこの関数を実行しリストに入れていく
+def calc_daily_meal_cals(user, date):
+    # Calculate total calories for the specified date
+    total_calories = Meal.objects.filter(account=user, meal_date=date).aggregate(
+        total_calories=Coalesce(
+            Sum(
+                    Case(
+                        When(serving__isnull=True, then=F('grams') * F('food__cal') / F('food__amount_per_serving')),
+                        When(serving=0, then=F('grams') * F(f'food__cal') / F('food__amount_per_serving')),
+                        default=F('serving') * F(f'food__cal'),
+                        output_field=FloatField()
+                    )
+                    
+                ),Value(0, output_field=FloatField()))
+    
+            )['total_calories']
+
+    return total_calories
+
+

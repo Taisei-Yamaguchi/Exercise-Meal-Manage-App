@@ -11,7 +11,7 @@ class UserInfo(models.Model):
     
     body_fat_percentage = models.FloatField(null=True, blank=True, validators=[MinValueValidator(1)])
     muscle_mass = models.FloatField(null=True, blank=True, validators=[MinValueValidator(1)])
-    metabolism = models.FloatField(null=True, blank=True, validators=[MinValueValidator(1)])
+    metabolism = models.FloatField(validators=[MinValueValidator(1)],default=1)
     target_weight = models.FloatField(null=True, blank=True, validators=[MinValueValidator(1)])
     target_body_fat_percentage = models.FloatField(null=True, blank=True, validators=[MinValueValidator(1)])
     target_muscle_mass = models.FloatField(null=True, blank=True, validators=[MinValueValidator(1)])

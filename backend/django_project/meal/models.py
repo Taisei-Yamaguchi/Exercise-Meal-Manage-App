@@ -5,9 +5,9 @@ from django.core.validators import MinValueValidator
 
 class Food(models.Model):
     name = models.CharField(max_length=100)  # 食品名
-    cal = models.FloatField(validators=[MinValueValidator(1)])  # カロリー
+    cal = models.FloatField(validators=[MinValueValidator(1)],default=1)  # カロリー
     account = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # ユーザーアカウントへの参照
-    amount_per_serving = models.FloatField(validators=[MinValueValidator(1)])  # 1人前あたりの量
+    amount_per_serving = models.FloatField(validators=[MinValueValidator(1)],default=1)  # 1人前あたりの量
     
     # Nutrients Field with MinValueValidator
     carbohydrate = models.FloatField(blank=True, null=True, validators=[MinValueValidator(0)])
