@@ -31,8 +31,8 @@ const CalsGraph = () => {
             const data = await response.json();
             setIntakeCals(data.intake_cals);
             setConsumingCals(data.consuming_cals);
-            console.log(data.intake_cals);
-            console.log(data.consuming_cals);
+            // console.log(data.intake_cals);
+            // console.log(data.consuming_cals);
             console.log(data)
 
             // // Chartを破棄
@@ -53,7 +53,7 @@ const CalsGraph = () => {
 
         fetchData();
     }, []); // 依存する変数はありません
-
+    
     // Check if data is not yet fetched
     // if (!calsData.length) {
     //     return <p>Loading...</p>;
@@ -79,7 +79,6 @@ const CalsGraph = () => {
     //     },
     //     ],
     // };
-    
 
     const data = {
         labels: consumingCals.map(entry => entry.date),
