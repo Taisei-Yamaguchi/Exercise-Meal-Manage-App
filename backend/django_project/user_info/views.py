@@ -70,6 +70,10 @@ def calculate_metabolism(weight, height,sex,birthday):
     # ここで基礎代謝の計算ロジックを実装
     today = datetime.today().date()
     age = today.year - birthday.year - ((today.month, today.day) < (birthday.month, birthday.day))
+    # 変数をfloat型に変換
+    weight = float(weight)
+    height = float(height)
+    age = float(age)
 
     # Mifflin-St Jeorの式を用いる
     if sex: #True 女のとき

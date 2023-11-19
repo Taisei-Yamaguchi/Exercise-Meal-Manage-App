@@ -353,7 +353,7 @@ class CalGraphAPIView(APIView):
             })
         
 
-        return Response({'intake_cals':intake_cals,'consumig_cals':consuming_cals}, status=status.HTTP_200_OK)
+        return Response({'intake_cals':intake_cals,'consuming_cals':consuming_cals}, status=status.HTTP_200_OK)
     
     
     
@@ -383,7 +383,7 @@ def calculate_exercise_calories(exercise):
     # duration_minutesがnullの場合はsetsとrepsから計算
     if exercise.duration_minutes is None:
         # 1 repあたりの時間（秒）を計算
-        rep_duration = 2  
+        rep_duration = 4  
 
         # setsとrepsからトータルの運動時間（秒）を計算
         total_duration = rep_duration * exercise.sets * exercise.reps
