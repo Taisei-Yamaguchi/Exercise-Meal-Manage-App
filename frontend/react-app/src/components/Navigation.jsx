@@ -1,71 +1,57 @@
 // Navigation.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
-import { useEffect } from 'react';
 
 function Navigation() {
     const [showNav, setShowNav] = useState(false);
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
+    const workout_type='Chest';
 
     const currentDate = new Date();
     const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-    .toString()
-    .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
+        .toString()
+        .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
 
-
-    useEffect(() => {
-        const handleResize = () => {
-            setWindowWidth(window.innerWidth);
-        };
-    
-        window.addEventListener('resize', handleResize);
-    
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-    
     const handleNavClick = () => {
         setShowNav(!showNav);
     };
 
+    const navLinks = [
+        { to: "/accounts/signup", label: "Sign Up" },
+        { to: "/accounts/login", label: "Log In" },
+        { to: "/meals", label: "Meals" },
+        { to: "/meal/food", label: "Food Post" },
+        { to: "/meal/food-list", label: "Food List" },
+        { to: `/meals/date/${formattedDate}`, label: "Meals Today" },
+        { to: "/exercise/workout-create", label: "Workout Post" },
+        { to: "/exercise/workout-list", label: "Workout List" },
+        { to: "/user_info", label: "User Info" },
+        { to: `/exercise/date/${formattedDate}`, label: "Exercise List" },
+        { to: "/graph/weight-graph", label: "Weight Graph" },
+        { to: "/graph/body-fat-percentage-graph", label: "Body Fat Graph" },
+        { to: "/graph/muscle-mass-graph", label: "Muscle Mass Graph" },
+        { to: "/graph/total-weight-graph", label: "Exercise Total Weight Graph" },
+        { to: `/graph/nutrients/${formattedDate}`, label: "Daily Nutrients Graph" },
+        { to: `/graph/daily-exercise-weight/${workout_type}`, label: "Daily Exercise Weight Graph" },
+        { to: "/graph/cals", label: "Cals Graph" },
+    ];
 
     return (
         <nav>
-            <h1 onClick={windowWidth <= 765 ? handleNavClick : null}>EMMA</h1>
-            <ul className={showNav ? 'show' : ''}>
-                <li>
-                    <p><NavLink to="/accounts/signup" className='nav-link' activeclassname="active">Sign Up</NavLink></p>
-                </li>
-                <li>
-                    <p><NavLink to="/accounts/login" className='nav-link' activeclassname="active">Log In</NavLink></p>
-                </li>
-                <li>
-                    <p><NavLink to="/meals" className='nav-link' activeclassname="active">Meals</NavLink></p>
-                </li>
-                <li>
-                    <p><NavLink to="/meal/food" className='nav-link' activeclassname="active">Food Post</NavLink></p>
-                </li>
-                <li>
-                    <p><NavLink to="/meal/food-list" className='nav-link' activeclassname="active">Food List</NavLink></p>
-                </li>
-                <li>
-                    <p><NavLink to={`/meals/date/${formattedDate}`} className='nav-link' activeclassname="active">Meals Today</NavLink></p>
-                </li>
-                <li>
-                    <p><NavLink to="/exercise/workout-create" className='nav-link' activeclassname="active">Workout Post</NavLink></p>
-                </li>
-                <li>
-                    <p><NavLink to="/exercise/workout-list" className='nav-link' activeclassname="active">Workout List</NavLink></p>
-                </li>
-                <li>
-                    <p><NavLink to="/user_info" className='nav-link' activeclassname="active">User Info</NavLink></p>
-                </li>
-                <li>
-                    <p><NavLink to={`/exercise/date/${formattedDate}`} className='nav-link' activeclassname="active">Exercise List</NavLink></p>
-                </li>
+            <h1 className='nav-toggle' onClick={handleNavClick}>EMMA</h1>
+            {/* <div className="menu-toggle" onClick={handleNavClick}>
+                Menu
+            </div> */}
+            <ul className={`nav-menu ${showNav ? 'show' : ''}`}>
+                {navLinks.map((link, index) => (
+                    <li key={index}>
+                        <p>
+                            <NavLink to={link.to} className='nav-link' activeclassname="active">
+                                {link.label}
+                            </NavLink>
+                        </p>
+                    </li>
+                ))}
             </ul>
         </nav>
     );

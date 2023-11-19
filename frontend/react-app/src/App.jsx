@@ -22,6 +22,15 @@ import WorkoutList from './components/exercise/WorkoutList';
 import ExerciseCreate from './components/exercise/ExerciseCreate';
 import ExerciseDate from './components/exercise/ExerciseDate';
 
+import WeightGraph from './components/graph/WeightGraph';
+import BodyFatPercentageGraph from './components/graph/BodyFatPercentageGraph';
+import MuscleMassGraph from './components/graph/MuscleMassGraph';
+import ExerciseTotalWeightGraph from './components/graph/ExerciseTotalWeightGraph';
+import DailyNutrientsGraph from './components/graph/DailyNutrientsGraph';
+import DailyExerciseWeightGraph from './components/graph/DailyExerciseWeightGraph';
+import CalsGraph from './components/graph/CalsGraph';
+
+
 function App() {
   
 
@@ -45,8 +54,13 @@ function App() {
         <Route path="/exercise/workout-list" element={<WorkoutList/>}/>
         <Route path="/exercise/exercise-create/:date" element={<ExerciseCreate />}/>
         <Route path="/exercise/date/:date" element={<ExerciseDate />}/>
-        
-
+        <Route path="/graph/weight-graph" element={<WeightGraph />}/>
+        <Route path="/graph/body-fat-percentage-graph" element={<BodyFatPercentageGraph />}/>
+        <Route path="/graph/muscle-mass-graph" element={<MuscleMassGraph />}/>
+        <Route path="/graph/total-weight-graph" element={<ExerciseTotalWeightGraph />}/>
+        <Route path="/graph/nutrients/:date" element={<DailyNutrientsGraph />}/>
+        <Route path="/graph/daily-exercise-weight/:workout_type" element={<DailyExerciseWeightGraph />}/>
+        <Route path="/graph/cals" element={<CalsGraph />}/>
       </Routes>
     </BrowserRouter>
       

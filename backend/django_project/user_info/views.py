@@ -28,6 +28,10 @@ class UserInfoCreateOrUpdateView(APIView):
             # Check if the latest info is available and its date matches with the provided date
             if latest_info and latest_info.date == date_from_request:
                 # Update only the fields provided in the request
+                if request.data['metabolism'] is None:
+                    request.data['metabolism'] = calculate_metabolism(request.data['weight'], request.data['height'],user.sex,user.birthday)
+
+                
                 serializer = UserInfoSerializer(latest_info, data=request.data, partial=True)
             else:
                 # Create a new user info entry using the provided data or latest info if not available
@@ -43,6 +47,11 @@ class UserInfoCreateOrUpdateView(APIView):
                     'target_body_fat_percentage': request.data.get('target_body_fat_percentage'),
                     'target_muscle_mass': request.data.get('target_muscle_mass'),
                 }
+                
+                
+                if data['metabolism'] is None:
+                    data['metabolism'] = calculate_metabolism(data['weight'], data['height'],user.sex,user.birthday)
+
                 serializer = UserInfoSerializer(data=data)
 
             if serializer.is_valid():
@@ -56,7 +65,28 @@ class UserInfoCreateOrUpdateView(APIView):
             return Response({'detail': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
 
 
-    
+#metabolism 自動計算関数
+def calculate_metabolism(weight, height,sex,birthday):
+    # ここで基礎代謝の計算ロジックを実装
+    today = datetime.today().date()
+    age = today.year - birthday.year - ((today.month, today.day) < (birthday.month, birthday.day))
+    # 変数をfloat型に変換
+    weight = float(weight)
+    height = float(height)
+    age = float(age)
+
+    # Mifflin-St Jeorの式を用いる
+    if sex: #True 女のとき
+        metabolism= 10 * weight + 6.25 * height - 5 * age - 161
+    else: #False 男のとき
+        metabolism = 10 * weight + 6.25 * height - 5 * age + 5
+
+    return metabolism
+
+
+
+
+
     
 #get latest user info
 class LatestUserInfoView(APIView):
