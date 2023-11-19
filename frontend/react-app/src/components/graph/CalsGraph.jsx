@@ -79,6 +79,7 @@ const CalsGraph = () => {
     //     },
     //     ],
     // };
+    
 
     const data = {
         labels: consumingCals.map(entry => entry.date),
