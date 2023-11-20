@@ -11,4 +11,12 @@ class MealSerializer(serializers.ModelSerializer):
     class Meta:
         model = Meal
         fields = '__all__'
+        
+        
+class GetMealSerializer(serializers.ModelSerializer):
+    
+    food=FoodSerializer()
+    class Meta:
+        model = Meal
+        fields = '__all__'
 

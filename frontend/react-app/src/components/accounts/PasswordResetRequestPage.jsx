@@ -11,7 +11,7 @@ const PasswordResetRequestPage = () => {
   const handlePasswordResetRequest = async () => {
     try {
       // バックエンドにメール送信の要求を送信
-      const response = await axios.post('http://127.0.0.1:8000/accounts/reset_password_request/', {
+      const response = await axios.post('http://127.0.0.1:8000/accounts/reset-password-request/', {
         email,
       });
       console.log(response.data);  // バックエンドからのレスポンスを確認

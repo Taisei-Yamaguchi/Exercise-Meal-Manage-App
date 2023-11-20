@@ -32,7 +32,7 @@ const Login = () => {
                 setAuthToken(userData.token);
                 localStorage.setItem('authToken', userData.token);
                 
-                navigate('/meals');
+                navigate('/meal/food-list');
             } else {
                 // ログイン失敗時の処理
                 console.log(response.json());

@@ -52,9 +52,9 @@ const ExerciseTotalWeightGraph = () => {
     }, []); // 依存する変数はありません
 
     // Check if data is not yet fetched
-    if (!totalWeightData.length) {
-        return <p>Loading...</p>;
-    }
+    // if (!totalWeightData.length) {
+    //     return <p>Loading...</p>;
+    // }
 
     // // ラベルとデータを用意
     // Extracting labels and total weights from the data

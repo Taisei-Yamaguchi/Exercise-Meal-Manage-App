@@ -19,7 +19,8 @@ function Navigation() {
     const navLinks = [
         { to: "/accounts/signup", label: "Sign Up" },
         { to: "/accounts/login", label: "Log In" },
-        { to: "/meals", label: "Meals" },
+        { to: "/accounts/update", label: "Setting Account" },
+        { to: "/accounts/get", label: "Account Info" },
         { to: "/meal/food", label: "Food Post" },
         { to: "/meal/food-list", label: "Food List" },
         { to: `/meals/date/${formattedDate}`, label: "Meals Today" },

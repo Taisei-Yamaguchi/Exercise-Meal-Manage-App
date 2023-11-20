@@ -13,9 +13,7 @@ class Workout(models.Model):
         ('Arm', 'Arm'),
         ('Abs', 'Abs'),
         ('Other', 'Other'),
-        # Add more workout types as needed
     ]
-
     
     account = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
@@ -23,6 +21,8 @@ class Workout(models.Model):
 
     def __str__(self):
         return self.name
+
+
 
 # Exercise Model
 class Exercise(models.Model):
@@ -34,16 +34,14 @@ class Exercise(models.Model):
     workout = models.ForeignKey(Workout, on_delete=models.CASCADE, null=True, blank=True)
     default_workout = models.JSONField(null=True, blank=True)
     
-    # workout_typeが筋トレである場合
+    # カロリー計算時、duration_minutesを優先、なければsets,repsを使う。
     sets = models.PositiveIntegerField(default=1,null=True, blank=True)
     reps = models.PositiveIntegerField(default=1,null=True, blank=True)
-    weight_kg = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    weight_kg = models.FloatField(null=True, blank=True)
+    duration_minutes = models.FloatField(null=True, blank=True)
+    distance = models.FloatField( null=True, blank=True)
+    mets = models.FloatField( null=True, blank=True)
     
-    # workout_typeがaeroである場合
-    duration_minutes = models.PositiveIntegerField(null=True, blank=True)
-    distance = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
-    
-    mets = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
     memos = models.TextField(blank=True,null=True)
 
     def __str__(self):
@@ -58,4 +56,6 @@ class Exercise(models.Model):
         if self.workout and self.default_workout:
             raise ValidationError("Only one of 'workout' or 'default_workout' should be provided.")
 
-    
+        # duration_minutes が null の場合、sets と reps は必須
+        if self.duration_minutes is None and (self.sets is None or self.reps is None):
+            raise ValidationError("If 'duration_minutes' is not provided, both 'sets' and 'reps' are required.")

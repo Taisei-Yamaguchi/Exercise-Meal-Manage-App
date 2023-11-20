@@ -10,7 +10,7 @@ const ConfirmationPage = () => {
     
         const confirmEmail = async () => {
             try {
-                const response = await axios.post('http://127.0.0.1:8000/accounts/signup_confirmation/', { uid, token });
+                const response = await axios.post('http://127.0.0.1:8000/accounts/signup-confirmation/', { uid, token });
                 console.log(response.data);  // バックエンドからのレスポンスを確認
                 navigation('/accounts/login')
             } catch (error) {
