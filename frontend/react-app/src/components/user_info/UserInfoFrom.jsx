@@ -37,7 +37,7 @@ const UserInfoForm = () => {
     // Fetch the latest user info when the component mounts
     const fetchLatestInfo = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/user_info/get_latest/',{
+            const response = await fetch('http://127.0.0.1:8000/user_info/get-latest/',{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -77,7 +77,6 @@ const UserInfoForm = () => {
         const { name, value } = e.target;
 
         // If the value is an empty string, set it to null
-        // If the value is an empty string, set it to null
         const sanitizedValue = value === '' ? null : value;
 
         if (name !== 'date') {
@@ -90,7 +89,7 @@ const UserInfoForm = () => {
         e.preventDefault();
 
         try {
-        const response = await fetch('http://127.0.0.1:8000/user_info/create/', {
+        const response = await fetch('http://127.0.0.1:8000/user_info/create-update/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
