@@ -46,7 +46,6 @@ class SignupAPIView(APIView):
             #     'user': user.name,
             #     'confirm_url': confirm_url,
             # })
-
             # # 実際にはここでメール送信
             # send_mail('Confirm your email', message, 'from@example.com', [user.email])
 
@@ -56,12 +55,11 @@ class SignupAPIView(APIView):
     
     
 # Signup Confirmation via email.
-class ConfirmEmailAPIView(APIView):
+class SignUpConfirmEmailAPIView(APIView):
     def post(self, request):
         uidb64 = request.data.get('uid')
         token = request.data.get('token')
 
-        
         try:
             if uidb64 is None:
                 return Response({'detail': 'uid is required.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -104,11 +102,8 @@ class PasswordResetRequestAPIView(APIView):
         #     'user': user.name,
         #     'rest_url': reset_url,
         # })
-
         # # 実際にはここでメール送信
         # send_mail('Confirm your email', message, 'from@example.com', [user.email])
-
-
         return Response({'detail': 'Password reset link sent successfully.'}, status=status.HTTP_200_OK)
 
 
@@ -174,11 +169,8 @@ class LoginView(APIView):
                 'name': user.name,
                 'email': user.email,
                 'sex': user.sex,
-                'metabolism': user.metabolism,
                 'birthday': user.birthday,
                 'token': token.key
-
-                
                 # 他のユーザー情報も必要に応じて追加
             }
             
@@ -203,3 +195,38 @@ class LogoutView(APIView):
 
         return Response({'message': 'Logout successful.'}, status=status.HTTP_200_OK)
         
+        
+        
+        
+# Update Account
+class UpdateAccountView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def put(self, request):
+        user = request.user
+        serializer = CustomUserSerializer(user, data=request.data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response('detail: update success.', status=status.HTTP_200_OK)
+        else:
+            print(serializer.errors)
+            return Response('detail: update error.', status=status.HTTP_400_BAD_REQUEST)
+        
+        
+        
+# Get Account
+class GetAccountView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        user = request.user
+        serializer = CustomUserSerializer(user)
+        data = {
+            'name': serializer.data['name'],
+            'email_address': user.email,
+            'picture': serializer.data['picture'],
+            'sex': serializer.data['sex'],
+            'birthday': serializer.data['birthday'],
+        }
+        return Response(data)

@@ -13,7 +13,7 @@ const PasswordResetPage = () => {
 
   const handlePasswordReset = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:8000/accounts/reset_password_confirm/', {
+      const response = await axios.post('http://127.0.0.1:8000/accounts/reset-password-confirm/', {
         uid,
         token,
         new_password: newPassword,
