@@ -384,7 +384,7 @@ def calculate_exercise_calories(exercise):
     if exercise.duration_minutes is None:
         # 1 repあたりの時間（秒）を計算
         rep_duration = 4  
-
+        
         # setsとrepsからトータルの運動時間（秒）を計算
         total_duration = rep_duration * exercise.sets * exercise.reps
     else:
