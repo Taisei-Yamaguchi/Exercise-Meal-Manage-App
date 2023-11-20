@@ -4,9 +4,11 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 
 class Food(models.Model):
+    account = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # ユーザーアカウントへの参照
+    
+    # name,cal ,amount_per_servingは必須
     name = models.CharField(max_length=100)  # 食品名
     cal = models.FloatField(validators=[MinValueValidator(1)],default=1)  # カロリー
-    account = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # ユーザーアカウントへの参照
     amount_per_serving = models.FloatField(validators=[MinValueValidator(1)],default=1)  # 1人前あたりの量
     
     # Nutrients Field with MinValueValidator
@@ -38,19 +40,22 @@ class Food(models.Model):
     
     
 class Meal(models.Model):
-    account = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # ユーザーに関連付ける外部キー
-    food = models.ForeignKey(Food, on_delete=models.CASCADE)  # 食品に関連付ける外部キー
-    meal_date = models.DateField()  # 食事の日付
-
-    serving = models.FloatField(null=True, blank=True,validators=[MinValueValidator(0)])  # 人前
-    grams = models.FloatField(null=True, blank=True,validators=[MinValueValidator(0)])  # グラム
     MEAL_TYPE_CHOICES = [
         ('breakfast', '朝食'),
         ('lunch', '昼食'),
         ('dinner', '夕食'),
         ('snack', 'スナック'),
     ]
+    
+    account = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # ユーザーに関連付ける外部キー
+    food = models.ForeignKey(Food, on_delete=models.CASCADE)  # 食品に関連付ける外部キー
+    meal_date = models.DateField()  # 食事の日付
+
+    serving = models.FloatField(null=True, blank=True,validators=[MinValueValidator(0)])  # 人前
+    grams = models.FloatField(null=True, blank=True,validators=[MinValueValidator(0)])  # グラム
+    
     meal_type = models.CharField(max_length=10, choices=MEAL_TYPE_CHOICES)  # 食事のタイプ
+
 
     def clean(self):
         if self.serving is None and self.grams is None:

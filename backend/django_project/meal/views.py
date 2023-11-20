@@ -1,15 +1,10 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-import requests
-from django.contrib.auth.decorators import login_required
 from .models import Meal,Food
-from .serializers import MealSerializer, FoodSerializer 
-from rest_framework.authentication import SessionAuthentication
+from .serializers import MealSerializer, FoodSerializer,GetMealSerializer
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-import logging
 from rest_framework.generics import DestroyAPIView
 
 
@@ -22,20 +17,18 @@ class FoodPostView(APIView):
     def post(self, request):
         # ログインユーザーを取得
         user = self.request.user
-        if user.is_authenticated:
-            # POSTデータをシリアライザに渡す
-            request.data['account'] = user.id
-            serializer = FoodSerializer(data=request.data)
-            if serializer.is_valid():
-                # ログインユーザーに紐付けて保存
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            else:
-                print(serializer.errors)
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({'detail': 'Authentication credentials were not provided.'}, status=status.HTTP_401_UNAUTHORIZED)
         
+        # POSTデータをシリアライザに渡す
+        request.data['account'] = user.id
+        serializer = FoodSerializer(data=request.data)
+        if serializer.is_valid():
+            # ログインユーザーに紐付けて保存
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
     
     
     
@@ -46,16 +39,13 @@ class FoodListView(APIView):
 
     def get(self, request):
         # ログインユーザーに関連するFoodを取得
-        user_id = request.user.id
-        if user_id is not None:
+        user = self.request.user
+        
+        foods = Food.objects.filter(account=user.id)
             
-            foods = Food.objects.filter(account=user_id)
-            
-            serialized_foods = FoodSerializer(foods, many=True)
-            return Response({'foods':serialized_foods.data})
-        else:
-            return Response({'detail': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
-    
+        serialized_foods = FoodSerializer(foods, many=True)
+        return Response({'foods':serialized_foods.data})
+        
     
     
     
@@ -66,25 +56,17 @@ class MealCreateView(APIView):
     def post(self, request):
         user = self.request.user
         
-        if user.is_authenticated:
-            #先にログインユーザーのidを紐づける
-            request.data['account'] = user.id
-            # POSTデータをシリアライザに渡す
-            serializer = MealSerializer(data=request.data)
-            if serializer.is_valid():
-                
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            else:
-                
-                # バリデーションエラーがある場合、ログにエラー内容を記録
-                logger = logging.getLogger(__name__)
-                logger.error(f"Meal create validation failed: {serializer.errors}")
-                
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            
+        #先にログインユーザーのidを紐づける
+        request.data['account'] = user.id
+        # POSTデータをシリアライザに渡す
+        serializer = MealSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response({'detail': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+            print(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
 
 
 
@@ -95,64 +77,15 @@ class MealByDateView(APIView):
 
     def get(self, request):
         
-        user_id = request.user.id
-        if user_id is not None:
+        user = self.request.user
             
-            meal_date = request.query_params.get('meal_date', None)
-            meals = Meal.objects.filter(meal_date=meal_date,account=user_id)   # ログインユーザーのmealを取得
+        meal_date = request.query_params.get('meal_date', None)
+        meals = Meal.objects.filter(meal_date=meal_date,account=user.id)   # ログインユーザーのmealを取得
 
-            serialized_meals = []
-            for meal in meals:
-                serialized_meal = {
-                    'id':meal.id,
-                    'meal_date': meal.meal_date,
-                    'food':FoodSerializer(meal.food).data,
-                    'meal_type':meal.meal_type,
-                    'meal_serving':meal.serving,
-                    'grams':meal.grams,
-                }
-                serialized_meals.append(serialized_meal)
+        serialized_meals=GetMealSerializer(meals,many=True).data
+        return Response({'meals': serialized_meals})
+        
 
-            
-            return Response({'meals': serialized_meals})
-        
-        else:
-            print('認証失敗')
-            return Response({'error': 'Authentication required.'}, status=401)
-        
-        
-        
-        
-# Get All Meal list
-class MealAccessView(APIView):
-    permission_classes = [IsAuthenticated]
-    
-    def get(self, request):
-        print('start MealAccessView'),
-        user_id = request.user.id
-        if user_id is not None:
-            
-            meals = Meal.objects.filter(account=user_id)   # ログインユーザーのmealを取得
-
-            serialized_meals = []
-            for meal in meals:
-                serialized_meal = {
-                    'id':meal.id,
-                    'meal_date': meal.meal_date,
-                    'food':FoodSerializer(meal.food).data,
-                    'meal_type':meal.meal_type,
-                    'meal_serving':meal.serving,
-                    'grams':meal.grams,
-                }
-                serialized_meals.append(serialized_meal)
-
-            
-            return Response({'meals': serialized_meals})
-        
-        else:
-            print('認証失敗')
-            return Response({'error': 'Authentication required.'}, status=401)
-        
         
         
         
@@ -163,19 +96,15 @@ class MealUpdateView(APIView):
     def put(self, request, meal_id):
         user = self.request.user
 
-        if user.is_authenticated:
-            meal = get_object_or_404(Meal, id=meal_id, account=user.id)
-            serializer = MealSerializer(instance=meal, data=request.data, partial=True)
+        meal = get_object_or_404(Meal, id=meal_id, account=user.id)
+        serializer = MealSerializer(instance=meal, data=request.data, partial=True)
 
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                print(serializer.errors)
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response({'detail': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
-        
+            print(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         
         
@@ -186,7 +115,6 @@ class MealDeleteView(DestroyAPIView):
     queryset = Meal.objects.all()
     serializer_class = MealSerializer
     
-
     def perform_destroy(self, instance):
         # ログインユーザーと meal の所有者が一致するか確認
         if self.request.user == instance.account:

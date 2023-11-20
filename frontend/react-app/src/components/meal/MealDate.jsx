@@ -110,10 +110,10 @@ const MealDate = () => {
                         <p>{meal.food.name}</p>
                         {/* <p>Cal: {meal.food.cal}</p> */}
                         
-                        {meal.meal_serving !== null && meal.meal_serving !== 0 ? (
+                        {meal.serving !== null && meal.serving !== 0 ? (
                             <div>
-                                <p>{meal.meal_serving} servings</p>
-                                <p>{meal.food.cal * meal.meal_serving} (kcal)</p>
+                                <p>{meal.serving} servings</p>
+                                <p>{meal.food.cal * meal.serving} (kcal)</p>
                             </div>
                             ) : (
                             <div>
