@@ -52,7 +52,7 @@ class FoodListView(APIView):
         # ログインユーザーに関連するFoodを取得
         user = self.request.user
         
-        foods = Food.objects.filter(account=user.id)
+        foods = Food.objects.filter(account=user.id,is_open_api=False)
             
         serialized_foods = FoodSerializer(foods, many=True)
         return Response({'foods':serialized_foods.data})
@@ -152,8 +152,8 @@ class FatSecretSearchAPIView(APIView):
         encoded_search_expression = quote(search_expression, safe='')
 
         # Check if search_expression is provided
-        # if search_expression is None or search_expression.strip() == '':
-        #     return Response({'error': 'Search expression is required and cannot be empty'}, status=status.HTTP_400_BAD_REQUEST)
+        if search_expression is None or search_expression.strip() == '':
+            return Response({'error': 'Search expression is required and cannot be empty'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Parameters for the API request
         params = {
@@ -209,7 +209,7 @@ class FatSecretSearchAPIView(APIView):
             search_results.append({
                 'food_id': food.get('food_id', ''),
                 'name': food.get('food_name',''),
-                'cals': nutritional_values['cals'],
+                'cal': nutritional_values['cal'],
                 'amount_per_serving': nutritional_values['amount_per_serving'],
                 'carbohydrate': nutritional_values['carbohydrate'],
                 'fat': nutritional_values['fat'],
@@ -224,10 +224,6 @@ class FatSecretSearchAPIView(APIView):
         else:
             # Return an error response
             return Response({'error': 'Failed to fetch data from FatSecret API'}, status=response.status_code)
-
-
-
-
 
 
 def extract_nutritional_values(food_description):
@@ -254,9 +250,63 @@ def extract_nutritional_values(food_description):
 
         return {
             'amount_per_serving': amount_per_serving_100g, 
-            'cals': cals_per_100g, 
+            'cal': cals_per_100g, 
             'fat': fat_per_100g, 
             'carbohydrate': carbs_per_100g, 
-            'protein': protein_per_100g}
+            'protein': protein_per_100g
+        }
     else:
         return None
+    
+    
+    
+    
+    
+    
+# Meal Create 自分のFoodをもとに食事内容を記録していく
+class MealCreateWithFatSecretView(APIView):
+    permission_classes = [IsAuthenticated]  # ユーザーが認証されていることを確認
+    
+    def post(self, request):
+        user = self.request.user
+        
+        # Foodデータの取得または作成
+        food_data = request.data.get('food_data', {})
+        meal_data = request.data.get('meal_data', {})
+        print(food_data)
+        print(meal_data)
+
+        if food_data['food_id']:
+            # 既存のFoodが存在する場合はそれを取得
+            try:
+                food = Food.objects.get(food_id=food_data['food_id'], account=user.id)
+            except Food.DoesNotExist:
+                # 既存のFoodが存在しない場合は新しく作成
+                food_data['account']=user.id
+                food_data['is_open_api']=True
+                serializer = FoodSerializer(data=food_data)
+                if serializer.is_valid():
+                    serializer.save(account=user)
+                    food = serializer.instance
+                else:
+                    
+                    print(serializer.errors)
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            print('error: food_id is required')
+            return Response({'error': 'food_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Mealデータの保存
+        
+        meal_data['account'] = user.id
+        meal_data['food'] = food.id
+        print(meal_data)
+
+        meal_serializer = MealSerializer(data=meal_data)
+        if meal_serializer.is_valid():
+            meal_serializer.save()
+            return Response(meal_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print(meal_serializer.errors)
+            return Response(meal_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            

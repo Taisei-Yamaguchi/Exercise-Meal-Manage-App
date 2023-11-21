@@ -11,6 +11,9 @@ class Food(models.Model):
     cal = models.FloatField(validators=[MinValueValidator(1)],default=1)  # カロリー
     amount_per_serving = models.FloatField(validators=[MinValueValidator(1)],default=1)  # 1人前あたりの量
     
+    # fat secret apiで取得したデータの場合、ここを入力
+    is_open_api = models.BooleanField(default=False)
+    food_id = models.CharField(max_length=100, null=True, blank=True)
     
     # Nutrients Field with MinValueValidator
     carbohydrate = models.FloatField(blank=True, null=True, validators=[MinValueValidator(0)])

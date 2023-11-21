@@ -55,7 +55,7 @@ function App() {
         <Route path="/meal/food" element={<FoodForm />}/>
         <Route path="/meal/food-list" element={<FoodList />}/>
         <Route path="/meals/date/:date" element={<MealDate />}/>
-        <Route path='/meal/food-search' element={<FoodSearch />}/>
+        <Route path='/meal/food-search/:date' element={<FoodSearch />}/>
 
         <Route path="/user_info" element={<UserInfoForm />}/>
         <Route path="/exercise/workout-create" element={<WorkoutForm />}/>
