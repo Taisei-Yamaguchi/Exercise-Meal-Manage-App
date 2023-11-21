@@ -32,6 +32,8 @@ import DailyNutrientsGraph from './components/graph/DailyNutrientsGraph';
 import DailyExerciseWeightGraph from './components/graph/DailyExerciseWeightGraph';
 import CalsGraph from './components/graph/CalsGraph';
 
+import FoodSearch from './components/meal/FoodSearch';
+
 
 function App() {
   
@@ -53,6 +55,8 @@ function App() {
         <Route path="/meal/food" element={<FoodForm />}/>
         <Route path="/meal/food-list" element={<FoodList />}/>
         <Route path="/meals/date/:date" element={<MealDate />}/>
+        <Route path='/meal/food-search' element={<FoodSearch />}/>
+
         <Route path="/user_info" element={<UserInfoForm />}/>
         <Route path="/exercise/workout-create" element={<WorkoutForm />}/>
         <Route path="/exercise/workout-list" element={<WorkoutList/>}/>
