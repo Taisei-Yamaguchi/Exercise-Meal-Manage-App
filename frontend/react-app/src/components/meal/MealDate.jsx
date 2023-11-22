@@ -104,7 +104,7 @@ const MealDate = () => {
                     .filter((meal) => meal.meal_type === type)
                     .map((meal, index) => (
                     <div className={`each-meal ${meal.meal_type}`} key={index}>
-                        <MealUpdate mealId={meal.id} />
+                        <MealUpdate meal={meal} />
                         <MealDelete mealId={meal.id}/>
                         {/* <p>Meal Date: {meal.meal_date}</p> */}
                         <p>{meal.food.name}</p>
@@ -112,15 +112,26 @@ const MealDate = () => {
                         
                         {meal.serving !== null && meal.serving !== 0 ? (
                             <div>
+                                
                                 <p>{meal.serving} servings</p>
                                 <p>{meal.food.cal * meal.serving} (kcal)</p>
                             </div>
-                            ) : (
+                            ) :(
                             <div>
+                                
                                 <p>{meal.grams} (g)</p>
-                                <p>{meal.food.cal * (meal.grams / meal.food.amount_per_serving)} kcal</p>
+                                {meal.food.is_open_api ===true &&  meal.food.is_100g === true ? (
+                                    <div>
+                                    <p>100gあたりのデータから計算</p>
+                                    <p>また、1 servingあたり100gとしてる</p>
+                                    <p>{meal.food.cal * (meal.grams / meal.food.amount_per_serving)} kcal</p>
+                                    </div>
+                                ) : (
+                                    <p>{meal.food.cal * (meal.grams / meal.food.amount_per_serving)} kcal</p>
+                                )}
                             </div>
                         )}
+
                         
                     </div>
                     ))}

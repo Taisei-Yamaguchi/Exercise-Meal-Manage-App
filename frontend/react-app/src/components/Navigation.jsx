@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 function Navigation() {
     const [showNav, setShowNav] = useState(false);
 
-    const workout_type='Chest';
+    const workout_type='All';
 
     const currentDate = new Date();
     const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
@@ -23,6 +23,7 @@ function Navigation() {
         { to: "/accounts/get", label: "Account Info" },
         { to: "/meal/food", label: "Food Post" },
         { to: "/meal/food-list", label: "Food List" },
+        { to: `/meal/food-search/${formattedDate}`, label: "Food Search" },
         { to: `/meals/date/${formattedDate}`, label: "Meals Today" },
         { to: "/exercise/workout-create", label: "Workout Post" },
         { to: "/exercise/workout-list", label: "Workout List" },

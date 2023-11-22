@@ -2,6 +2,7 @@
 using Django &amp; React
 
 ・最初に、export でDB_USER,DB_PASSWORDを設定する。これによりDBにアクセスできるようにする。<br>
+・FOOD_API_CONSUMER_KEY, FOOD_API_CONSUMER_SECRETを同様に設定する。
 <br>
 
 1. 今後やること <br>

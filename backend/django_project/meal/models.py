@@ -9,7 +9,14 @@ class Food(models.Model):
     # name,cal ,amount_per_servingは必須
     name = models.CharField(max_length=100)  # 食品名
     cal = models.FloatField(validators=[MinValueValidator(1)],default=1)  # カロリー
-    amount_per_serving = models.FloatField(validators=[MinValueValidator(1)],default=1)  # 1人前あたりの量
+    amount_per_serving = models.FloatField(validators=[MinValueValidator(1)],null=True,blank=True)  # 1人前あたりの量
+    
+    
+    # fat secret apiで取得したデータの場合、ここを入力
+    is_open_api = models.BooleanField(default=False)
+    is_100g = models.BooleanField(default=False)
+    is_serving =models.BooleanField(default=False)
+    food_id = models.CharField(max_length=100, null=True, blank=True)
     
     # Nutrients Field with MinValueValidator
     carbohydrate = models.FloatField(blank=True, null=True, validators=[MinValueValidator(0)])
@@ -58,18 +65,26 @@ class Meal(models.Model):
 
 
     def clean(self):
+        #どちらかは必要
         if self.serving is None and self.grams is None:
             raise ValidationError("Serving or grams is required.")
         
+        # どちらも有効な形であってはいけない
         if self.grams is not None and self.serving is not None:
             if self.serving > 0 and self.grams >0:
                 raise ValidationError("Only one of serving or grams should be provided.")
 
-        if self.grams is not None and self.grams < 0:
-            raise ValidationError("Grams should be greater than 0.")
+        if self.grams == 0 and self.serving == 0:
+            raise ValidationError("Grams and Serving cannot be 0 at the same time.")
 
-        if self.serving is not None and self.serving < 0:
-            raise ValidationError("Serving should be greater than 0.")
+        if (self.grams is None or self.grams <=0) and (self.serving is None or self.serving <= 0):
+            raise ValidationError("If you don't set grams, Serving should be greater than 0.If you don't set serving, Grams should be greater than 0.")
+
+        if self.food.is_serving:
+            # foodがis_servingの場合、gramsはnullである必要があります
+            if self.grams is not None:
+                raise ValidationError("For food with is_serving=True, grams must be null.")
+        
 
     def save(self, *args, **kwargs):
         self.full_clean()  # インスタンスが保存される前にバリデーションを実行

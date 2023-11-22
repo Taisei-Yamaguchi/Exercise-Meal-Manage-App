@@ -3,13 +3,14 @@
 import React, { useState } from 'react';
 import getCookie from '../helpers/getCookie';
 
-function MealUpdate({ mealId }) {
+function MealUpdate({ meal }) {
     const [serving, setServing] = useState(1);
-    const [grams,setGrams] =useState(0);
+    const [grams,setGrams] =useState(null);
 
     const handleUpdateMeal = async () => {
+        
         try {
-            const response = await fetch(`http://127.0.0.1:8000/meal/meal/update/${mealId}/`, {
+            const response = await fetch(`http://127.0.0.1:8000/meal/meal/update/${meal.id}/`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -39,13 +40,23 @@ function MealUpdate({ mealId }) {
         <div>
             <label>
                 Serving:
-                <input type="number" value={serving} onChange={(e) => setServing(e.target.value)} />
+                <input type="number" value={serving === null ? '':serving} 
+                onChange={(e) => setServing(e.target.value === '' ? null : parseFloat(e.target.value))} />
             </label>
             <br></br>
-            <label>
-                Grams:
-                <input type="number" value={grams} onChange={(e) => setGrams(e.target.value)} />
-            </label>
+            {meal.food.is_open_api ===true &&  meal.food.is_serving === true ?(
+                <div>
+                <p>これに対応するfoodは、1 servingあたりのデータ</p>
+                <p>amount_per_servingが不明なため、grams数指定不可</p>
+                </div>
+            ):(
+                <label>
+                    Grams:
+                    <input type="number" value={grams === null ? '' : grams} 
+                    onChange={(e) => setGrams(e.target.value === '' ? null : parseFloat(e.target.value))} />
+                </label>
+            )}
+            
             <button onClick={handleUpdateMeal}>Update</button>
         </div>
     );
