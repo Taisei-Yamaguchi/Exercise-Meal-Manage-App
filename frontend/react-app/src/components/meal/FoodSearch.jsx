@@ -10,12 +10,13 @@ const FoodSearch = () => {
     
     const [searchExpression, setSearchExpression] = useState('');
     const [searchResults, setSearchResults] = useState([]);
-    const [mealData,setMealData] =useState({
+    const mealData ={
         'meal_date':date,
         'serving':1,
         'meal_type':meal_type,
-    })
-    
+    }
+
+    const [mes,setMes] = useState('')
     const navigate=useNavigate();
 
     useEffect(() => {
@@ -41,6 +42,13 @@ const FoodSearch = () => {
                 const data = await response.json();
                 console.log('Food Search successfully:', data);
                 setSearchResults(data);
+                setSearchExpression('');
+
+                if(data.length===0){
+                    setMes("No foof is found. Please search with different word.")
+                }else{
+                    setMes('')
+                }
             } else {
                 console.error('Failed to Food Search:', response.statusText);
             }
@@ -69,7 +77,7 @@ const FoodSearch = () => {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Meal created successfully:', data);
-                // 任意のリダイレクトなどを行う
+                
             } else {
                 console.error('Failed to create Meal:', response.statusText);
             }
@@ -100,6 +108,7 @@ const FoodSearch = () => {
                 </li>
             ))}
         </ul>
+        <p>{mes}</p>
         </div>
     );
 };

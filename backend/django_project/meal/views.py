@@ -152,23 +152,24 @@ class FatSecretSearchAPIView(APIView):
         #  必要な情報を整理してJSON形式にする
         search_results = []
         for food in json_data.get('foods', {}).get('food', []):
-            nutritional_values = extract_nutritional_values(food.get('food_description'))
             
-            if nutritional_values is None:
-                continue
-        
-            search_results.append({
-                'food_id': food.get('food_id', ''),
-                'name': food.get('food_name',''),
-                'cal': nutritional_values['cal'],
-                'amount_per_serving': nutritional_values['amount_per_serving'],
-                'carbohydrate': nutritional_values['carbohydrate'],
-                'fat': nutritional_values['fat'],
-                'protein': nutritional_values['protein'],
-                'is_100g' :nutritional_values['is_100g'],
-                'is_serving' :nutritional_values['is_serving']
-                # 他の栄養情報取得は有料
-            })
+            # 'search_expression' が食品名に含まれるか確認
+            if 'food_name' in food and search_expression.lower().rstrip('/') in food.get('food_name').lower():
+                nutritional_values = extract_nutritional_values(food.get('food_description'))
+            
+                if nutritional_values is not None:
+                    search_results.append({
+                        'food_id': food.get('food_id', ''),
+                        'name': food.get('food_name',''),
+                        'cal': nutritional_values['cal'],
+                        'amount_per_serving': nutritional_values['amount_per_serving'],
+                        'carbohydrate': nutritional_values['carbohydrate'],
+                        'fat': nutritional_values['fat'],
+                        'protein': nutritional_values['protein'],
+                        'is_100g' :nutritional_values['is_100g'],
+                        'is_serving' :nutritional_values['is_serving']
+                        # 他の栄養情報取得は有料
+                    })
 
         # Check if the API request was successful
         if response.status_code == 200:
@@ -215,6 +216,7 @@ class MealCreateWithFatSecretView(APIView):
         # Mealデータの保存
         meal_data['account'] = user.id
         meal_data['food'] = food.id
+        print(meal_data)
 
         meal_serializer = MealSerializer(data=meal_data)
         if meal_serializer.is_valid():

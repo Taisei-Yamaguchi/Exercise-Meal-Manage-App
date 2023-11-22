@@ -26,6 +26,7 @@ def prepare_fatsecret_search_request(search_expression):
         'oauth_nonce': oauth_nonce,
         'oauth_timestamp': oauth_timestamp,
         'oauth_version': '1.0',
+        'page_number': 0
     }
 
     signing_params = {k: v for k, v in params.items() if k != ''}

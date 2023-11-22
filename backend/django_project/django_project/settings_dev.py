@@ -51,7 +51,6 @@ LOGGING={
 
 EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
 
-CORS_ALLOW_ALL_ORIGINS = False
 CSRF_COOKIE_SAMESITE = None
 CORS_ALLOW_CREDENTIALS = True
 CSRF_COOKIE_SECURE = False
