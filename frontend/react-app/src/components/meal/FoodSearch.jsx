@@ -6,8 +6,8 @@ import { useParams } from 'react-router-dom';
 import Navigation from '../Navigation';
 
 const FoodSearch = () => {
-    const {date}=useParams();
-    const meal_type='dinner'
+    const {date,meal_type}=useParams();
+    
     const [searchExpression, setSearchExpression] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [mealData,setMealData] =useState({
