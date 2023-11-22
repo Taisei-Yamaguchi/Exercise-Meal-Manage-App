@@ -7,7 +7,7 @@ using Django &amp; React
 
 1. 今後やること <br>
 ・email送信は後で設定。<br>
-・food Opne APIの使用検討 <br>
+<del>・food Opne APIの使用検討 <br></del>
 <del>・account updateの実装 <br></del>
 <del>・バックエンド　コード整理 1(account,user_info,exercise,meal,graph)<br></del>
 ・バックエンド　コード整理 2<br>
