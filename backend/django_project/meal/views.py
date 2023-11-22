@@ -15,8 +15,7 @@ import hashlib
 import base64
 from urllib.parse import quote, urlencode
 import os
-import re
-
+from .helpers.extract_nutritional_values import extract_nutritional_values
 
 
 
@@ -139,7 +138,7 @@ class MealDeleteView(DestroyAPIView):
         
 
 class FatSecretSearchAPIView(APIView):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         # FatSecret API credentials
         consumer_key = os.environ.get('FOOD_API_CONSUMER_KEY')
         consumer_secret = os.environ.get('FOOD_API_CONSUMER_SECRET')
@@ -172,7 +171,6 @@ class FatSecretSearchAPIView(APIView):
         # Extract the parameters for signing
         signing_params = {k: v for k, v in params.items() if k != ''}
 
-
         base_string = '&'.join(
             [
                 'POST',
@@ -200,12 +198,10 @@ class FatSecretSearchAPIView(APIView):
         # APIからのレスポンスをJSONに変換
         json_data = response.json()
         
-        
-        # # # 必要な情報を整理してJSON形式にする
+        #  必要な情報を整理してJSON形式にする
         search_results = []
         for food in json_data.get('foods', {}).get('food', []):
             nutritional_values = extract_nutritional_values(food.get('food_description'))
-            print('えらー',nutritional_values)
         
             search_results.append({
                 'food_id': food.get('food_id', ''),
@@ -215,6 +211,8 @@ class FatSecretSearchAPIView(APIView):
                 'carbohydrate': nutritional_values['carbohydrate'],
                 'fat': nutritional_values['fat'],
                 'protein': nutritional_values['protein'],
+                'is_100g' :nutritional_values['is_100g'],
+                'is_serving' :nutritional_values['is_serving']
                 # 他の栄養情報取得は有料
             })
 
@@ -227,50 +225,9 @@ class FatSecretSearchAPIView(APIView):
             return Response({'error': 'Failed to fetch data from FatSecret API'}, status=response.status_code)
 
 
-def extract_nutritional_values(food_description):
-    # 正規表現パターン
-    pattern = r"Per (\d+(\.\d+)?)\s*(g| serving) - Calories: (\d+)kcal \| Fat: (\d+\.\d+)g \| Carbs: (\d+\.\d+)g \| Protein: (\d+\.\d+)g"
 
-    # 正規表現にマッチする部分を取得
-    match = re.search(pattern, food_description)
 
-    # マッチした場合は各値を返す
-    if match:
-        amount_per_serving = float(match.group(1))
-        unit = match.group(3).strip().lower()  # 'g' or 'serving'
-        calories = float(match.group(4))
-        fat = float(match.group(5))
-        carbs = float(match.group(6))
-        protein = float(match.group(7))
-
-        
-        #　実際には、この場合、amount_per_servingをnullにした処理をする。
-        if unit == 'serving':
-            amount_per_serving=amount_per_serving*100
-        # amount_per_servingが100gの場合の計算
-        amount_per_serving_100g=100
-        cals_per_100g = (calories / amount_per_serving) * 100
-        fat_per_100g = (fat / amount_per_serving) * 100
-        carbs_per_100g = (carbs / amount_per_serving) * 100
-        protein_per_100g = (protein / amount_per_serving) * 100
-
-        
-        return {
-            'amount_per_serving': amount_per_serving_100g, 
-            'cal': cals_per_100g, 
-            'fat': fat_per_100g, 
-            'carbohydrate': carbs_per_100g, 
-            'protein': protein_per_100g
-        }
-    else:
-        return None
-    
-    
-    
-    
-    
-    
-# Meal Create 自分のFoodをもとに食事内容を記録していく
+# Meal Create with FatSeceret FatSecretから取得したデータを利用してmeal登録する場合
 class MealCreateWithFatSecretView(APIView):
     permission_classes = [IsAuthenticated]  # ユーザーが認証されていることを確認
     

@@ -208,7 +208,7 @@ class DailyNutrientsGraphDataAPIView(APIView):
             Sum(
                     Case(
                         When(serving__isnull=True, then=F('grams') * F(f'food__{nutrient}') / F('food__amount_per_serving')),
-                        When(serving=0, then=F('grams') * F(f'food__{nutrient}') / F('food__amount_per_serving')),
+                        When(serving=0,serving__isnull=False, then=F('grams') * F(f'food__{nutrient}') / F('food__amount_per_serving')),
                         default=F('serving') * F(f'food__{nutrient}'),
                         output_field=FloatField()
                     )
