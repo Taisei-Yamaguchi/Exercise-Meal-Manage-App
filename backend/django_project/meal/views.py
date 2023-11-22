@@ -201,10 +201,11 @@ class FatSecretSearchAPIView(APIView):
         json_data = response.json()
         
         
-        # # 必要な情報を整理してJSON形式にする
+        # # # 必要な情報を整理してJSON形式にする
         search_results = []
         for food in json_data.get('foods', {}).get('food', []):
             nutritional_values = extract_nutritional_values(food.get('food_description'))
+            print('えらー',nutritional_values)
         
             search_results.append({
                 'food_id': food.get('food_id', ''),
@@ -228,19 +229,24 @@ class FatSecretSearchAPIView(APIView):
 
 def extract_nutritional_values(food_description):
     # 正規表現パターン
-    pattern = r"Per (\d+)g - Calories: (\d+)kcal \| Fat: (\d+\.\d+)g \| Carbs: (\d+\.\d+)g \| Protein: (\d+\.\d+)g"
+    pattern = r"Per (\d+(\.\d+)?)\s*(g| serving) - Calories: (\d+)kcal \| Fat: (\d+\.\d+)g \| Carbs: (\d+\.\d+)g \| Protein: (\d+\.\d+)g"
 
     # 正規表現にマッチする部分を取得
     match = re.search(pattern, food_description)
 
     # マッチした場合は各値を返す
     if match:
-        amount_per_serving = int(match.group(1))
-        calories = float(match.group(2))
-        fat = float(match.group(3))
-        carbs = float(match.group(4))
-        protein = float(match.group(5))
+        amount_per_serving = float(match.group(1))
+        unit = match.group(3).strip().lower()  # 'g' or 'serving'
+        calories = float(match.group(4))
+        fat = float(match.group(5))
+        carbs = float(match.group(6))
+        protein = float(match.group(7))
 
+        
+        #　実際には、この場合、amount_per_servingをnullにした処理をする。
+        if unit == 'serving':
+            amount_per_serving=amount_per_serving*100
         # amount_per_servingが100gの場合の計算
         amount_per_serving_100g=100
         cals_per_100g = (calories / amount_per_serving) * 100
@@ -248,6 +254,7 @@ def extract_nutritional_values(food_description):
         carbs_per_100g = (carbs / amount_per_serving) * 100
         protein_per_100g = (protein / amount_per_serving) * 100
 
+        
         return {
             'amount_per_serving': amount_per_serving_100g, 
             'cal': cals_per_100g, 

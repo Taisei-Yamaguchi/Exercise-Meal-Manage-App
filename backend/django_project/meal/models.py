@@ -9,10 +9,13 @@ class Food(models.Model):
     # name,cal ,amount_per_servingは必須
     name = models.CharField(max_length=100)  # 食品名
     cal = models.FloatField(validators=[MinValueValidator(1)],default=1)  # カロリー
-    amount_per_serving = models.FloatField(validators=[MinValueValidator(1)],default=1)  # 1人前あたりの量
+    amount_per_serving = models.FloatField(validators=[MinValueValidator(1)],null=True,blank=True)  # 1人前あたりの量
+    
     
     # fat secret apiで取得したデータの場合、ここを入力
     is_open_api = models.BooleanField(default=False)
+    is_100g = models.BooleanField(default=False)
+    is_serving =models.BooleanField(default=False)
     food_id = models.CharField(max_length=100, null=True, blank=True)
     
     # Nutrients Field with MinValueValidator
