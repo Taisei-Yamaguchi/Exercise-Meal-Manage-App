@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom';
 import MealUpdate from './MealUpdate';
 import MealDelete from './MealDelete';
 import getCookie from '../helpers/getCookie';
+import { NavLink } from 'react-router-dom';
+
 // import LogoutButton from './LogoutButton';
 
 
@@ -14,7 +16,6 @@ const MealDate = () => {
     const [meals, setMeals] = useState([]);
     const navigate=useNavigate()
     const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack'];
-
 
     useEffect(() => {
         const yourAuthToken = localStorage.getItem('authToken'); // localStorage や state からトークンを取得する
@@ -98,6 +99,7 @@ const MealDate = () => {
             {mealTypes.map((type) => (
                 <div key={type} className='meal-group'>
                 <h2>{type} Meals</h2>
+                <NavLink to={`/meal/food-search/${date}/${type}`}>Search</NavLink>
                 <MealCreateForm meal_type={type} meal_date={date}/>
                 {/* Filter meals based on the current type */}
                 {meals
