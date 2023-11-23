@@ -28,8 +28,10 @@ const FoodSearch = () => {
     }, []);
 
     const handleSearch = async () => {
+        const escapedSearchExpression = searchExpression.replace(/&/g, '%26').replace(/\|/g, '%7C');
+
         try {
-            const response = await fetch(`http://127.0.0.1:8000/meal/meal/food-search/?search_expression=${searchExpression}/`, {
+            const response = await fetch(`http://127.0.0.1:8000/meal/meal/food-search/?search_expression=${escapedSearchExpression}/`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,7 +47,7 @@ const FoodSearch = () => {
                 setSearchExpression('');
 
                 if(data.length===0){
-                    setMes("No foof is found. Please search with different word.")
+                    setMes("No food is found. Please search with different word.")
                 }else{
                     setMes('')
                 }

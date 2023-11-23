@@ -12,6 +12,8 @@ from urllib.parse import quote, urlencode
 import os
 from .helpers.extract_nutritional_values import extract_nutritional_values
 from .helpers.prepare_fatsecret_search_request import prepare_fatsecret_search_request
+from .helpers.clean_search_expression import clean_search_expression
+from .helpers.apply_search_expression import apply_search_expression
 
 
 
@@ -131,7 +133,7 @@ class MealDeleteView(DestroyAPIView):
 
 
 
-
+# Search Food woth search_expression in FatSecret. (キーワード検索で、APIからfoodを取得する)
 class FatSecretSearchAPIView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
@@ -151,10 +153,12 @@ class FatSecretSearchAPIView(APIView):
         
         #  必要な情報を整理してJSON形式にする
         search_results = []
+        cleaned_expression= clean_search_expression(search_expression)
+        
         for food in json_data.get('foods', {}).get('food', []):
             
             # 'search_expression' が食品名に含まれるか確認
-            if 'food_name' in food and search_expression.lower().rstrip('/') in food.get('food_name').lower():
+            if apply_search_expression(food,cleaned_expression):
                 nutritional_values = extract_nutritional_values(food.get('food_description'))
             
                 if nutritional_values is not None:
