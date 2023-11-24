@@ -60,6 +60,8 @@
 <p>・search_expressionをpostで渡し、fatsecretのfoodを検索し取得する</p>
 <h3>Create Meal With Fatsecret ( /meal/meal/create-with-fatsecret/ ) </h3>
 <p>・food searchで取得したfoodをpostで渡す。</p>
+<h3>Searched Food History ( /meal/food/get-searched-food-history/ ) </h3>
+<p>・food searchで登録したfoodの履歴をGET。</p>
 
 <br>
 <h2>User Info</h2>
@@ -89,6 +91,15 @@
 <h3>Cals Graph ( /graph/cals-graph/ )</h3>
 <p>・これまでの全日の,intake_cals,consuming_calsのデータを取得</p>
 
+<br>
+<h2>Main</h2>
+<br>
 
+<h3> Registration Status Check ( /main/registration-status-check/)</h3>
+<p>・各日付において、meal,exerciseそれぞれを登録してるかtrue,falseを示すデータをget。</p>
+<h3> Cals By Date ( /main/cals-by-date/)</h3>
+<p>・フロントで指定したdateをクエリで渡す。結果、その日のカロリーデータが返ってくる。</p>
+<h3> PFC By Date ( /main/pfc-by-date/)</h3>
+<p>・フロントで指定したdateをクエリで渡す。結果、その日のPFCデータが返ってくる。</p>
 
 

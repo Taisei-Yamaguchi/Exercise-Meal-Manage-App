@@ -23,7 +23,7 @@ function Navigation() {
         { to: "/accounts/get", label: "Account Info" },
         { to: "/meal/food", label: "Food Post" },
         { to: "/meal/food-list", label: "Food List" },
-        
+        { to: "/meal/searched-food-history", label: "Searched Food History"},
         { to: `/meals/date/${formattedDate}`, label: "Meals Today" },
         { to: "/exercise/workout-create", label: "Workout Post" },
         { to: "/exercise/workout-list", label: "Workout List" },
@@ -36,6 +36,9 @@ function Navigation() {
         { to: `/graph/nutrients/${formattedDate}`, label: "Daily Nutrients Graph" },
         { to: `/graph/daily-exercise-weight/${workout_type}`, label: "Daily Exercise Weight Graph" },
         { to: "/graph/cals", label: "Cals Graph" },
+        { to: "/main/registration-status-check", label: "Registration Status Check"},
+        { to: `/main/cals-by-date/${formattedDate}`, label: "Cals Today" },
+        { to: `/main/pfc-by-date/${formattedDate}`, label: "PFC Today" },
     ];
 
     return (

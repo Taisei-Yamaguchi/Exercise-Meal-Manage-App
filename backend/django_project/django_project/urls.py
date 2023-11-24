@@ -25,4 +25,6 @@ urlpatterns = [
     path('user_info/',include('user_info.urls')),
     path('exercise/',include('exercise.urls')),
     path('graph/',include('graph.urls')),
+    path('main/',include('main.urls')),
+    
 ]

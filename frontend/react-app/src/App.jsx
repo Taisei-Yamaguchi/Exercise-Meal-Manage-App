@@ -33,7 +33,10 @@ import DailyExerciseWeightGraph from './components/graph/DailyExerciseWeightGrap
 import CalsGraph from './components/graph/CalsGraph';
 
 import FoodSearch from './components/meal/FoodSearch';
-
+import SearchedFoodHistory from './components/meal/SearchedFoodHistory';
+import RegistrationStatusCheck from './components/main/RegistrationStatusCheck';
+import CalsByDate from './components/main/CalsByDate';
+import PFCByDate from './components/main/PFCByDate';
 
 function App() {
   
@@ -54,6 +57,7 @@ function App() {
         <Route path="/accounts/password_reset/:uid/:token" element={<PasswordResetPage/>}/>
         <Route path="/meal/food" element={<FoodForm />}/>
         <Route path="/meal/food-list" element={<FoodList />}/>
+        <Route path="/meal/searched-food-history" element={<SearchedFoodHistory />}/>
         <Route path="/meals/date/:date" element={<MealDate />}/>
         <Route path='/meal/food-search/:date/:meal_type' element={<FoodSearch />}/>
 
@@ -69,6 +73,9 @@ function App() {
         <Route path="/graph/nutrients/:date" element={<DailyNutrientsGraph />}/>
         <Route path="/graph/daily-exercise-weight/:workout_type" element={<DailyExerciseWeightGraph />}/>
         <Route path="/graph/cals" element={<CalsGraph />}/>
+        <Route path="/main/registration-status-check" element={<RegistrationStatusCheck />}/>
+        <Route path="/main/cals-by-date/:date" element={<CalsByDate />}/>
+        <Route path="/main/pfc-by-date/:date" element={<PFCByDate />}/>
       </Routes>
     </BrowserRouter>
       
