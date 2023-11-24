@@ -37,6 +37,8 @@ function Navigation() {
         { to: `/graph/daily-exercise-weight/${workout_type}`, label: "Daily Exercise Weight Graph" },
         { to: "/graph/cals", label: "Cals Graph" },
         { to: "/main/registration-status-check", label: "Registration Status Check"},
+        { to: `/main/cals-by-date/${formattedDate}`, label: "Cals Today" },
+        { to: `/main/pfc-by-date/${formattedDate}`, label: "PFC Today" },
     ];
 
     return (
