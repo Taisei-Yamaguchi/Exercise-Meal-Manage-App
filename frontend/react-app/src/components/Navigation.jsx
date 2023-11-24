@@ -23,7 +23,7 @@ function Navigation() {
         { to: "/accounts/get", label: "Account Info" },
         { to: "/meal/food", label: "Food Post" },
         { to: "/meal/food-list", label: "Food List" },
-        
+        { to: "/meal/searched-food-history", label: "Searched Food History"},
         { to: `/meals/date/${formattedDate}`, label: "Meals Today" },
         { to: "/exercise/workout-create", label: "Workout Post" },
         { to: "/exercise/workout-list", label: "Workout List" },

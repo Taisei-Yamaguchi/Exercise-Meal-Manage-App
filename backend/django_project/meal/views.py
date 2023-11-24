@@ -230,3 +230,14 @@ class MealCreateWithFatSecretView(APIView):
             print(meal_serializer.errors)
             return Response(meal_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
+            
+            
+
+# GetSearchedFoodHistory (検索して登録したfoodの履歴を返す)
+class GetSearchedFoodHistoryView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = self.request.user
+        foods = Food.objects.filter(account=user.id,is_open_api=True)   
+        serialized_foods = FoodSerializer(foods, many=True)
+        return Response({'foods':serialized_foods.data})

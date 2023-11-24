@@ -33,6 +33,7 @@ import DailyExerciseWeightGraph from './components/graph/DailyExerciseWeightGrap
 import CalsGraph from './components/graph/CalsGraph';
 
 import FoodSearch from './components/meal/FoodSearch';
+import SearchedFoodHistory from './components/meal/SearchedFoodHistory';
 
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
         <Route path="/accounts/password_reset/:uid/:token" element={<PasswordResetPage/>}/>
         <Route path="/meal/food" element={<FoodForm />}/>
         <Route path="/meal/food-list" element={<FoodList />}/>
+        <Route path="/meal/searched-food-history" element={<SearchedFoodHistory />}/>
         <Route path="/meals/date/:date" element={<MealDate />}/>
         <Route path='/meal/food-search/:date/:meal_type' element={<FoodSearch />}/>
 
