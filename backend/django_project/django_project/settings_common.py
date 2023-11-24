@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "user_info.apps.UserInfoConfig",
     "exercise.apps.ExerciseConfig",
     "graph.apps.GraphConfig",
+    "main.apps.MainConfig",
     
     "django.contrib.sites",
     "allauth",

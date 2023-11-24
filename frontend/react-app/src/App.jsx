@@ -34,6 +34,7 @@ import CalsGraph from './components/graph/CalsGraph';
 
 import FoodSearch from './components/meal/FoodSearch';
 import SearchedFoodHistory from './components/meal/SearchedFoodHistory';
+import RegistrationStatusCheck from './components/main/RegistrationStatusCheck';
 
 
 function App() {
@@ -71,6 +72,7 @@ function App() {
         <Route path="/graph/nutrients/:date" element={<DailyNutrientsGraph />}/>
         <Route path="/graph/daily-exercise-weight/:workout_type" element={<DailyExerciseWeightGraph />}/>
         <Route path="/graph/cals" element={<CalsGraph />}/>
+        <Route path="/main/registration-status-check" element={<RegistrationStatusCheck />}/>
       </Routes>
     </BrowserRouter>
       

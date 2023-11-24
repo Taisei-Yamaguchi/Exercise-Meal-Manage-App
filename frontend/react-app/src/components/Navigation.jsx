@@ -36,6 +36,7 @@ function Navigation() {
         { to: `/graph/nutrients/${formattedDate}`, label: "Daily Nutrients Graph" },
         { to: `/graph/daily-exercise-weight/${workout_type}`, label: "Daily Exercise Weight Graph" },
         { to: "/graph/cals", label: "Cals Graph" },
+        { to: "/main/registration-status-check", label: "Registration Status Check"},
     ];
 
     return (
