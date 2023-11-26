@@ -1,9 +1,7 @@
-// MealUpdateForm.js
-
 import React, { useState } from 'react';
-import getCookie from '../helpers/getCookie';
+import getCookie from '../../hooks/getCookie';
 
-function MealUpdate({ meal }) {
+function MealUpdate({ meal,onUpdate }) {
     const [serving, setServing] = useState(meal.serving);
     const [grams,setGrams] =useState(meal.grams);
 
@@ -26,6 +24,7 @@ function MealUpdate({ meal }) {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Meal updated successfully:', data);
+                onUpdate()
             } else {
                 console.error('Failed to update meal:', response.statusText);
             }
@@ -37,27 +36,26 @@ function MealUpdate({ meal }) {
     
 
     return (
-        <div>
+        <div className='meal-update'>
             <label>
-                Serving:
-                <input type="number" value={serving === null ? '':serving} 
-                onChange={(e) => setServing(e.target.value === '' ? null : parseFloat(e.target.value))} />
+                <input type="number"  className='food-amount-select' value={serving === null ? '':serving} 
+                onChange={(e) => setServing(e.target.value === '' ? null : parseFloat(e.target.value))} />(servings)
             </label>
             <br></br>
             {meal.food.is_open_api ===true &&  meal.food.is_serving === true ?(
-                <div>
-                <p>これに対応するfoodは、1 servingあたりのデータ</p>
-                <p>amount_per_servingが不明なため、grams数指定不可</p>
-                </div>
+                <div></div>
             ):(
-                <label>
-                    Grams:
-                    <input type="number" value={grams === null ? '' : grams} 
-                    onChange={(e) => setGrams(e.target.value === '' ? null : parseFloat(e.target.value))} />
+                <div>
+                    <label>
+                    <input type="number" className='food-amount-select' value={grams === null ? '' : grams} 
+                    onChange={(e) => setGrams(e.target.value === '' ? null : parseFloat(e.target.value))} />(g)
                 </label>
+                <br></br>
+                </div>
+                
             )}
             
-            <button onClick={handleUpdateMeal}>Update</button>
+            <button className='meal-update-button'onClick={handleUpdateMeal}>U</button>
         </div>
     );
 }

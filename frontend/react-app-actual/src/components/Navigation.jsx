@@ -6,6 +6,10 @@ import LogoutButton from './account/Logout';
 
 const Navigation = () => {
 
+    const currentDate = new Date();
+    const  formattedCurrentDate= `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
     const yourAuthToken = localStorage.getItem('authToken');
     return (
         <nav className='menu-nav'>
@@ -28,6 +32,9 @@ const Navigation = () => {
                 </li>
                 <li>
                     <Link to="/dashboard">Dashboard</Link>
+                </li>
+                <li>
+                    <Link to={`/meal/${formattedCurrentDate}`}>Meal</Link>
                 </li>
                 
             </div>

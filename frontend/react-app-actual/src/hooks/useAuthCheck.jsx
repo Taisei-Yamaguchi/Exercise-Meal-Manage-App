@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const useAuthCheck = () => {
+const useAuthCheck =(fetchFunc) => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -10,8 +10,12 @@ const useAuthCheck = () => {
         if (!authToken) {
             console.log('Token Error');
             navigate('/login');
+        }else{
+            if (typeof fetchFunc === 'function') {
+                fetchFunc();
+            }
         }
-    }, [navigate]);
+    }, []);
 
     return {
         // 他に必要な場合、フックから返すデータや関数を追加できます
