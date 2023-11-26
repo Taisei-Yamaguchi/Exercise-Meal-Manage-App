@@ -36,6 +36,9 @@ const Navigation = () => {
                 <li>
                     <Link to={`/meal/${formattedCurrentDate}`}>Meal</Link>
                 </li>
+                <li>
+                    <Link to={`/exercise/${formattedCurrentDate}`}>Exercise</Link>
+                </li>
                 
             </div>
             }

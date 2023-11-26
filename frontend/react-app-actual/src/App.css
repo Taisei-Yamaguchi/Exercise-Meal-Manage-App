@@ -61,6 +61,7 @@ nav{
   display: flex;
   flex-direction: row;
   padding-left: 210px;
+  width:70%
 }
 
 .menu-nav {
@@ -254,3 +255,131 @@ nav{
 
 }
 
+
+
+/* exercise */
+.exercise-nav{
+  border: solid;
+
+}
+
+.exercise-create-form{
+  display: flex;
+  flex-direction: column;
+  border: solid;
+  width:100%
+}
+
+.exercise-create-form .exercise-create-detail{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.exercise-create-form .exercise-create-detail input{
+  width: 34px;
+}
+
+.exercise-create-form .exercise-create-detail select{
+  width: 70px;
+}
+
+.exercise-create-form textarea{
+  width:150%
+}
+.exercise-create-form button{
+  background-color: brown;
+  color: #fff;
+  width: 50px;
+  height: 30px;
+  font-size: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.exercise-create-form .exercise-create-others{
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.exercise-main-container{
+  width:80%;
+}
+
+.exercise-group .each-exercise{
+  border: solid;
+  background-color: red;
+}
+
+
+.exercise-update-form{
+  display: flex;
+  flex-direction: column;
+  
+  width:100%
+}
+
+.exercise-update-form .exercise-update-detail{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.exercise-update-form .exercise-update-detail input{
+  width: 34px;
+}
+
+.exercise-update-form .exercise-update-detail select{
+  width: 70px;
+}
+
+.exercise-update-form textarea{
+  width:150%
+}
+.exercise-update-form button{
+  background-color: brown;
+  color: #fff;
+  width: 50px;
+  height: 30px;
+  font-size: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.exercise-update-form .exercise-update-others{
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.exercise-delete-button{
+  background-color: rgb(174, 171, 171);
+  color: #fff;
+  width: 50px;
+  height: 30px;
+  font-size: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+
+.exercise-graph-type-links{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.exercise-links{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
