@@ -9,10 +9,11 @@ const Dashboard = () => {
 
     return (
         
-        <div>
+        <div className='container'>
             <Navigation />
-        <h1>Dashboard Page</h1>
-        
+            <div className='sub-container'>
+            <h1>Dashboard Page</h1>
+            </div>
         
         </div>
         

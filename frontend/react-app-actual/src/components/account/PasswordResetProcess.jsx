@@ -38,24 +38,26 @@ const PasswordResetProcess = () => {
     };
 
     return (
-        <div>
+        <div className='container'>
             <Navigation />
-            <h2>Password Reset</h2>
-            <label htmlFor="new-password">New Password:</label>
-            <input
-                type="password"
-                id="new-password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-            />
-            <input
-                type="password"
-                id="again-password"
-                value={againPassword}
-                onChange={(e) => setAgainPassword(e.target.value)}
-            />
-            <button onClick={handlePasswordReset}>Reset Password</button>
-            {mes}
+            <div className='sub-container'>
+                <h2>Password Reset</h2>
+                <label htmlFor="new-password">New Password:</label>
+                <input
+                    type="password"
+                    id="new-password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                />
+                <input
+                    type="password"
+                    id="again-password"
+                    value={againPassword}
+                    onChange={(e) => setAgainPassword(e.target.value)}
+                />
+                <button onClick={handlePasswordReset}>Reset Password</button>
+                {mes}
+            </div>
         </div>
         
     );

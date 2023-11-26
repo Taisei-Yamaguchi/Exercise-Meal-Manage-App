@@ -44,24 +44,26 @@ const Login = () => {
     };
 
     return (
-        <div>
+        <div className='container'>
             <Navigation />
-            <h1>Login</h1>
-            <input
-                type="text"
-                placeholder="E-mail"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <button onClick={handleLogin}>Login</button>
-            <p><NavLink to="/password-reset/request">Did you forget your password?</NavLink></p>
-            {mes}
+            <div className='sub-container'>
+                <h1>Login</h1>
+                <input
+                    type="text"
+                    placeholder="E-mail"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <button onClick={handleLogin}>Login</button>
+                <p><NavLink to="/password-reset/request">Did you forget your password?</NavLink></p>
+                {mes}
+            </div>
         </div>
     );
 };

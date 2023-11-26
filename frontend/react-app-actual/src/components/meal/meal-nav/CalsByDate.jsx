@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react';
 import getCookie from '../../../hooks/getCookie';
 
 
-const CalsByDate = ({ selectedDate}) => {
+const CalsByDate = ({ selectedDate,onUpdate}) => {
     
     const [calsData, setCalsData] = useState([]);
     
-    
     useEffect(() => {
         fetchData()
-    }, [selectedDate]);
+    }, [selectedDate,onUpdate]);
+
+    
+
     // API経由でログインユーザーのpfcを取得
     const fetchData = async() => {
         try {

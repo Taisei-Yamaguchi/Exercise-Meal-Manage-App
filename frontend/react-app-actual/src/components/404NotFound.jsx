@@ -8,7 +8,7 @@ const NotFound= () => {
 
     return (
         
-        <div>
+        <div className='container'>
             <Navigation />
         <h1>404 Not Found</h1>
         

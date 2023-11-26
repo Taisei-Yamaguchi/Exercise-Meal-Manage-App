@@ -6,11 +6,11 @@ const Home = () => {
     
     return (
         
-        <div>
+        <div className='container'>
             <Navigation />
-        <h1>Home Page</h1>
-        
-        
+            <div className='sub-container'>
+                <h1>Home Page</h1>
+            </div>
         </div>
         
     );

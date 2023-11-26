@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
 import { useParams } from 'react-router-dom';
 import Navigation from '../Navigation';
@@ -15,12 +15,20 @@ const FoodSearch = () => {
         'meal_type':meal_type,
     }
     const [mes,setMes] = useState('')
+    const [updateTrigger, setUpdateTrigger] = useState(false);
+
+
+    const handleUpdate = () => {
+        // 何らかのアクションが発生した時にupdateTriggerをトグル
+        setUpdateTrigger((prev) => !prev);
+    };
 
     useAuthCheck()
 
-    const handleSearch = async () => {
+    const handleSearch = async (e) => {
+        e.preventDefault();
         const escapedSearchExpression = searchExpression.replace(/&/g, '%26').replace(/\|/g, '%7C');
-
+        
         try {
             const response = await fetch(`http://127.0.0.1:8000/meal/meal/food-search/?search_expression=${escapedSearchExpression}/`, {
                 method: 'GET',
@@ -66,6 +74,7 @@ const FoodSearch = () => {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Meal created successfully:', data);
+                handleUpdate();
                 
             } else {
                 console.error('Failed to create Meal:', response.statusText);
@@ -80,36 +89,46 @@ const FoodSearch = () => {
 
 
     return (
-        <div>
+        <div className='container'>
             <Navigation />
-            <MealNavigation />
-        <input
-            type="text"
-            placeholder="Enter food name"
-            value={searchExpression}
-            onChange={(e) => setSearchExpression(e.target.value)}
-        />
-        <button onClick={handleSearch}>Search</button>
-
-        <ul>
-            {searchResults.map((result) => (
-                <li className='each-searched-food' key={result.food_id} >
-                    <p>{result.name}</p>
-                    <div className='searched-food-detail'>
-                        <p>
-                            {Math.round(result.cal)} kcal
-                            {result.is_100g==true && result.is_serving==false ?(
-                                    <>(100g/1Per)</>
-                                ):(
-                                    <>(1Per)</>
-                            )}
-                        </p>
-                        <button className='meal-add-button' onClick={() => handleFoodClick(result)}>+</button>
-                    </div>
-                </li>
-            ))}
-        </ul>
-        <p>{mes}</p>
+            <div className='sub-container'>
+                <MealNavigation onChange={handleUpdate}/>
+                <div className='main'>
+                    <form onSubmit={handleSearch}>
+                        <input
+                            type="text"
+                            placeholder="Enter food name"
+                            value={searchExpression}
+                            onChange={(e) => setSearchExpression(e.target.value)}
+                            required
+                            pattern="\S+" // スペース以外の文字が1文字以上必要
+                            title="スペースのみの入力は無効です"
+                        />
+                        <button type='submit'>Search</button>
+                    </form>
+                    
+                    <p>* You can do 'and' ,'or' search with '&' ,'|'. </p>
+                    <ul>
+                        {searchResults.map((result) => (
+                            <li className='each-searched-food' key={result.food_id} >
+                                <p>{result.name}</p>
+                                <div className='searched-food-detail'>
+                                    <p>
+                                        {Math.round(result.cal)} kcal
+                                        {result.is_100g==true && result.is_serving==false ?(
+                                                <>(100g/1Per)</>
+                                            ):(
+                                                <>(1Per)</>
+                                        )}
+                                    </p>
+                                    <button className='meal-add-button' onClick={() => handleFoodClick(result)}>+</button>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                    <p>{mes}</p>
+                </div>
+            </div>
         </div>
     );
 };

@@ -57,6 +57,39 @@ nav{
 }
 
 
+.container{
+  display: flex;
+  flex-direction: row;
+  padding-left: 210px;
+}
+
+.menu-nav {
+  position: fixed;
+  top: 0;  /* 上端に固定する場合 */
+  left: 0;  /* 左端に固定する場合 */
+  width: 200px;  /* ナビゲーションの幅を調整してください */
+  height: 100vh;  /* 画面の高さいっぱいに設定します */
+  background-color: #fff;  /* ナビゲーションの背景色を指定してください */
+  border-right: 1px solid #ccc;  /* ナビゲーションの右側に境界線を追加します */
+  padding-top: 20px;  /* 適切なパディングを設定します */
+}
+
+.sub-container{
+  
+  display: flex;
+  flex-direction: column;
+  padding-left: 1%;
+}
+
+.main{
+  padding-top: 1%;
+}
+
+.graph{
+  border: solid;
+  
+}
+
 /* meal */
 .meal-nav{
   border: solid;
@@ -141,7 +174,7 @@ nav{
 }
 
 .meal-update-button{
-  background-color: greenyellow;
+  background-color: rgb(255, 227, 47);
   width: 20px;
   height:30px;
   font-size: small;
@@ -162,8 +195,20 @@ nav{
   border-radius: 50%;
 }
 
+.serving-toggle-button{
+  background-color: rgb(189, 185, 185);
+  color: aliceblue;
+  width: 50px;
+  height: 30px;
+  font-size: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
 .each-meal{
-  background-color: rgb(207, 255, 255);
+  background-color: rgb(187, 255, 41);
   display: flex;
   flex-direction: row;
   border: solid;

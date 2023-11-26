@@ -21,13 +21,15 @@ const SignUpConfirm = () => {
         };
     
         return (
-        <div>
+        <div className='container'>
             <Navigation />
-            <p>Confirmation in progress...</p>
-            {/* Add a button to trigger the confirmEmail function */}
-            <button onClick={confirmEmail}>Confirm Email</button>
-            {mes}
-            <Link to='/login'>Login </Link>
+            <div className='sub-container'>
+                <p>Confirmation in progress...</p>
+                {/* Add a button to trigger the confirmEmail function */}
+                <button onClick={confirmEmail}>Confirm Email</button>
+                {mes}
+                <Link to='/login'>Login </Link>
+            </div>
         </div>
         );
     };

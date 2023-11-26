@@ -66,49 +66,53 @@ const MealsByDate = () => {
     return (
         <div className='container'>
             <Navigation />
-            <MealNavigation /> 
-            {/* <h1>Meal {date}</h1> */}
-            {mealTypes.map((type) => (
-                <div key={type} className='meal-group'>
-                <h2>{type}</h2>
-                    <div className='meal-add-container'>
-                        <MealCreateForm meal_type={type} meal_date={date} onUpdate={handleUpdate}/>
-                        <MealCreateFormWithHistory meal_type={type} meal_date={date} onUpdate={handleUpdate}/>
-                        <NavLink to={`/meal/food-search/${type}/${date}`}>Search</NavLink>
-                    </div>
-                {/* Filter meals based on the current type */}
-                {meals
-                    .filter((meal) => meal.meal_type === type)
-                    .map((meal, index) => (
-                    <div className={`each-meal ${meal.meal_type}`} key={index}>
-                        
-                        <div className='basic-info'>
-                            <p>{meal.food.name}</p>
-                            {meal.serving !== null && meal.serving !== 0 ? (
-                                <div>
-                                    <p>({Math.round(meal.food.cal * meal.serving)}kcal)</p>
+                <div className='sub-container'>
+                <MealNavigation onUpdate={handleUpdate}/> 
+                    <div className='main'>
+                        {/* <h1>Meal {date}</h1> */}
+                        {mealTypes.map((type) => (
+                            <div key={type} className='meal-group'>
+                            <h2>{type}</h2>
+                                <div className='meal-add-container'>
+                                    <MealCreateForm meal_type={type} meal_date={date} onUpdate={handleUpdate}/>
+                                    <MealCreateFormWithHistory meal_type={type} meal_date={date} onUpdate={handleUpdate}/>
+                                    <NavLink to={`/meal/food-search/${type}/${date}`}>Search</NavLink>
                                 </div>
-                                ) :(
-                                <div>
-                                    {meal.food.is_open_api ===true &&  meal.food.is_100g === true ? (
-                                        
-                                        <p>({Math.round(meal.food.cal * (meal.grams / meal.food.amount_per_serving))} kcal)</p>
-                                        
-                                    ) : (
-                                        <p>({Math.round(meal.food.cal * (meal.grams / meal.food.amount_per_serving))} kcal)</p>
-                                    )}
-                                </div>
-                            )}
-                        </div>
+                            {/* Filter meals based on the current type */}
+                            {meals
+                                .filter((meal) => meal.meal_type === type)
+                                .map((meal, index) => (
+                                <div className={`each-meal ${meal.meal_type}`} key={index}>
+                                    
+                                    <div className='basic-info'>
+                                        <p>{meal.food.name}</p>
+                                        {meal.serving !== null && meal.serving !== 0 ? (
+                                            <div>
+                                                <p>({Math.round(meal.food.cal * meal.serving)}kcal)</p>
+                                            </div>
+                                            ) :(
+                                            <div>
+                                                {meal.food.is_open_api ===true &&  meal.food.is_100g === true ? (
+                                                    
+                                                    <p>({Math.round(meal.food.cal * (meal.grams / meal.food.amount_per_serving))} kcal)</p>
+                                                    
+                                                ) : (
+                                                    <p>({Math.round(meal.food.cal * (meal.grams / meal.food.amount_per_serving))} kcal)</p>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
 
-                        <div className='meal-btns'>
-                            <MealUpdate meal={meal} onUpdate={handleUpdate}/>
-                            <MealDelete mealId={meal.id} onUpdate={handleUpdate}/>
-                        </div>
+                                    <div className='meal-btns'>
+                                        <MealUpdate meal={meal} onUpdate={handleUpdate}/>
+                                        <MealDelete mealId={meal.id} onUpdate={handleUpdate}/>
+                                    </div>
+                                </div>
+                                ))}
+                            </div>
+                        ))}
                     </div>
-                    ))}
                 </div>
-            ))}
             </div>
         );
         

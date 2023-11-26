@@ -13,9 +13,11 @@ const FoodCreate = () => {
     const [fat,setFat] =useState('');
     const [protein,setProtein] =useState('');
     
+    
     useAuthCheck()
 
-    const handlePostFood = async () => {
+    const handlePostFood = async (e) => {
+        e.preventDefault()
         if(carbohydrate===''){
             setCarbohydrate(null)
         }
@@ -63,17 +65,28 @@ const FoodCreate = () => {
 
 
     return (
-        <div>
+        <div className='container'>
             <Navigation />
-            <MealNavigation/>
-            <div className='food-form'>
-                <label>Name:<input type="text" value={name} onChange={(e) => setName(e.target.value)} />(必須)</label>
-                <label>Cal (kcal):<input type="number" value={cal} onChange={(e) => setCal(e.target.value)} />(必須)</label>
-                <label>Amount per serving (g):<input type="number" value={amount_per_serving} onChange={(e) => setAmount_per_servnig(e.target.value)} />(必須)</label>
-                <label>Carbohydrate (g):<input type="number" value={carbohydrate} onChange={(e) => setCarbohydrate(e.target.value)} /></label>
-                <label>Fat (g):<input type="number" value={fat} onChange={(e) => setFat(e.target.value)} /></label>
-                <label>Protein (g):<input type="number" value={protein} onChange={(e) => setProtein(e.target.value)} /></label>
-                <button onClick={handlePostFood}>Post Food</button>
+            <div className='sub-container'>
+                <MealNavigation/>
+                
+                <form className='food-form main' onSubmit={handlePostFood}>
+                    <label>Name:<input 
+                        type="text" 
+                        value={name} 
+                        onChange={(e) => setName(e.target.value)} 
+                        required
+                        pattern="\S+" // スペース以外の文字が1文字以上必要
+                        title="スペースのみの入力は無効です"/>(必須)</label>
+                    <label>Cal (kcal):<input type="number" value={cal} onChange={(e) => setCal(e.target.value)} required min={1}/>(必須)</label>
+                    <label>Amount per serving (g):<input type="number" value={amount_per_serving} onChange={(e) => setAmount_per_servnig(e.target.value)} required min={1}/>(必須)</label>
+                    <label>Carbohydrate (g):<input type="number" value={carbohydrate} onChange={(e) => setCarbohydrate(e.target.value)}min={0}/></label>
+                    <label>Fat (g):<input type="number" value={fat} onChange={(e) => setFat(e.target.value)} min={0}/></label>
+                    <label>Protein (g):<input type="number" value={protein} onChange={(e) => setProtein(e.target.value)} min={0}/></label>
+                    <button type="submit">Post Food</button>
+                </form>
+                
+                
             </div>
         </div>
     );

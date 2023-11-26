@@ -30,25 +30,26 @@ const PasswordResetRequestPage = () => {
     }
 
     return (
-        <div>
-        <Navigation />
-        <h2>Password Reset Request</h2>
-        {requestSent ? (
-            <p>Check your email for the password reset link.</p>
-        ) : (
-            <>
-            <label htmlFor="email">Email:</label>
-            <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <button onClick={handlePasswordResetRequest}>Request Password Reset</button>
-            {mes}
-            </>
-        )}
-        
+        <div className='container'>
+            <Navigation />
+            <div className='sub-container'>
+                <h2>Password Reset Request</h2>
+                {requestSent ? (
+                    <p>Check your email for the password reset link.</p>
+                ) : (
+                    <>
+                    <label htmlFor="email">Email:</label>
+                    <input
+                        type="email"
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <button onClick={handlePasswordResetRequest}>Request Password Reset</button>
+                    {mes}
+                    </>
+                )}
+            </div>
         </div>
     );
 };

@@ -66,61 +66,64 @@ const SignUp = () => {
     };
 
     return (
-        <div>
+        <div className='container'>
             <Navigation />
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Name"
-                    value={userData.name}
-                    onChange={handleChange}
-                />
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={userData.email}
-                    onChange={handleChange}
-                />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={userData.password}
-                    onChange={handleChange}
-                />
-                <input
-                    type="password"
-                    name="passwordAgain"
-                    placeholder="Re-enter Password"
-                    value={userData.passwordAgain}
-                    onChange={handleChange}
-                />
-                <div>
-                    <label>
-                        Male
-                        <input
-                            type="radio"
-                            value={0}
-                            checked={userData.sex === 0}
-                            onChange={(e) => setUserData({ ...userData, sex: parseInt(e.target.value) })}
-                        />
-                    </label>
-                    <label>
-                        Female
-                        <input
-                            type="radio"
-                            value={1}
-                            checked={userData.sex === 1}
-                            onChange={(e) => setUserData({ ...userData, sex: parseInt(e.target.value) })}
-                        />
-                    </label>
-                </div>
-                <input type="date" name="birthday" value={userData.birthday} onChange={handleChange} />
-                <button type="submit">Sign Up</button>
-            </form>
-            {mes}
+            <div className='sub-container'>
+                <h1>Sign Up</h1>
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Name"
+                        value={userData.name}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={userData.email}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value={userData.password}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="password"
+                        name="passwordAgain"
+                        placeholder="Re-enter Password"
+                        value={userData.passwordAgain}
+                        onChange={handleChange}
+                    />
+                    <div>
+                        <label>
+                            Male
+                            <input
+                                type="radio"
+                                value={0}
+                                checked={userData.sex === 0}
+                                onChange={(e) => setUserData({ ...userData, sex: parseInt(e.target.value) })}
+                            />
+                        </label>
+                        <label>
+                            Female
+                            <input
+                                type="radio"
+                                value={1}
+                                checked={userData.sex === 1}
+                                onChange={(e) => setUserData({ ...userData, sex: parseInt(e.target.value) })}
+                            />
+                        </label>
+                    </div>
+                    <input type="date" name="birthday" value={userData.birthday} onChange={handleChange} />
+                    <button type="submit">Sign Up</button>
+                </form>
+                {mes}
+            </div>
         </div>
     );
 };

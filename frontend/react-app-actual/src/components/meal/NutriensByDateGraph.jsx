@@ -90,13 +90,16 @@ const DailyNutrientsGraph = () => {
     };
 
     return (
-        <div>
+        <div className='container'>
             <Navigation />
-            <MealNavigation />
-            <h1>Daily Nutrients Graph</h1>
-            <canvas ref={chartRef} />
-            <Bar data={data} height={400} options={options}/>
-            
+            <div className='sub-container'>
+                <MealNavigation />
+                <div className='main graph'>
+                    {/* <h1>Daily Nutrients Graph</h1> */}
+                    <canvas ref={chartRef} />
+                    <Bar data={data} height={300} options={options}/>
+                </div>
+            </div>
         </div>
     );
 };

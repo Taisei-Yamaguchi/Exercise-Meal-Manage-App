@@ -13,6 +13,7 @@ function MealCreateForm({meal_type,meal_date,onUpdate}) {
 
     // API経由でログインユーザーのfoodを取得
     const fetchFoods = async() => {
+        
         const yourAuthToken = localStorage.getItem('authToken'); 
         fetch('http://127.0.0.1:8000/meal/food/list/', {
             method: 'GET',
@@ -43,9 +44,9 @@ function MealCreateForm({meal_type,meal_date,onUpdate}) {
 
 
 // post meal
-    const handleCreateMeal = async () => {
-        console.log(meal_type)
-        console.log(meal_date)
+    const handleCreateMeal = async (e) => {
+        e.preventDefault();
+        
         const yourAuthToken = localStorage.getItem('authToken');
         try {
         const response = await fetch('http://127.0.0.1:8000/meal/meal/create/', {
@@ -77,28 +78,28 @@ function MealCreateForm({meal_type,meal_date,onUpdate}) {
     };
 
     return (
-        <div className='meal-create'>
-        {/* Dropdown for selecting a food item */}
-        <label>
+        <form className='meal-create' onSubmit={handleCreateMeal}>
+            {/* Dropdown for selecting a food item */}
+            <label>
+                
+                <select className='food-select' value={selectedFood} onChange={(e) => setSelectedFood(e.target.value)} required>
+                <option value="" disabled>Your</option>
+                {foods.map((food) => (
+                    <option key={food.id} value={food.id}>
+                    {food.name}
+                    </option>
+                ))}
+                </select>
+            </label>
+            <label>
+                
+                <input type="number" className='food-amount-select' value={serving} onChange={(e) => setServing(e.target.value)} required min={0.1} step={0.1}/>
+                (servings)
+            </label>
             
-            <select className='food-select' value={selectedFood} onChange={(e) => setSelectedFood(e.target.value)}>
-            <option value="" disabled>Your</option>
-            {foods.map((food) => (
-                <option key={food.id} value={food.id}>
-                {food.name}
-                </option>
-            ))}
-            </select>
-        </label>
-        <label>
-            
-            <input type="number" className='food-amount-select' value={serving} onChange={(e) => setServing(e.target.value)} />
-            (servings)
-        </label>
-        
-        {/* Button to create the meal */}
-        <button className='meal-add-button' onClick={handleCreateMeal}>+</button>
-        </div>
+            {/* Button to create the meal */}
+            <button className='meal-add-button' type='submit'>+</button>
+        </form>
     );
 }
 

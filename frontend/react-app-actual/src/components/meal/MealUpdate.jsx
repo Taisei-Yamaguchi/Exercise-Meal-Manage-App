@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
 
 function MealUpdate({ meal,onUpdate }) {
     const [serving, setServing] = useState(meal.serving);
     const [grams,setGrams] =useState(meal.grams);
+    const [isServingSelected, setIsServingSelected] = useState(!(meal.serving === null || meal.serving === 0));
 
-    const handleUpdateMeal = async () => {
-        
+    const handleUpdateMeal = async (e) => {
+        e.preventDefault()
+        if((serving!==null&&grams!==null) || (serving===null&&grams===null)){
+            window.alert('Please write only one form.');
+            return
+        }
         try {
             const response = await fetch(`http://127.0.0.1:8000/meal/meal/update/${meal.id}/`, {
                 method: 'PUT',
@@ -34,29 +39,47 @@ function MealUpdate({ meal,onUpdate }) {
     };
 
     
+    useEffect(() => {
+        if (isServingSelected) {
+            setGrams(null);
+        } else {
+            setServing(null);
+        }
+    }, [isServingSelected])
 
     return (
-        <div className='meal-update'>
-            <label>
-                <input type="number"  className='food-amount-select' value={serving === null ? '':serving} 
-                onChange={(e) => setServing(e.target.value === '' ? null : parseFloat(e.target.value))} />(servings)
-            </label>
-            <br></br>
-            {meal.food.is_open_api ===true &&  meal.food.is_serving === true ?(
-                <div></div>
-            ):(
-                <div>
+        <>
+        <form className='meal-update' onSubmit={handleUpdateMeal}>
+            {
+                isServingSelected?(
                     <label>
-                    <input type="number" className='food-amount-select' value={grams === null ? '' : grams} 
-                    onChange={(e) => setGrams(e.target.value === '' ? null : parseFloat(e.target.value))} />(g)
-                </label>
-                <br></br>
-                </div>
-                
+                        <input type="number"  className='food-amount-select' value={serving === null ? '':serving} 
+                        onChange={(e) => setServing(e.target.value === '' ? null : parseFloat(e.target.value))} min={0.1} step={0.1}/>(servings)
+                    </label>
+            
+            ):(
+                <>
+                    {meal.food.is_open_api ===true &&  meal.food.is_serving === true ?(
+                        <div></div>
+                    ):(
+                        <div>
+                        <label>
+                            <input type="number" className='food-amount-select' value={grams === null ? '' : grams} 
+                            onChange={(e) => setGrams(e.target.value === '' ? null : parseFloat(e.target.value))} min={0.1} step={0.1}/>(g)
+                        </label>
+                        <br></br>
+                        </div>
+                        
+                    )}
+                </>
             )}
             
-            <button className='meal-update-button'onClick={handleUpdateMeal}>U</button>
-        </div>
+            <button className='meal-update-button' type='submit'>U</button>
+        </form>
+            <button className='serving-toggle-button' onClick={() => setIsServingSelected(!isServingSelected)}>
+            change
+        </button>
+    </>
     );
 }
 

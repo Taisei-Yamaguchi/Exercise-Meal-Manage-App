@@ -6,7 +6,7 @@ import Calendar from './Calendar';
 import PFCByDate from './PFCByDate';
 import CalsByDate from './CalsByDate';
 
-const MealNavigation = () => {
+const MealNavigation = (onUpdate) => {
     const { date } = useParams();
     
     return (
@@ -15,8 +15,8 @@ const MealNavigation = () => {
             <h2>{date}</h2>
             <Calendar selectedDate={date}  />
             <div className='meal-info'>
-                <PFCByDate selectedDate={date} />
-                <CalsByDate selectedDate={date} />
+                <PFCByDate selectedDate={date} onUpdate={onUpdate}/>
+                <CalsByDate selectedDate={date} onUpdate={onUpdate}/>
             </div>
             
             <div className='meal-links'>

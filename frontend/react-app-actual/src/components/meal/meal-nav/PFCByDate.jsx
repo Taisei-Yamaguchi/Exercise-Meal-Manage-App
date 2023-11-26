@@ -3,14 +3,14 @@ import getCookie from '../../../hooks/getCookie';
 import { NavLink } from 'react-router-dom';
 
 
-const PFCByDate = ({ selectedDate}) => {
+const PFCByDate = ({ selectedDate,onUpdate}) => {
     
     const [pfcData, setPfcData] = useState([]);
     
     
     useEffect(() => {
         fetchData()
-    }, [selectedDate]);
+    }, [selectedDate,onUpdate]);
     // API経由でログインユーザーのpfcを取得
     const fetchData = async() => {
         try {
