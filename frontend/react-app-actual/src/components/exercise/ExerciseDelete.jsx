@@ -1,7 +1,7 @@
 import React from 'react';
 import getCookie from '../../hooks/getCookie';
 
-const ExerciseDelete = ({ exerciseId, onDelete }) => {
+const ExerciseDelete = ({ exerciseId, onUpdate }) => {
     const handleDelete = async () => {
         try {
         const authToken = localStorage.getItem('authToken');
@@ -17,6 +17,7 @@ const ExerciseDelete = ({ exerciseId, onDelete }) => {
         if (response.ok) {
              // 親コンポーネントでリストを更新するなどの処理を実行
             console.log('Delete success')
+            onUpdate()
         } else {
             console.error('Failed to delete exercise');
         }

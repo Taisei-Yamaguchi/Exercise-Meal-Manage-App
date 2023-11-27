@@ -14,8 +14,9 @@ const ExerciseNavigation = (onUpdate) => {
             <h1>Exercise </h1>
             <h2>{date}</h2>
             <Calendar selectedDate={date}  />
-            <div className='meal-info'>
+            <div className='exrcise-info'>
                 {/* <PFCByDate selectedDate={date} onUpdate={onUpdate}/> */}
+                <p>*Metsはカロリー計算の指標です。mins,sets,repsおよびUser Infoの最新の体重データ、性別から計算しています。</p>
                 <CalsByDate selectedDate={date} onUpdate={onUpdate}/>
             </div>
             

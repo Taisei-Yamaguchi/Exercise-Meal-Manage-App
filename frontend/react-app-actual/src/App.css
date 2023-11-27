@@ -61,7 +61,7 @@ nav{
   display: flex;
   flex-direction: row;
   padding-left: 210px;
-  width:70%
+  width:100%
 }
 
 .menu-nav {
@@ -70,20 +70,19 @@ nav{
   left: 0;  /* 左端に固定する場合 */
   width: 200px;  /* ナビゲーションの幅を調整してください */
   height: 100vh;  /* 画面の高さいっぱいに設定します */
-  background-color: #fff;  /* ナビゲーションの背景色を指定してください */
+  background-color: rgb(203, 202, 202);  /* ナビゲーションの背景色を指定してください */
   border-right: 1px solid #ccc;  /* ナビゲーションの右側に境界線を追加します */
   padding-top: 20px;  /* 適切なパディングを設定します */
 }
 
 .sub-container{
-  
   display: flex;
   flex-direction: column;
   padding-left: 1%;
 }
 
 .main{
-  padding-top: 1%;
+  padding-top: 280px;
 }
 
 .graph{
@@ -94,8 +93,34 @@ nav{
 /* meal */
 .meal-nav{
   border: solid;
+  position: fixed;
+  top: 0;  /* 上端に固定する場合 */
+  left: 200px;  /* 左端に固定する場合 */
+  right: 0; 
+   /* ナビゲーションの幅を調整してください */
+  height: 270px;  /* 画面の高さいっぱいに設定します */
+  background-color: rgb(196, 255, 100);  /* ナビゲーションの背景色を指定してください */
+  border-right: 1px solid #ccc;  /* ナビゲーションの右側に境界線を追加します */
+  padding-top: 20px;  /* 適切なパディングを設定します */
+  padding-left: 1%;
 }
 
+
+
+.meal-nav h1{
+  font-size: 30px;
+}
+
+.meal-nav h2{
+  font-size: 15px;
+}
+
+.meal-links{
+  display: flex;
+  flex-direction: row ;
+  
+  justify-content: space-around;
+}
 .meal-group{
   border: solid;
 }
@@ -123,7 +148,7 @@ nav{
 
 .meal-info{
   display: flex;
-  border: solid;
+  
   justify-content: space-between;
 }
 
@@ -216,12 +241,7 @@ nav{
   justify-content: space-between;
 }
 
-.meal-links{
-  display: flex;
-  flex-direction: row ;
-  border: solid;
-  justify-content: space-around;
-}
+
 
 .each-meal .basic-info{
   display: flex;
@@ -288,11 +308,11 @@ nav{
   width:150%
 }
 .exercise-create-form button{
-  background-color: brown;
+  background-color: rgb(232, 60, 60);
   color: #fff;
   width: 50px;
   height: 30px;
-  font-size: 5px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -312,7 +332,7 @@ nav{
 
 .exercise-group .each-exercise{
   border: solid;
-  background-color: red;
+  background-color: rgb(251, 66, 24);
 }
 
 
@@ -341,11 +361,11 @@ nav{
   width:150%
 }
 .exercise-update-form button{
-  background-color: brown;
+  background-color: rgb(225, 207, 7);
   color: #fff;
   width: 50px;
   height: 30px;
-  font-size: 5px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -364,7 +384,7 @@ nav{
   color: #fff;
   width: 50px;
   height: 30px;
-  font-size: 5px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -382,4 +402,31 @@ nav{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+
+.exercise-nav{
+  border: solid;
+  position: fixed;
+  top: 0;  /* 上端に固定する場合 */
+  left: 200px;  /* 左端に固定する場合 */
+  right: 0; /* ウィンドウの右端まで */
+   /* ナビゲーションの幅を調整してください */
+  height: 280px;  /* 画面の高さいっぱいに設定します */
+  background-color: rgb(255, 180, 100);  /* ナビゲーションの背景色を指定してください */
+  border-right: 1px solid #ccc;  /* ナビゲーションの右側に境界線を追加します */
+  padding-top: 20px;  /* 適切なパディングを設定します */
+  padding-left: 1%;
+}
+
+.exercise-nav h1{
+  font-size: 30px;
+}
+
+.exercise-nav h2{
+  font-size: 15px;
+}
+
+.exercise-nav p{
+  font-size: 10px;
 }

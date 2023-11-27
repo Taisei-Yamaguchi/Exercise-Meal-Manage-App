@@ -9,7 +9,8 @@ const WorkoutCreate = ({workoutType}) => {
 
     useAuthCheck();
 
-    const handleCreateWorkout = async () => {
+    const handleCreateWorkout = async (e) => {
+        e.preventDefault()
         try {
         const authToken = localStorage.getItem('authToken');
         const response = await fetch('http://127.0.0.1:8000/exercise/post-workout/', {
@@ -24,21 +25,25 @@ const WorkoutCreate = ({workoutType}) => {
 
         const data = await response.json();
         console.log('Workout created successfully:', data);
+        setWorkoutName('')
         } catch (error) {
         console.error('Error creating workout:', error);
         }
     };
 
     return (
-        <div>
+        <form onSubmit={handleCreateWorkout}>
             <input
                 type="text"
                 value={workoutName}
                 onChange={(e) => setWorkoutName(e.target.value)}
+                required
+                pattern="\S+" // スペース以外の文字が1文字以上必要
+                title="スペースのみの入力は無効です"
             />
             
-            <button onClick={handleCreateWorkout}>Create Workout</button>
-        </div>
+            <button type='submit'>new workout</button>
+        </form>
     );
     };
 

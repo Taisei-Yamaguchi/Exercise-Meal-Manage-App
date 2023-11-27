@@ -68,7 +68,7 @@ const MealsByDate = () => {
             <Navigation />
                 <div className='sub-container'>
                 <MealNavigation onUpdate={handleUpdate}/> 
-                    <div className='main'>
+                    <div className='main meal-main'>
                         {/* <h1>Meal {date}</h1> */}
                         {mealTypes.map((type) => (
                             <div key={type} className='meal-group'>

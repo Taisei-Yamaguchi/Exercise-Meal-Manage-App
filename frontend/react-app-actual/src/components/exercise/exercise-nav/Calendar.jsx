@@ -50,9 +50,9 @@ const Calendar = ({ selectedDate, onDateChange }) => {
                 
                 return (
                     <div key={date} className="calendar-date">
-                        {/* navLinkが使えない */}
-                        <NavLink to={`/exercise/${date}`}>{displayDate}</NavLink>
-                        
+                        {/* navLinkが使えない NavLinkだとページ移動後、fetchExerciseがされない*/}
+                        {/* <NavLink to={`/exercise/${date}`}>{displayDate}</NavLink> */}
+                        <a href={`/exercise/${date}`}>{displayDate}</a>
                     </div>
                 );
             })}

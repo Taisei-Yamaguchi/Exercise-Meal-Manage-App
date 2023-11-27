@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import getCookie from '../../hooks/getCookie';
+import useAuthCheck from '../../hooks/useAuthCheck';
 
 
-const ExerciseCreate = ({workoutType,exercise_date}) => {
+const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
     const navigate=useNavigate()
-    // const { date } = useParams();
+    
     const [workouts,setWorkouts]= useState([])
     const [default_workouts,setDefaultWorkouts]= useState([])
     const [formData, setFormData] = useState({
@@ -23,24 +24,7 @@ const ExerciseCreate = ({workoutType,exercise_date}) => {
         memos: null
     });
 
-    // const [loading, setLoading] = useState(false);
-    // const [error, setError] = useState('');
-
-    useEffect(() => {
-        const yourAuthToken = localStorage.getItem('authToken'); // localStorage や state からトークンを取得する
-        if (!yourAuthToken) {
-            console.log('Token Error')
-            navigate('../accounts/login'); // トークンがない場合はログインページにリダイレクト
-        }else{
-            fetchWorkouts()
-        }
-    }, []);
-
-    useEffect(()=>{
-        console.log(formData.workout_id)
-    },[formData])
-
-
+    const [workoutUpdateTrigger, setWorkoutUpdateTrigger] = useState(false);
 
     // fetch workouts and use in form.
     const fetchWorkouts = async () => {
@@ -58,14 +42,22 @@ const ExerciseCreate = ({workoutType,exercise_date}) => {
             const data = await response.json();
             setWorkouts(data.workout);
             setDefaultWorkouts(data.default_workout)
+            onUpdate()
         } catch (error) {
             console.error('Error fetching workouts:', error);
         }
     };
 
+    useAuthCheck(fetchWorkouts)
 
     // post exercise
-    const handleCreateExercise = async () => {
+    const handleCreateExercise = async (e) => {
+        e.preventDefault()
+        if((formData.sets === null || formData.reps === null) && formData.duration_minutes === null){
+            window.alert('Please write sets,reps or mins.')
+            return
+        }
+        
         try {
             const authToken = localStorage.getItem('authToken');
             const response = await fetch('http://127.0.0.1:8000/exercise/post-exercise/', {
@@ -82,6 +74,7 @@ const ExerciseCreate = ({workoutType,exercise_date}) => {
 
         console.log('Exercise created successfully:', data);
         // 成功時の処理を追加
+        onUpdate()
 
         } catch (error) {
             console.error('Error creating exercise:', error);
@@ -94,13 +87,9 @@ const ExerciseCreate = ({workoutType,exercise_date}) => {
     // detect change of form.
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        console.log(name,value)
-
-
         // If the value is an empty string, set it to null
         if(name === 'workout_id'){
             const isNumeric = /^\d+$/.test(value); // 数字かどうかチェック
-            console.log(isNumeric)
             setFormData((prevData) => ({
                 ...prevData,
                 [name]: isNumeric ? Number(value) : value,
@@ -115,6 +104,16 @@ const ExerciseCreate = ({workoutType,exercise_date}) => {
     };
 
 
+    useEffect(()=>{
+        fetchWorkouts()
+    },[workoutUpdateTrigger])
+
+    const handleUpdate = () => {
+        // 何らかのアクションが発生した時にupdateTriggerをトグル
+        setWorkoutUpdateTrigger((prev) => !prev);
+        
+    };
+
 
     
     return (
@@ -122,114 +121,122 @@ const ExerciseCreate = ({workoutType,exercise_date}) => {
             
             <h3>{formData.date}</h3>
 
-            <div className='exercise-create-form'>
-                <div className='exercise-create-detail'>
-                    <label>
-                        <select
-                            name='workout_id'
-                            value={formData.workout_id === null ? '' : formData.workout_id}
-                            onChange={handleInputChange}
-                        >
-                            <option value='' disabled>workout</option>
-                            {workouts
-                            .filter((workout)=>workout.workout_type===workoutType)
-                            .map((workout) => (
-                                <option key={workout.id} value={workout.id}>
-                                {workout.name}
-                            </option>
-
-                                
-                            ))}
-                            {default_workouts
-                            .filter((workout)=>workout.workout_type===workoutType)
-                            .map((workout) => (
-                                <option key={workout.id} value={workout.id}>
+            <form className='exercise-create-form'onSubmit={handleCreateExercise}>
+                <div className='exercise-create-detail' > 
+                        <label className='workout_id'>
+                            <select
+                                name='workout_id'
+                                value={formData.workout_id === null ? '' : formData.workout_id}
+                                onChange={handleInputChange}
+                                required
+                            >
+                                <option value='' disabled>workout</option>
+                                {workouts
+                                .filter((workout)=>workout.workout_type===workoutType)
+                                .map((workout) => (
+                                    <option key={workout.id} value={workout.id}>
                                     {workout.name}
                                 </option>
-                            ))}
-                        </select>
-                    </label>
 
-                    {workoutType === 'Aerobic' ? (
+                                    
+                                ))}
+                                {default_workouts
+                                .filter((workout)=>workout.workout_type===workoutType)
+                                .map((workout) => (
+                                    <option key={workout.id} value={workout.id}>
+                                        {workout.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+
+                        <label className='sets'>
+                            <input
+                                name='sets'
+                                type="number"
+                                value={formData.sets === null ? '' : formData.sets}
+                                onChange={handleInputChange}
+                                min={1}
+                            />(sets)
+                        </label>
+
+                        <label className='reps'>
+                            <input
+                                name='reps'
+                                type="number"
+                                value={formData.reps === null ? '' : formData.reps}
+                                onChange={handleInputChange}
+                                min={1}
+                            />(reps)
+                        </label>
+
+                        <label className='weight_kg'>
+                            <input
+                                name='weight_kg'
+                                type="number"
+                                value={formData.weight_kg === null ? '' : formData.weight_kg}
+                                onChange={handleInputChange}
+                                min={0.1}
+                                step={0.1}
+                            />(kg)
+                        </label>
+                    
+
+                    {(workoutType !== 'Aerobic' && workoutType !== 'Other')? (
+                        <></>
+                    ) : (
                         <>
-                            <label>
-
+                            <label className='distance'>
                                 <input
                                     name='distance'
                                     type="number"
                                     value={formData.distance === null ? '' : formData.distance}
                                     onChange={handleInputChange}
+                                    min={0.1}
+                                    step={0.1}
                                 />(km)
                             </label>
 
-                            <label>
-                                
+                            <label className='duration_minutes'>
                                 <input
                                     name="duration_minutes"
                                     type="number"
                                     value={formData.duration_minutes === null ? '' : formData.duration_minutes}
                                     onChange={handleInputChange}
+                                    min={1}
                                 />(mins)
-                            </label>
-                        </>
-                    ) : (
-                        <>
-                            <label>
-                                
-                                <input
-                                    name='sets'
-                                    type="number"
-                                    value={formData.sets === null ? '' : formData.sets}
-                                    onChange={handleInputChange}
-                                />(sets)
-                            </label>
-
-                            <label>
-                            
-                                <input
-                                    name='reps'
-                                    type="number"
-                                    value={formData.reps === null ? '' : formData.reps}
-                                    onChange={handleInputChange}
-                                />(reps)
-                            </label>
-
-                            <label>
-                                
-                                <input
-                                    name='weight_kg'
-                                    type="number"
-                                    value={formData.weight_kg === null ? '' : formData.weight_kg}
-                                    onChange={handleInputChange}
-                                />(kg)
                             </label>
                         </>
                     )}
 
-                    <label>
-                        
+                    <label className='mets'>
                         <input 
                         name='mets'
                         type="number" 
                         value={formData.mets ===null?'':formData.mets} 
-                        onChange={handleInputChange} />(mets)
-                    </label>
-                </div>
-                <div className='exercise-create-others'>
-                    <label>
-                        <textarea 
-                        name='memos'
-                        value={formData.memos ===null?'':formData.memos} 
                         onChange={handleInputChange} 
-                        placeholder='Memos'/>
+                        required
+                        min={1}
+                        />(mets)
                     </label>
-
-                    <button onClick={handleCreateExercise} >
-                        Create
-                    </button>
-                </div>
+                    </div>
                 
-            </div>
+                    <div className='exercise-create-others'>
+                        <label>
+                            <textarea 
+                            name='memos'
+                            value={formData.memos ===null?'':formData.memos} 
+                            onChange={handleInputChange} 
+                            placeholder='Memos'/>
+                        </label>
+
+                        <button type='submit' >
+                            +
+                        </button>
+                    </div>
+                
+                
+            </form>
 
         {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
         </div>
