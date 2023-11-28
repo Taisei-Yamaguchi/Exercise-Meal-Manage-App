@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import getCookie from '../helpers/getCookie';
 
 function MealUpdate({ meal }) {
-    const [serving, setServing] = useState(1);
-    const [grams,setGrams] =useState(null);
+    const [serving, setServing] = useState(meal.serving);
+    const [grams,setGrams] =useState(meal.grams);
 
     const handleUpdateMeal = async () => {
         

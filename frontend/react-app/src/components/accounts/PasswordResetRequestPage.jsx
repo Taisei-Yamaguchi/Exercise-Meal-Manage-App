@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Navigation from '../Navigation';
 
-const PasswordResetRequestPage = () => {
+const PasswordResetRequest = () => {
   const [email, setEmail] = useState('');
   const [requestSent, setRequestSent] = useState(false);
 
@@ -45,4 +45,4 @@ const PasswordResetRequestPage = () => {
   );
 };
 
-export default PasswordResetRequestPage;
+export default PasswordResetRequest;

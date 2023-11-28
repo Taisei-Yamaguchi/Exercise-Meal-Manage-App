@@ -22,6 +22,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.http import Http404
+from django.contrib.auth import logout
 
 
 #Sign Up with Email Confirm
@@ -37,7 +38,7 @@ class SignupAPIView(APIView):
             # トークンを含んだURLを構築
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
-            confirm_url = f"http://localhost:5173/accounts/confirm/{uid}/{token}"
+            confirm_url = f"http://localhost:5173/signup/email-confirmation/{uid}/{token}"
 
             # とりあえず、ターミナルから確認
             print(confirm_url)
@@ -94,7 +95,7 @@ class PasswordResetRequestAPIView(APIView):
         user.save()
 
         # Send the reset link to the user's email (replace with your email sending logic)
-        reset_url = f"http://localhost:5173/accounts/password_reset/{uid}/{token}"
+        reset_url = f"http://localhost:5173/password-reset/process/{uid}/{token}"
         
         print(reset_url)  # For testing purposes
         # # メール本文を作成
@@ -155,34 +156,32 @@ class LoginView(APIView):
         
         user = authenticate(username=username, password=password)
         
-        if (
-            user is not None
-            and user.is_active
-            and user.email_check
-        ):
-            # 認証成功
-            login(request, user)
+        if user is not None:
+            if user.is_active and user.email_check:
+                # 認証成功
+                login(request, user)
 
-            token, created = Token.objects.get_or_create(user=user)  # トークンを取得
+                token, created = Token.objects.get_or_create(user=user)  # トークンを取得
 
-            user_details = {
-                'name': user.name,
-                'email': user.email,
-                'sex': user.sex,
-                'birthday': user.birthday,
-                'token': token.key
-                # 他のユーザー情報も必要に応じて追加
-            }
-            
-            request.user = user
+                user_details = {
+                    'name': user.name,
+                    'email': user.email,
+                    'sex': user.sex,
+                    'birthday': user.birthday,
+                    'token': token.key
+                    # 他のユーザー情報も必要に応じて追加
+                }
+                
+                request.user = user
 
-            return Response(user_details, status=status.HTTP_200_OK)
+                return Response(user_details, status=status.HTTP_200_OK)
+            else:
+                # ユーザーがアクティブでないか、メールが確認されていない場合
+                return Response({'detail': 'User is not active or email is not checked'},
+                                status=status.HTTP_401_UNAUTHORIZED)
         else:
             # 認証失敗
-            if(user.email_check==False):
-                print('not eamil check yet')
-            return Response({'username': username,'password':password}, status=status.HTTP_401_UNAUTHORIZED)
-        
+            return Response({'detail': 'Invalid username or password'}, status=status.HTTP_401_UNAUTHORIZED)
         
         
 # LogOut 
@@ -192,6 +191,7 @@ class LogoutView(APIView):
     def post(self, request):
         # トークンを無効化したり、セッションを削除したりする必要がある場合はここで処理を追加
         request.auth.delete()  # トークンの無効化
+        logout(request) #logout セッションの削除
 
         return Response({'message': 'Logout successful.'}, status=status.HTTP_200_OK)
         

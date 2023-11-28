@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import getCookie from '../helpers/getCookie';
+import getCookie from '../../hooks/getCookie';
 import { Bar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import Navigation from '../Navigation';
+import MealNavigation from './meal-nav/MealNavigation';
 import { useParams } from 'react-router-dom';
 
 const DailyNutrientsGraph = () => {
@@ -54,7 +55,13 @@ const DailyNutrientsGraph = () => {
 
     // Check if data is not yet fetched
     if (!nutrientstData.length) {
-        return <p>Loading...</p>;
+        return (
+        <div>
+            <Navigation />
+            <MealNavigation />
+            <p>Loading...</p>
+        </div>
+        )
     }
 
     // // // ラベルとデータを用意
@@ -83,13 +90,16 @@ const DailyNutrientsGraph = () => {
     };
 
     return (
-        <div>
+        <div className='container'>
             <Navigation />
-            <h1>Daily Nutrients Graph</h1>
-            <h2>{date}</h2>
-            <canvas ref={chartRef} />
-            <Bar data={data} height={400} options={options}/>
-            
+            <div className='sub-container'>
+                <MealNavigation />
+                <div className='main graph'>
+                    {/* <h1>Daily Nutrients Graph</h1> */}
+                    <canvas ref={chartRef} />
+                    <Bar data={data} height={300} options={options}/>
+                </div>
+            </div>
         </div>
     );
 };
