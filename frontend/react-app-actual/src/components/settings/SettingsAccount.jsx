@@ -103,6 +103,9 @@ const SettingsAccount = () => {
                         placeholder="Name"
                         value={name}
                         onChange={handleChange}
+                        required
+                        pattern="\S+" // スペース以外の文字が1文字以上必要
+                        title="スペースのみの入力は無効です"
                     />
                     <p>email: {email}</p>
                     <div className='account-sex'>
@@ -133,6 +136,7 @@ const SettingsAccount = () => {
                         name="birthday" 
                         value={birthday} 
                         onChange={handleChange} 
+                        required
                     />
                     <button type="submit">Update Account</button>
                 </form>

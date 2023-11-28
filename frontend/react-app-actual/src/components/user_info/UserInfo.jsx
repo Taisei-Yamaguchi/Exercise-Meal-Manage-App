@@ -116,6 +116,9 @@ const UserInfo = () => {
                         name="weight"
                         value={formData.weight ===null?'':formData.weight}
                         onChange={handleInputChange}
+                        required
+                        min={1}
+                        step={0.1}
                     /></label>
 
                     <label>Height<input
@@ -123,6 +126,9 @@ const UserInfo = () => {
                         name="height"
                         value={formData.height ===null?'': formData.height}
                         onChange={handleInputChange}
+                        required
+                        min={1}
+                        step={0.1}
                     /></label>
 
                     <label>Body Fat Rate<input
@@ -130,6 +136,8 @@ const UserInfo = () => {
                         name="body_fat_percentage"
                         value={formData.body_fat_percentage ===null?'': formData.body_fat_percentage}
                         onChange={handleInputChange}
+                        min={1}
+                        step={0.1}
                     /></label>
 
                     <label>Muscle Mass<input
@@ -137,6 +145,8 @@ const UserInfo = () => {
                         name="muscle_mass"
                         value={formData.muscle_mass ===null?'': formData.muscle_mass}
                         onChange={handleInputChange}
+                        min={1}
+                        step={0.1}
                     /></label>
 
                     <label>Metablism<input
@@ -144,6 +154,8 @@ const UserInfo = () => {
                         name="metabolism"
                         value={formData.metabolism ===null?'': formData.metabolism}
                         onChange={handleInputChange}
+                        min={1}
+                        step={0.1}
                     /></label>
 
                     <label>Target Weight<input
@@ -151,6 +163,8 @@ const UserInfo = () => {
                         name="target_weight"
                         value={formData.target_weight ===null?'': formData.target_weight}
                         onChange={handleInputChange}
+                        min={1}
+                        step={0.1}
                     /></label>
 
                     <label>Target Body Fat Rate<input
@@ -158,6 +172,8 @@ const UserInfo = () => {
                         name="target_body_fat_percentage"
                         value={formData.target_body_fat_percentage ===null?'': formData.target_body_fat_percentage}
                         onChange={handleInputChange}
+                        min={1}
+                        step={0.1}
                     /></label>
 
                     <label>Target Muscle Mass<input
@@ -165,6 +181,8 @@ const UserInfo = () => {
                         name="target_muscle_mass"
                         value={formData.target_muscle_mass ===null?'': formData.target_muscle_mass}
                         onChange={handleInputChange}
+                        min={1}
+                        step={0.1}
                     /></label>
                     <button type="submit">Save</button>
                 </form>

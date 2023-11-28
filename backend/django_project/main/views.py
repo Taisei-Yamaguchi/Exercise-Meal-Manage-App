@@ -2,7 +2,7 @@ from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.db.models import Max,Sum
+from django.db.models import Max,Sum,Min
 from rest_framework.permissions import IsAuthenticated
 from meal.models import Meal,Food
 from exercise.models import Exercise,Workout
@@ -33,11 +33,19 @@ class RegistrationStatusCheckView(APIView):
         # meal_date および exercise_date が None の場合は現在の日付を使用
         latest_meal_date = latest_meal_date or timezone.now().date()
         latest_exercise_date = latest_exercise_date or timezone.now().date()
+        
+        # 最も古い運動日付
+        oldest_exercise_date = Exercise.objects.filter(account=user.id).aggregate(Min('exercise_date'))['exercise_date__min']
+
+        # 最も古い食事日付
+        oldest_meal_date = Meal.objects.filter(account=user.id).aggregate(Min('meal_date'))['meal_date__min']
+
+        # 最も古い日付
+        oldest_date = min(oldest_exercise_date, oldest_meal_date, user.date_joined.date())
 
         # account 作成日から今日までの日付リストを取得
-        account_created_date = user.date_joined.date()
         latest_date = max(latest_meal_date, latest_exercise_date, timezone.now().date())
-        date_list = [account_created_date + timezone.timedelta(days=x) for x in range((latest_date - account_created_date).days + 1)]
+        date_list = [oldest_date + timezone.timedelta(days=x) for x in range((latest_date - oldest_date).days + 1)]
 
         for date in date_list:
             status_entry = {
