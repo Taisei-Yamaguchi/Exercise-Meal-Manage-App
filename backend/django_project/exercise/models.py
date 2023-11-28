@@ -18,6 +18,10 @@ class Workout(models.Model):
     account = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     workout_type = models.CharField(max_length=20, choices=WORKOUT_TYPES)
+    
+    #default_workoutをここに登録してしまう
+    is_default = models.BooleanField(default=False)
+    d_id = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.name

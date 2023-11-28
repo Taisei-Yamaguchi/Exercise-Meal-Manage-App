@@ -95,17 +95,33 @@ class ExerciseCreateView(APIView):
 
             # If workout_id is a str, it is associated with default_workout.
             elif isinstance(workout_id, str):
-                # Extract elements with IDs that match workout_id (search in default_workout.py).
-                matching_default_workout = next(
-                    (item for item in default_workout_data if item['id'] == workout_id),
-                    None
-                )
-                    
-                if matching_default_workout:
-                    request.data['default_workout']=matching_default_workout
+                # Try to find the workout with d_id=workout_id
+                workout = Workout.objects.filter(d_id=workout_id, account=user.id).first()
+
+                if workout is not None:
+                    request.data['workout']=workout.id #bind workout
                     request.data['workout_id'] =None
                 else:
-                    return Response({'detail': 'Matching default workout not found.'}, status=status.HTTP_400_BAD_REQUEST)
+                    matching_default_workout = next(
+                        (item for item in default_workout_data if item['id'] == workout_id),
+                        None
+                    )
+                        
+                    if matching_default_workout:
+                        # Save the matching default workout to Workout model
+                        workout = Workout.objects.create(
+                            account=user,
+                            d_id=matching_default_workout['id'],
+                            name=matching_default_workout['name'],
+                            workout_type=matching_default_workout['workout_type'],
+                            is_default= True,
+                            # Add other fields as needed
+                        )
+                        request.data['workout'] = workout.id  # bind workout
+                        
+                        request.data['workout_id'] = None
+                    else:
+                        return Response({'detail': 'Matching default workout not found.'}, status=status.HTTP_400_BAD_REQUEST)
 
             # If workout_id is not a str or a number, response error.
             else:
