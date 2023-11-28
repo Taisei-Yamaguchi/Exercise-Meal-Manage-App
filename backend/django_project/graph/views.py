@@ -328,8 +328,8 @@ class CalGraphAPIView(APIView):
             
             consuming_cals.append({
                 "date": date,
-                "exercise_consuming_cals": exercise_calories,
                 "bm_consuming_cal": bm_calories,
+                "exercise_consuming_cals": exercise_calories,
                 "food_consuming_cal": food_cals,
             })
         

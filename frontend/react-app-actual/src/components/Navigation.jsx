@@ -46,7 +46,7 @@ const Navigation = () => {
                     <Link to="/calendar">Calendar</Link>
                 </li>
                 <li>
-                    <Link to="/settins">Settings</Link>
+                    <Link to="/settings">Settings</Link>
                 </li>
                 
             </div>

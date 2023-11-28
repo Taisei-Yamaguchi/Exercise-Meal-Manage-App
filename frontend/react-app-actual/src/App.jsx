@@ -27,6 +27,14 @@ import ExerciseByDate from './components/exercise/ExerciseByDate';
 import ExerciseTotalWeightGraph from './components/exercise/ExerciseTotalWeightGraph';
 import DailyExerciseWeightGraph from './components/exercise/DailyExerciseWeightGraph';
 
+import UserInfo from './components/user_info/UserInfo';
+import WeightGraph from './components/user_info/WeightGraph';
+import BodyFatPercentageGraph from './components/user_info/BodyFatPercentageGraph';
+import MuscleMassGraph from './components/user_info/MuscleMassGraph';
+import CalsGraph from './components/user_info/CalsGraph';
+
+import SettingsAccount from './components/settings/SettingsAccount';
+
 const App = () => {
   return (
     <Provider store={store}>
@@ -48,6 +56,14 @@ const App = () => {
           <Route path="/exercise/:date" element={<ExerciseByDate/>}/>
           <Route path="/exercise/exercise-total-weight-graph/:date" element={<ExerciseTotalWeightGraph/>}/>
           <Route path="/exercise/daily-exercise-weight-graph/:date/:workout_type" element={<DailyExerciseWeightGraph/>}/>
+
+          <Route path="/user_info" element={<UserInfo />}/>
+          <Route path="/user_info/weight-graph" element={<WeightGraph />}/>
+          <Route path="/user_info/body-fat-percentage-graph" element={<BodyFatPercentageGraph />}/>
+          <Route path="/user_info/muscle-mass-graph" element={<MuscleMassGraph />}/>
+          <Route path="/user_info/cals-graph" element={<CalsGraph />}/>
+
+          <Route path="/settings" element={<SettingsAccount/>}/>
 
           <Route path="/*" element={<NotFound />} />
         </Routes>

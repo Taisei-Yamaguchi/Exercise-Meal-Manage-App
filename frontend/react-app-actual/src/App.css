@@ -430,3 +430,16 @@ nav{
 .exercise-nav p{
   font-size: 10px;
 }
+
+
+/* user_info */
+.user-info-form{
+  display: flex;
+  flex-direction: column;
+}
+
+/* .user-info-form input{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+} */
