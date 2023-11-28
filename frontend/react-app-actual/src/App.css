@@ -540,3 +540,73 @@ nav{
   display:flex;
   flex-direction: column;
 }
+
+
+
+
+
+/* calendar */
+.calendar {
+  font-family: 'Arial', sans-serif;
+  max-width: 100%;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  padding-left: 100px;
+  
+  width:100%
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #3498db;
+  color: #fff;
+}
+
+.calendar-header button {
+  background-color: #fff;
+  color: #3498db;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  padding: 10px;
+}
+
+.day-label {
+  font-weight: bold;
+  text-align: center;
+}
+
+.day {
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.day:hover {
+  background-color: #f2f2f2;
+}
+
+.other-month {
+  color: #aaa;
+}
+
+.sunday{
+  color: red;
+}
+
+.saturday{
+  color:blue;
+}

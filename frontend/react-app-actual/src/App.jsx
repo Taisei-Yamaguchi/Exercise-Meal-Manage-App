@@ -35,6 +35,8 @@ import CalsGraph from './components/user_info/CalsGraph';
 
 import SettingsAccount from './components/settings/SettingsAccount';
 
+import MainCalendar from './components/calendar/MainCalendar';
+
 const App = () => {
   return (
     <Provider store={store}>
@@ -64,6 +66,8 @@ const App = () => {
           <Route path="/user_info/cals-graph" element={<CalsGraph />}/>
 
           <Route path="/settings" element={<SettingsAccount/>}/>
+
+          <Route path="/calendar/:month" element={<MainCalendar/>}/>
 
           <Route path="/*" element={<NotFound />} />
         </Routes>
