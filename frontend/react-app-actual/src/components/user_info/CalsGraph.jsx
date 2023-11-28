@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import getCookie from '../../hooks/getCookie';
 import { Bar,Line } from 'react-chartjs-2';
-import Chart from 'chart.js/auto';
 import Navigation from '../Navigation';
 import UserInfoNavigation from './user_info-nav/UserInfoNavigation';
 
@@ -9,7 +8,6 @@ const CalsGraph = () => {
     const [intakeCals, setIntakeCals] = useState([]);
     const [consumingCals, setConsumingCals] =useState([]);
     const [error, setError] = useState(null);
-    // const chartRef = useRef(null); // チャートの参照
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,21 +30,7 @@ const CalsGraph = () => {
             const data = await response.json();
             setIntakeCals(data.intake_cals);
             setConsumingCals(data.consuming_cals);
-            // console.log(data.intake_cals);
-            // console.log(data.consuming_cals);
-            console.log(data)
-
-            // // Chartを破棄
-            // if (chartRef.current) {
-            // chartRef.current.destroy();
-            // }
-
-            // Chartを再描画
-            // const newChart = new Chart(chartRef.current, {
-            // type: 'line',
-            // data: data,
-            // options: options,
-            // });
+            
         } catch (error) {
             setError('An error occurred while fetching data.');
         }
@@ -55,31 +39,7 @@ const CalsGraph = () => {
         fetchData();
     }, []); // 依存する変数はありません
     
-    // Check if data is not yet fetched
-    // if (!calsData.length) {
-    //     return <p>Loading...</p>;
-    // }
-
-    // // // ラベルとデータを用意
-    // // Extracting labels and cals from the data
-    // const labels =  consumingCals.map(entry => entry.date);
-    // const bm_cals = consumingCals.map(entry => entry.bm_consuming_cal);
-
-    //  // Chart.js data
-    // const data = {
-    //     labels: labels,
-    //     datasets: [
-    //     {
-    //         label: 'Cals',
-    //         backgroundColor: 'rgba(75,192,192,0.4)',
-    //         borderColor: 'rgba(75,192,192,1)',
-    //         borderWidth: 1,
-    //         hoverBackgroundColor: 'rgba(75,192,192,0.6)',
-    //         hoverBorderColor: 'rgba(75,192,192,1)',
-    //         data: bm_cals,
-    //     },
-    //     ],
-    // };
+    
 
     const data = {
         labels: consumingCals.map(entry => entry.date),
@@ -123,7 +83,7 @@ const CalsGraph = () => {
     return (
         <div className='container'>
             <Navigation />
-            <div className='sub-container user_info-container'>
+            <div className='sub-container user-info-main-container'>
                 <UserInfoNavigation />
                 <h1>Cals Graph</h1>
                 <Bar data={data} height={300} options={options}/>

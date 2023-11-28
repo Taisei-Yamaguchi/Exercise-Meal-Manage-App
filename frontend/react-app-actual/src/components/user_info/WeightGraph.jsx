@@ -64,9 +64,6 @@ const WeightGraph = () => {
             weights[i] = weights[i - 1];
         }
     }
-    // // 有効なデータのみ抽出
-    // const validWeights = weights.filter(weight => weight !== null);
-    // const validLabels = labels.filter((label, index) => weights[index] !== null);
 
     // Chart.jsのデータ構造
     const data = {
@@ -125,7 +122,7 @@ const WeightGraph = () => {
     return (
         <div className='container'> 
             <Navigation />
-            <div className='subcontainer'>
+            <div className='subcontainer user-info-main-container'>
                 <UserInfoNavigation />
                 <h1>Weight Graph</h1>
                 <canvas ref={chartRef} />

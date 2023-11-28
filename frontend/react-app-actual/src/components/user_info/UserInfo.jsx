@@ -62,12 +62,7 @@ const UserInfo = () => {
             console.error('Error fetching latest user info:', error);
         }
     };
-
-
-
     useAuthCheck(fetchLatestInfo)
-
-
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -110,7 +105,7 @@ const UserInfo = () => {
     return (
         <div className='container'>
             <Navigation />
-            <div className='sub-container'>
+            <div className='sub-container user-info-main-container'>
                 <UserInfoNavigation />
                 <h2>User Info Form</h2>
                 <form onSubmit={handleSubmit} className='user-info-form'>

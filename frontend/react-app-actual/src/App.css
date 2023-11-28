@@ -90,6 +90,9 @@ nav{
   
 }
 
+
+
+
 /* meal */
 .meal-nav{
   border: solid;
@@ -433,6 +436,65 @@ nav{
 
 
 /* user_info */
+
+.user-info-nav{
+  border: solid;
+  position: fixed;
+  top: 0;  /* 上端に固定する場合 */
+  left: 200px;  /* 左端に固定する場合 */
+  right: 0; 
+   /* ナビゲーションの幅を調整してください */
+  height: 270px;  /* 画面の高さいっぱいに設定します */
+  background-color: rgb(225, 159, 226);  /* ナビゲーションの背景色を指定してください */
+  border-right: 1px solid #ccc;  /* ナビゲーションの右側に境界線を追加します */
+  padding-top: 20px;  /* 適切なパディングを設定します */
+  padding-left: 1%;
+}
+
+.user-info-main-container{
+  padding-top: 280px;
+}
+
+.user-info-nav .user-info-detail{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1% 1% 1% 1%;
+  border: solid;
+}
+
+
+.user-info-nav .user-info-detail .user-info-info{
+  border: solid;
+  width: 50%;
+}
+
+.user-info-nav .user-info-detail .user-info-info p{
+  font-size: 5px;
+}
+
+.user-info-nav .user-info-links{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: solid;
+}
+
+.user-info-nav .user-info-links .user-info-link{
+  font-size: 15px;
+  padding-bottom: 1%;
+}
+
+
+.user-info-nav h1{
+  font-size: 30px;
+}
+
+.user-info-nav h2{
+  font-size: 15px;
+}
+
+
 .user-info-form{
   display: flex;
   flex-direction: column;
@@ -443,3 +505,38 @@ nav{
   flex-direction: row;
   justify-content: space-between;
 } */
+
+
+/* account */
+.account-nav{
+  
+  position: fixed;
+  top: 0;  /* 上端に固定する場合 */
+  left: 200px;  /* 左端に固定する場合 */
+  right: 0; 
+   /* ナビゲーションの幅を調整してください */
+  height: 150px;  /* 画面の高さいっぱいに設定します */
+  background-color: rgb(159, 226, 221);  /* ナビゲーションの背景色を指定してください */
+  border-right: 1px solid #ccc;  /* ナビゲーションの右側に境界線を追加します */
+  padding-top: 20px;  /* 適切なパディングを設定します */
+  padding-left: 1%;
+}
+
+.account-nav h1{
+  font-size: 30px;
+}
+
+.account-form{
+  display: flex;
+  flex-direction: column;
+}
+
+.account-form button{
+  width:100px
+  
+}
+
+.signup-form{
+  display:flex;
+  flex-direction: column;
+}

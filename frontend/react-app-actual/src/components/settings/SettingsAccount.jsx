@@ -10,11 +10,8 @@ const SettingsAccount = () => {
     const [picture, setPicture] = useState(null);
     const [sex, setSex] = useState(false);
     const [birthday, setBirthday] = useState('');
-
     const [email, setEmail] = useState('');
-
     const [mes,setMes]=useState('')
-    const navigate= useNavigate()
     
 
     const fetchAccount = async () => {
@@ -95,48 +92,53 @@ const SettingsAccount = () => {
     return (
         <div className='container'>
             <Navigation />
-            <form onSubmit={handleSubmit}>
-                <input
-                    className='account-name'
-                    type="text"
-                    name="name"
-                    placeholder="Name"
-                    value={name}
-                    onChange={handleChange}
-                />
-                <p>email: {email}</p>
-                <div className='account-sex'>
-                    <label>
-                        Male
-                        <input
-                            type="radio"
-                            name='sex'
-                            value={false}
-                            checked={sex === false}
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <label>
-                        Female
-                        <input
-                            type="radio"
-                            name='sex'
-                            value={true}
-                            checked={sex === true}
-                            onChange={handleChange}
-                        />
-                    </label>
-                </div>
-                <input 
-                    className='account-birthday'
-                    type="date"  
-                    name="birthday" 
-                    value={birthday} 
-                    onChange={handleChange} 
-                />
-                <button type="submit">Update Account</button>
-            </form>
-            {mes}
+            <div className='sub-container account-main-container'>
+                <div className='account-nav'><h1>Account</h1></div>
+                <h1>Setting Account</h1>
+                <form onSubmit={handleSubmit} className='account-form'>
+                    <input
+                        className='account-name'
+                        type="text"
+                        name="name"
+                        placeholder="Name"
+                        value={name}
+                        onChange={handleChange}
+                    />
+                    <p>email: {email}</p>
+                    <div className='account-sex'>
+                        <label>
+                            Male
+                            <input
+                                type="radio"
+                                name='sex'
+                                value={false}
+                                checked={sex === false}
+                                onChange={handleChange}
+                            />
+                        </label>
+                        <label>
+                            Female
+                            <input
+                                type="radio"
+                                name='sex'
+                                value={true}
+                                checked={sex === true}
+                                onChange={handleChange}
+                            />
+                        </label>
+                    </div>
+                    <input 
+                        className='account-birthday'
+                        type="date"  
+                        name="birthday" 
+                        value={birthday} 
+                        onChange={handleChange} 
+                    />
+                    <button type="submit">Update Account</button>
+                </form>
+                {mes}
+            </div>
+            
         </div>
     );
 };

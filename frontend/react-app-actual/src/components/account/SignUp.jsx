@@ -70,7 +70,7 @@ const SignUp = () => {
             <Navigation />
             <div className='sub-container'>
                 <h1>Sign Up</h1>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className='signup-form'>
                     <input
                         type="text"
                         name="name"

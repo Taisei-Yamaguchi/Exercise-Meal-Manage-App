@@ -124,7 +124,7 @@ const MuscleMassGraph = () => {
     return (
         <div className='container'>
             <Navigation />
-            <div className='sub-container user_info-container'>
+            <div className='sub-container user-info-main-container'>
                 <UserInfoNavigation />
                 <h1>Muscle Mass Graph</h1>
                 <canvas ref={chartRef} />
