@@ -17,7 +17,7 @@ class WorkoutListView(APIView):
     
     def get(self, request):
         user = self.request.user
-        workouts = Workout.objects.filter(account=user.id)
+        workouts = Workout.objects.filter(account=user.id,is_default=False)
         workout_serializer = WorkoutSerializer(workouts, many=True)
             
         return Response({'workout': workout_serializer.data, 'default_workout': default_workout_data})
@@ -58,13 +58,11 @@ class ExerciseGetByDateView(APIView):
         if not exercise_date:
             return Response({'detail': 'exercise_date parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Return the exercises with workout or with dfault_workout differently.
-        workout_exercise = Exercise.objects.filter(account=user.id, exercise_date=exercise_date,workout__isnull=False)
-        default_workout_exercise= Exercise.objects.filter(account=user.id, exercise_date=exercise_date,default_workout__isnull=False)
-        # use GetExerciseSerializer
-        w_exercise_serializer = GetExerciseSerializer(workout_exercise, many=True).data
-        d_exercise_serializer = GetExerciseSerializer(default_workout_exercise, many=True).data
-        return Response({'w_exercise':w_exercise_serializer,'d_exercise':d_exercise_serializer}, status=status.HTTP_200_OK)
+        
+        workout_exercise = Exercise.objects.filter(account=user.id, exercise_date=exercise_date).order_by('id')
+        exercise_serializer = GetExerciseSerializer(workout_exercise, many=True).data
+        
+        return Response({'exercise':exercise_serializer}, status=status.HTTP_200_OK)
         
 
 
@@ -81,8 +79,8 @@ class ExerciseCreateView(APIView):
         if 'workout_id' in request.data:
             workout_id = request.data['workout_id']
 
-            # If workout_id is a number, it is associated with workout.
-            if isinstance(workout_id, int):
+            # If it's not default workout.
+            if request.data['is_default'] == False:
                 #Check if the workout exists and the account of the workout matches the logged-in user.
                 workout = get_object_or_404(Workout, id=workout_id, account=user.id)
                 
@@ -93,11 +91,11 @@ class ExerciseCreateView(APIView):
                     return Response({'detail': 'Workout not found.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-            # If workout_id is a str, it is associated with default_workout.
-            elif isinstance(workout_id, str):
+            # If it is default_workout.
+            else:
                 # Try to find the workout with d_id=workout_id
                 workout = Workout.objects.filter(d_id=workout_id, account=user.id).first()
-
+                #もし、すでにworkoutにそのdefault_workoutを登録していたのであれば、それを利用する。
                 if workout is not None:
                     request.data['workout']=workout.id #bind workout
                     request.data['workout_id'] =None
@@ -115,17 +113,11 @@ class ExerciseCreateView(APIView):
                             name=matching_default_workout['name'],
                             workout_type=matching_default_workout['workout_type'],
                             is_default= True,
-                            # Add other fields as needed
                         )
                         request.data['workout'] = workout.id  # bind workout
-                        
                         request.data['workout_id'] = None
                     else:
                         return Response({'detail': 'Matching default workout not found.'}, status=status.HTTP_400_BAD_REQUEST)
-
-            # If workout_id is not a str or a number, response error.
-            else:
-                return Response({'detail': 'workout_id is invalid.'}, status=status.HTTP_400_BAD_REQUEST)
 
             # bind account.
             request.data['account']=user.id

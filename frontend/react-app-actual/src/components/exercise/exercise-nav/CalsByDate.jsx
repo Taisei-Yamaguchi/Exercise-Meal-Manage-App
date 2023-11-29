@@ -27,7 +27,6 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
 
             const data = await response.json();
             setCalsData(data);
-            console.log('cals',data)
         } catch (error) {
             console.error('Error fetching data.:', error);
         }

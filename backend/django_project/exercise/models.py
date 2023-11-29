@@ -34,9 +34,7 @@ class Exercise(models.Model):
     account = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     exercise_date = models.DateField()
     
-    # どちらか片方だけの入力を許容する
-    workout = models.ForeignKey(Workout, on_delete=models.CASCADE, null=True, blank=True)
-    default_workout = models.JSONField(null=True, blank=True)
+    workout = models.ForeignKey(Workout, on_delete=models.CASCADE) #必須
     
     # カロリー計算時、duration_minutesを優先、なければsets,repsを使う。
     sets = models.PositiveIntegerField(default=1,null=True, blank=True)
@@ -49,17 +47,9 @@ class Exercise(models.Model):
     memos = models.TextField(blank=True,null=True)
 
     def __str__(self):
-        return f"Exercise {self.id} ({self.account.name}) on {self.exercise_date}"
+        return f"Exercise {self.id} ({self.account.name}) on {self.exercise_date} ---{self.workout.is_default}"
     
     def clean(self):
-        # workout と default_workout のどちらか一方が必要
-        if self.workout is None and self.default_workout is None:
-            raise ValidationError("Either 'workout' or 'default_workout' must be provided.")
-        
-        # workout と default_workout のどちらか一方しか指定できない
-        if self.workout and self.default_workout:
-            raise ValidationError("Only one of 'workout' or 'default_workout' should be provided.")
-
         # duration_minutes が null の場合、sets と reps は必須
         if self.duration_minutes is None and (self.sets is None or self.reps is None):
             raise ValidationError("If 'duration_minutes' is not provided, both 'sets' and 'reps' are required.")

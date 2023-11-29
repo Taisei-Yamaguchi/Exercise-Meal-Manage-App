@@ -13,7 +13,7 @@ class GetExerciseSerializer(serializers.ModelSerializer):
     
     # This setting is inappropriate because when saving exercise, the workout field is required to be json as well.
     # Create a separate one for post.
-    workout = WorkoutSerializer(required=False)
+    workout = WorkoutSerializer(required=True)
     class Meta:
         model = Exercise
         fields = '__all__'
