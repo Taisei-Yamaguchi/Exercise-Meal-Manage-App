@@ -13,7 +13,7 @@ const ExerciseByDate = () => {
     const navigate = useNavigate();
     const { date } = useParams();
     const [exerciseData, setExerciseData] = useState([]);
-    const [defaultExerciseData, setDefaultExerciseData] = useState([]);
+    // const [defaultExerciseData, setDefaultExerciseData] = useState([]);
     const workoutTypes = ['Chest', 'Back', 'Shoulder', 'Arm','Leg','Abs'];
     const workoutType_aerobic ='Aerobic';
     const workoutType_other= 'Other';
@@ -25,8 +25,8 @@ const ExerciseByDate = () => {
     useEffect(() => {
         // fetchExerciseDataが完了したら実行される
         // exerciseDataとdefaultExerciseDataが設定された後に実行される
-        console.log('Data has been updated:', exerciseData, defaultExerciseData);
-    }, [exerciseData, defaultExerciseData]);
+        console.log('Data has been updated:', exerciseData);
+    }, [exerciseData,]);
 
     
     const fetchExerciseData = async () => {
@@ -47,8 +47,8 @@ const ExerciseByDate = () => {
 
             const data = await response.json();
             console.log(data)
-            setExerciseData(data.w_exercise);
-            setDefaultExerciseData(data.d_exercise);
+            setExerciseData(data.exercise);
+            
 
         } catch (error) {
             console.error('Error fetching exercise data:', error);
@@ -94,7 +94,7 @@ const ExerciseByDate = () => {
                                 </div>
                             ))}
 
-                            {defaultExerciseData
+                            {/* {defaultExerciseData
                             .filter((exercise)=>exercise.default_workout.workout_type === workoutType)
                             .map((exercise)=>(
                                 <div key={exercise.id} className={`each-exercise ${workoutType}`}>
@@ -104,7 +104,7 @@ const ExerciseByDate = () => {
                                     
                                     
                                 </div>
-                            ))}
+                            ))} */}
                         </div>
                     ))}
                     <div key={workoutType_aerobic} className='exercise-group'>
@@ -123,7 +123,7 @@ const ExerciseByDate = () => {
                                 </div>
                             ))}
 
-                            {defaultExerciseData
+                            {/* {defaultExerciseData
                             .filter((exercise)=>exercise.default_workout.workout_type === workoutType_aerobic)
                             .map((exercise)=>(
                                 <div key={exercise.id} className={`each-exercise ${workoutType_aerobic}`}>
@@ -133,7 +133,7 @@ const ExerciseByDate = () => {
                                     <ExerciseDelete exerciseId={exercise.id} onUpdate={handleUpdate}/>
                                     
                                 </div>
-                            ))}
+                            ))} */}
                     </div>
                     <div key={workoutType_other} className='exercise-group'>
                     <h2>{workoutType_other}</h2>
@@ -150,7 +150,7 @@ const ExerciseByDate = () => {
                                 </div>
                             ))}
 
-                            {defaultExerciseData
+                            {/* {defaultExerciseData
                             .filter((exercise)=>exercise.default_workout.workout_type === workoutType_other)
                             .map((exercise)=>(
                                 <div key={exercise.id} className={`each-exercise ${workoutType_other}`}>
@@ -159,7 +159,7 @@ const ExerciseByDate = () => {
                                     <ExerciseDelete exerciseId={exercise.id} onUpdate={handleUpdate}/>
                                     
                                 </div>
-                            ))}
+                            ))} */}
                     </div>
 
 

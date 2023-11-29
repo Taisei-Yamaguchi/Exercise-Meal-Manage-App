@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import Calendar from './Calendar';
-import CalsByDate from '../../meal/meal-nav/CalsByDate';
+import CalsByDate from './CalsByDate';
 
 
 const ExerciseNavigation = (onUpdate) => {

@@ -88,7 +88,7 @@ class MealByDateView(APIView):
         user = self.request.user
             
         meal_date = request.query_params.get('meal_date', None)
-        meals = Meal.objects.filter(meal_date=meal_date,account=user.id)   # ログインユーザーのmealを取得
+        meals = Meal.objects.filter(meal_date=meal_date,account=user.id).order_by('id')   # ログインユーザーのmealを取得
 
         serialized_meals=GetMealSerializer(meals,many=True).data
         return Response({'meals': serialized_meals})

@@ -14,6 +14,7 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
         workout_id: '',
         exercise_date: exercise_date,
 
+        is_default: null,
         sets: null,
         reps: null,
         weight_kg: null,
@@ -43,6 +44,7 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
             setWorkouts(data.workout);
             setDefaultWorkouts(data.default_workout)
             onUpdate()
+            console.log(data)
         } catch (error) {
             console.error('Error fetching workouts:', error);
         }
@@ -93,8 +95,39 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
             setFormData((prevData) => ({
                 ...prevData,
                 [name]: isNumeric ? Number(value) : value,
-                
             }));
+            
+
+            const selectedWorkoutId = e.target.value;
+
+            // 選択された workout を workouts リストから取得
+            const selectedWorkout = workouts.find(
+                (workout) => String(workout.id) === String(selectedWorkoutId)
+            );
+
+            // workout が見つかった場合、is_default は false
+            if (selectedWorkout) {
+                setFormData((prevFormData) => ({
+                ...prevFormData,
+                is_default: false,
+                // その他のフォームデータも必要に応じて更新
+                }));
+            }
+        
+            // 選択された workout が見つからない場合、default_workouts リストから取得
+            const selectedDefaultWorkout = default_workouts.find(
+                (workout) => String(workout.id) === String(selectedWorkoutId)
+            );
+        
+            // default_workout が見つかった場合、is_default は true
+            if (selectedDefaultWorkout) {
+                setFormData((prevFormData) => ({
+                ...prevFormData,
+                is_default: true,
+                // その他のフォームデータも必要に応じて更新
+                }));
+            }
+
         }else{
             const sanitizedValue = value === '' ? null : value;
             if (name !== 'date') {

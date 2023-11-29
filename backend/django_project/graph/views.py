@@ -159,30 +159,11 @@ class ExerciseTotalWeightGraphDataAPIView(APIView):
                 Cast(0, FloatField())
             )
         )
-
-        # デフォルトのワークアウトも取得
-        default_workout_total_weight_data = Exercise.objects.filter(account=request.user,default_workout__isnull=False).exclude(default_workout__isnull=True, default_workout__workout_type='Aerobic').values('default_workout__workout_type').annotate(
-            total_weight=Coalesce(
-                Cast(
-                    Sum(
-                    Cast(F('weight_kg'), FloatField()) *
-                    Cast(F('sets'), FloatField()) *
-                    Cast(F('reps'), FloatField()),
-                    output_field=FloatField()  
-                ),
-                FloatField()
-                ),
-                Cast(0, FloatField())
-            )
-        )
         
         #  それぞれの結果をディクショナリに格納
         total_weight_data_dict = {item['workout__workout_type']: item['total_weight'] for item in total_weight_data}
-        default_workout_weight_data_dict = {item['default_workout__workout_type']: item['total_weight'] for item in default_workout_total_weight_data}
-        # ディクショナリを結合
-        result = {key: total_weight_data_dict.get(key, 0) + default_workout_weight_data_dict.get(key, 0) for key in set(total_weight_data_dict) | set(default_workout_weight_data_dict)}
         # 結果をリストに変換
-        result_list = [{'workout__workout_type': key, 'total_weight': value} for key, value in result.items()]
+        result_list = [{'workout__workout_type': key, 'total_weight': value} for key, value in total_weight_data_dict.items()]
         # 総合計を計算
         grand_total = sum(item['total_weight'] for item in result_list)
         
@@ -238,8 +219,7 @@ class DailyExerciseWeightGraphDataAPIView(APIView):
         # 指定されたworkout_typeに対応するexerciseデータの抽出
         if workout_type != 'All':
             exercises = Exercise.objects.filter(
-                Q(account=request.user, workout__workout_type=workout_type, exercise_date__range=(start_date, end_date)) |
-                Q(account=request.user, workout=None, default_workout__workout_type=workout_type, exercise_date__range=(start_date, end_date))
+                Q(account=request.user, workout__workout_type=workout_type, exercise_date__range=(start_date, end_date)) 
             )
         else:
             exercises = Exercise.objects.filter(
@@ -262,7 +242,6 @@ class DailyExerciseWeightGraphDataAPIView(APIView):
                 Cast(0, FloatField())
             )
         ).order_by('exercise_date')
-
 
         # データが存在しない日の追加
         existing_dates = set(item['exercise_date'] for item in daily_weights)
