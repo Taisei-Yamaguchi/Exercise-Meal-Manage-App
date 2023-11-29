@@ -12,8 +12,7 @@ using Django &amp; React
 <del>・バックエンド　コード整理 1(account,user_info,exercise,meal,graph)<br></del>
 <del>・バックエンド　コード整理 2(food search部分の整理)<br></del>
 <del>・フロントエンドの実装 <br></del>
-
-・バックエンド　コード整理 3(exercise　default_workoutの扱い) <br>
+<del>・バックエンド　コード整理 3(exercise　default_workoutの扱い) <br></del>
 ・pet app <br>
 ・garden app <br>
 ・email送信は後で設定。<br>
