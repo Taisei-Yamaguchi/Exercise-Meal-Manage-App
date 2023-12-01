@@ -16,7 +16,7 @@ import SignUpConfirm from './components/account/SignUpConfirm';
 import PasswordResetRequest from './components/account/PasswordResetRequest';
 import PasswordResetProcess from './components/account/PasswordResetProcess';
 
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/dashboard/Dashboard';
 
 import MealsByDate from './components/meal/MealsByDate';
 import FoodSearch from './components/meal/FoodSearch';
