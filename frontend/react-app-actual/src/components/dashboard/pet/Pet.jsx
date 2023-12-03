@@ -39,29 +39,25 @@ const Pet = () => {
         if (petData && petData.grow) {
             switch (petData.grow) {
                 case 'Adult':
-                    if(petData && petData.status){
-                        switch(petData.status){
-                            case 'Muscular':
-                                return '/pets/pet-5-3.png'
-                            case 'Fatting':
-                                return '/pets/pet-5-1.png'
-                            default:
-                                return '/pets/pet-5-2.png'
-                        }
-                    }
-                    return '/pets/pet-5-2.png'
+                    return `/pets/Adult-${petData.body_status}.png`
                     
                 case 'Child':
-                    return '/pets/pet-4.png';
-                case 'Baby':
-                    return '/pets/pet-3.png';
-                case 'Egg2':
-                    return '/pets/pet-2.png';
+                case 'Child2':
+                    switch (petData.body_status){
+                        case "Semi-Fatting":
+                            return `/pets/${petData.grow}-Fatting.png`
+                        case "Semi-Thin":
+                            return `/pets/${petData.grow}-Thin.png`
+                        case "Semi-Muscular":
+                            return `/pets/${petData.grow}-Muscular.png`
+                        default:
+                            return `/pets/${petData.grow}-${petData.body_status}`
+                    }
                 default:
-                    return '/pets/pet-1.png';
+                    return `/pets/${petData.grow}.png`;
             }
         }
-        return '/pets/pet-1.png';
+        return '/pets/Egg.png';
     };
 
     useAuthCheck(fetchPetData)
@@ -72,7 +68,7 @@ const Pet = () => {
         {petData ? (
             <div>
                 <p>Grow: {petData.grow}</p>
-                <p>Status: {petData.status}</p>
+                <p>Status: {petData.body_status}</p>
             </div>
         ) : (
             <p>Loading pet data...</p>
