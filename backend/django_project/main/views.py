@@ -26,7 +26,7 @@ class RegistrationStatusCheckView(APIView):
         exercises = Exercise.objects.filter(account=user.id)
         meals = Meal.objects.filter(account=user.id)
         
-        # 最新の meal_date と exercise_date を取得
+        # # 最新の meal_date と exercise_date を取得
         latest_meal_date = meals.aggregate(latest_date=Max('meal_date'))['latest_date']
         latest_exercise_date = exercises.aggregate(latest_date=Max('exercise_date'))['latest_date']
 
@@ -40,9 +40,23 @@ class RegistrationStatusCheckView(APIView):
         # 最も古い食事日付
         oldest_meal_date = Meal.objects.filter(account=user.id).aggregate(Min('meal_date'))['meal_date__min']
 
+        print("oldest_exercise_date:", oldest_exercise_date)
+        print("oldest_meal_date:", oldest_meal_date)
         # 最も古い日付
-        oldest_date = min(oldest_exercise_date, oldest_meal_date, user.date_joined.date())
-
+        # oldest_date = min(
+        #     oldest_exercise_date,
+        #     oldest_meal_date,
+        #     (user.date_joined.date() if user.date_joined else None),
+        #     default=timezone.now().date()  # バックアップのデフォルト値
+        # )
+        
+        oldest_date = min(
+            filter(None, [oldest_exercise_date, oldest_meal_date, user.date_joined.date() if user.date_joined else None]),
+            default=timezone.now().date()  # バックアップのデフォルト値
+        )
+        
+        print("oldest_date:", oldest_date)
+        
         # account 作成日から今日までの日付リストを取得
         latest_date = max(latest_meal_date, latest_exercise_date, timezone.now().date())
         date_list = [oldest_date + timezone.timedelta(days=x) for x in range((latest_date - oldest_date).days + 1)]
@@ -56,6 +70,13 @@ class RegistrationStatusCheckView(APIView):
             registration_status.append(status_entry)
 
         return Response(registration_status)
+    
+    
+    
+    
+    
+    
+    
     
     
     

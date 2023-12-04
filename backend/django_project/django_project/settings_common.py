@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "exercise.apps.ExerciseConfig",
     "graph.apps.GraphConfig",
     "main.apps.MainConfig",
+    "pet.apps.PetConfig",
     
     "django.contrib.sites",
     "allauth",

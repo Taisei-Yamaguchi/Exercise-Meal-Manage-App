@@ -1,8 +1,9 @@
 // src/components/Home.jsx
 import React from 'react';
 
-import useAuthCheck from '../hooks/useAuthCheck';
-import Navigation from './Navigation';
+import useAuthCheck from '../../hooks/useAuthCheck';
+import Navigation from '../Navigation';
+import Pet from './pet/Pet';
 
 const Dashboard = () => {
     useAuthCheck();
@@ -13,6 +14,7 @@ const Dashboard = () => {
             <Navigation />
             <div className='sub-container'>
             <h1>Dashboard Page</h1>
+                <Pet />
             </div>
         
         </div>

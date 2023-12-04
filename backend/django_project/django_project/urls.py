@@ -26,5 +26,6 @@ urlpatterns = [
     path('exercise/',include('exercise.urls')),
     path('graph/',include('graph.urls')),
     path('main/',include('main.urls')),
+    path('pet/',include('pet.urls')),
     
 ]
