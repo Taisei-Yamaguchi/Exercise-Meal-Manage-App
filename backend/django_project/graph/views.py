@@ -17,10 +17,9 @@ from django.db.models import Q,CharField
 from django.db.models import Min
 from user_info.models import UserInfo
 
-
-from .helpers.calc_daily_exercise_cals import calc_daily_exercise_cals
-from .helpers.calc_daily_bm_cals import calc_daily_bm_cals
-from .helpers.calc_daily_meal_cals import calc_daily_meal_cals
+from helpers.calc_daily_exercise_cals import calc_daily_exercise_cals
+from helpers.calc_daily_bm_cals import calc_daily_bm_cals
+from helpers.calc_daily_meal_cals import calc_daily_meal_cals
 
 
 # weight data for creating weight graph. weightの毎日の変化を折れ線グラフにする。

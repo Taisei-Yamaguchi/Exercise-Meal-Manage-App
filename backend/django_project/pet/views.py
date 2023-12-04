@@ -79,7 +79,6 @@ class PetView(APIView):
 
 
 from datetime import timedelta
-from django.db.models import Max, Min
 from helpers.calc_daily_exercise_cals import calc_daily_exercise_cals
 from helpers.calc_daily_meal_cals import calc_daily_meal_cals
 from helpers.calc_daily_bm_cals import calc_daily_bm_cals
