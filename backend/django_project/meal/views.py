@@ -8,13 +8,10 @@ from django.shortcuts import get_object_or_404
 from rest_framework.generics import DestroyAPIView
 import requests
 
-from urllib.parse import quote, urlencode
-import os
 from .helpers.extract_nutritional_values import extract_nutritional_values
 from .helpers.prepare_fatsecret_search_request import prepare_fatsecret_search_request
 from .helpers.clean_search_expression import clean_search_expression
 from .helpers.apply_search_expression import apply_search_expression
-
 
 
 
@@ -39,8 +36,6 @@ class FoodPostView(APIView):
     
     
     
-    
-    
 # Food List 自分が登録したFoodを確認する。
 class FoodListView(APIView):
     permission_classes = [IsAuthenticated]
@@ -53,7 +48,6 @@ class FoodListView(APIView):
             
         serialized_foods = FoodSerializer(foods, many=True)
         return Response({'foods':serialized_foods.data})
-        
     
     
     
@@ -94,9 +88,7 @@ class MealByDateView(APIView):
         return Response({'meals': serialized_meals})
         
 
-        
-        
-        
+
 # update meal, mainly serving and grams.
 class MealUpdateView(APIView):
     permission_classes = [IsAuthenticated]

@@ -4,10 +4,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Max,Sum,Min
 from rest_framework.permissions import IsAuthenticated
-from meal.models import Meal,Food
-from exercise.models import Exercise,Workout
+from meal.models import Meal
+from exercise.models import Exercise
 from django.db.models import F,FloatField, Value,Case, When
 from django.db.models.functions import Coalesce
+
 from helpers.calc_daily_bm_cals import calc_daily_bm_cals
 from helpers.calc_daily_exercise_cals import calc_daily_exercise_cals
 from helpers.calc_daily_meal_cals import calc_daily_meal_cals

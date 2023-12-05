@@ -21,14 +21,12 @@ class UserInfoCreateOrUpdateView(APIView):
         if request.data['metabolism'] is None: #'metabolism'がnullだったら、weight,height,sex,birthdayから計算
             request.data['metabolism'] = calculate_metabolism(request.data['weight'], request.data['height'],user.sex,user.birthday)
 
-
         # Get the latest user info, if available.
         try:
             latest_info = UserInfo.objects.filter(account=user).latest('date')
         except UserInfo.DoesNotExist:
             latest_info = None
 
-        
         # Check if the latest info is available and its date matches with the provided date。
         if latest_info and latest_info.date == request.data['date']: # latest_infoが存在し、かつそのdateがdatef_from_requestと一致する場合
             # Update only the fields provided in the request

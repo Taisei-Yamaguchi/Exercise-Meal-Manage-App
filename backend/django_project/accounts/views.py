@@ -1,8 +1,5 @@
-from rest_framework.generics import CreateAPIView
 from .models import CustomUser
 from .serializers import CustomUserSerializer
-from rest_framework import generics
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -11,17 +8,15 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.tokens import default_token_generator
-from allauth.account.models import EmailConfirmation, EmailConfirmationHMAC
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
+# from allauth.account.models import EmailConfirmation, EmailConfirmationHMAC
+# from django.core.mail import send_mail
+# from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth import get_user_model
-from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from django.http import Http404
 from django.contrib.auth import logout
 
 
