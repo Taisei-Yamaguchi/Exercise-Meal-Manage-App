@@ -21,9 +21,10 @@ using Django &amp; React
 <del>・バックエンド　コード整理 3(exercise　default_workoutの扱い) <br></del>
 <del>・pet app <br></del>
 
+・デザイン調整 (tailwindを使う)<br>
 ・フロントエンドの整理 <br>
 ・バックエンドの整理 <br>
-・デザインの方向性検討 <br>
+
 ・詳細設定 <br>
 ・バックエンドテストケースの作成 <br>
 ・フロントエンドのテスト　<br>
