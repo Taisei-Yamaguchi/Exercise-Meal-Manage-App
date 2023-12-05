@@ -4,13 +4,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Max,Sum,Min
 from rest_framework.permissions import IsAuthenticated
-from meal.models import Meal,Food
-from exercise.models import Exercise,Workout
+from meal.models import Meal
+from exercise.models import Exercise
 from django.db.models import F,FloatField, Value,Case, When
 from django.db.models.functions import Coalesce
-from graph.helpers.calc_daily_bm_cals import calc_daily_bm_cals
-from graph.helpers.calc_daily_exercise_cals import calc_daily_exercise_cals
-from graph.helpers.calc_daily_meal_cals import calc_daily_meal_cals
+
+from helpers.calc_daily_bm_cals import calc_daily_bm_cals
+from helpers.calc_daily_exercise_cals import calc_daily_exercise_cals
+from helpers.calc_daily_meal_cals import calc_daily_meal_cals
 
 
 
@@ -42,13 +43,6 @@ class RegistrationStatusCheckView(APIView):
 
         print("oldest_exercise_date:", oldest_exercise_date)
         print("oldest_meal_date:", oldest_meal_date)
-        # 最も古い日付
-        # oldest_date = min(
-        #     oldest_exercise_date,
-        #     oldest_meal_date,
-        #     (user.date_joined.date() if user.date_joined else None),
-        #     default=timezone.now().date()  # バックアップのデフォルト値
-        # )
         
         oldest_date = min(
             filter(None, [oldest_exercise_date, oldest_meal_date, user.date_joined.date() if user.date_joined else None]),
@@ -70,15 +64,6 @@ class RegistrationStatusCheckView(APIView):
             registration_status.append(status_entry)
 
         return Response(registration_status)
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     

@@ -13,14 +13,13 @@ from exercise.models import Exercise
 from django.db.models.functions import Cast
 from meal.models import Meal
 from django.utils import timezone
-from django.db.models import Q,CharField
+from django.db.models import Q
 from django.db.models import Min
 from user_info.models import UserInfo
 
-
-from .helpers.calc_daily_exercise_cals import calc_daily_exercise_cals
-from .helpers.calc_daily_bm_cals import calc_daily_bm_cals
-from .helpers.calc_daily_meal_cals import calc_daily_meal_cals
+from helpers.calc_daily_exercise_cals import calc_daily_exercise_cals
+from helpers.calc_daily_bm_cals import calc_daily_bm_cals
+from helpers.calc_daily_meal_cals import calc_daily_meal_cals
 
 
 # weight data for creating weight graph. weightの毎日の変化を折れ線グラフにする。
@@ -50,7 +49,6 @@ class WeightDataAPIView(APIView):
             # 既にデータがある場合はスキップ
             if missing_date not in [entry['date'] for entry in weight_data]:
                 interpolated_data.append({'date': missing_date, 'weight': None})
-
                 
         # 補完データを元のデータに結合
         weight_data.extend(interpolated_data)
@@ -226,7 +224,6 @@ class DailyExerciseWeightGraphDataAPIView(APIView):
                 Q(account=request.user, exercise_date__range=(start_date, end_date))
             )
             
-
         # 各日の合計重量の計算
         daily_weights = exercises.values('exercise_date').annotate(
             total_weight=Coalesce(
@@ -254,7 +251,6 @@ class DailyExerciseWeightGraphDataAPIView(APIView):
         # 日付でソート
         daily_weights = sorted(daily_weights, key=lambda x: x['exercise_date'])
         return Response(daily_weights)
-
 
 
 
@@ -312,6 +308,5 @@ class CalGraphAPIView(APIView):
                 "food_consuming_cal": food_cals,
             })
         
-
         return Response({'intake_cals':intake_cals,'consuming_cals':consuming_cals}, status=status.HTTP_200_OK)
     

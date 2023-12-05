@@ -3,7 +3,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Pet
-from accounts.models import CustomUser
 from user_info.models import UserInfo
 from exercise.models import Exercise
 from meal.models import Meal
@@ -70,16 +69,11 @@ class PetView(APIView):
             else:
                 print('エラー',serializer.errors)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            
-    
-
-
 
 
 
 
 from datetime import timedelta
-from django.db.models import Max, Min
 from helpers.calc_daily_exercise_cals import calc_daily_exercise_cals
 from helpers.calc_daily_meal_cals import calc_daily_meal_cals
 from helpers.calc_daily_bm_cals import calc_daily_bm_cals
@@ -91,6 +85,7 @@ from django.db.models.functions import Coalesce
 NORMAL_BODY_FAT = 15  # 適切な体脂肪率の閾値(男) 女は＋10　
 HIGH_BODY_FAT = 25    # やや高い体脂肪率の閾値(男) 女は+10
 
+# Pet のbody_statusを決定する
 def determine_pet_status(user, pet_date,user_info):
     # 最新の日付から10日遡る
     

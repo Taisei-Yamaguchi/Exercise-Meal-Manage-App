@@ -41,4 +41,5 @@ default_workout_data=[
     
     {"id": 'd34', "name": "Bike", "workout_type": "Aerobic"},
     {"id": 'd35', "name": "Swimming", "workout_type": "Aerobic"},
+    {"id": 'd36', "name": "Walking", "workout_type": "Aerobic"},
 ]
