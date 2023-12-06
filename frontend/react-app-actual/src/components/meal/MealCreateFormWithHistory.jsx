@@ -72,25 +72,32 @@ function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
 
     return (
         <form className='meal-create' onSubmit={handleCreateMeal}>
-            {/* Dropdown for selecting a food item */}
-            <label>
-                
-                <select className='food-select' value={selectedFood} onChange={(e) => setSelectedFood(e.target.value)} required>
-                <option value="" disabled>History</option>
-                {foods.map((food) => (
-                    <option key={food.id} value={food.id}>
-                    {food.name}
-                    </option>
-                ))}
+            <div className="join">
+                <select className='food-select select select-bordered join-item select-xs' value={selectedFood} onChange={(e) => setSelectedFood(e.target.value)} required>
+                    <option value="" disabled>Your</option>
+                        {foods.map((food) => (
+                            <option key={food.id} value={food.id}>
+                            {food.name}
+                            </option>
+                        ))}
                 </select>
-            </label>
-            <label>
-                <input type="number" className='food-amount-select' value={serving} onChange={(e) => setServing(e.target.value)} required min={(0.1)} step={0.1}/>
-                (servings)
-            </label>
-            
-            {/* Button to create the meal */}
-            <button className='meal-add-button' type='submit' >+</button>
+                
+                <div className="indicator">
+                    <span className="indicator-item badge badge-secondary">serving</span> 
+                    <input 
+                        type="number"
+                        value={serving} 
+                        onChange={(e) => setServing(e.target.value)} 
+                        required min={0.1} 
+                        step={0.1}
+                        className="food-select input select-bordered join-item select-xs" 
+                    />
+                </div>
+                <div className="indicator">
+                    
+                    <button className='meal-add-btn btn join-item btn-xs' type='submit'>+</button>
+                </div>
+            </div>
         </form>
     );
 }

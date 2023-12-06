@@ -5,26 +5,38 @@ import { NavLink } from 'react-router-dom';
 import Calendar from './Calendar';
 import PFCByDate from './PFCByDate';
 import CalsByDate from './CalsByDate';
+import FoodCreate from '../FoodCreate';
 
 const MealNavigation = (onUpdate) => {
     const { date } = useParams();
     
     return (
-        <div className='meal-nav'>
+        <div className='meal-nav '>
             <h1>Meal </h1>
-            <h2>{date}</h2>
             <Calendar selectedDate={date}  />
-            <div className='meal-info'>
-                <PFCByDate selectedDate={date} onUpdate={onUpdate}/>
-                <CalsByDate selectedDate={date} onUpdate={onUpdate}/>
+            <ul className="menu bg-base-200 lg:menu-horizontal rounded-box">
+                <div className='meal-info'>
+                    <PFCByDate selectedDate={date} onUpdate={onUpdate}/>
+                    <CalsByDate selectedDate={date} onUpdate={onUpdate}/>
+                </div>
+                <div className='meal-links'>
+                    {/* <NavLink to={`/meal/food-create/${date}`}>Create Your Food</NavLink> */}
+                    <button className="btn btn-primary btn-xs" onClick={()=>document.getElementById('my_modal_4').showModal()}>Food Custom</button>
+                        <dialog id="my_modal_4" className="modal">
+                            <div className="modal-box">
+                                <form method="dialog">
+                                    <button className="btn btn-circle btn-ghost absolute right-2 top-2 btn-sm">✕</button>
+                                </form>
+                                    <FoodCreate/>
+                            </div>
+                        </dialog>
+                    <NavLink to={`/meal/${date}`}>Meal</NavLink>
+                </div> 
+            </ul>
+                
             </div>
             
-            <div className='meal-links'>
-            <NavLink to={`/meal/food-create/${date}`}>Create Your Food</NavLink>
-            
-            <NavLink to={`/meal/${date}`}>Meal</NavLink>
-            </div>
-        </div>
+        
     );
 };
 

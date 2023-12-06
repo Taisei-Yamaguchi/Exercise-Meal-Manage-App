@@ -33,29 +33,27 @@ const Calendar = ({ selectedDate, onDateChange }) => {
 
     return (
         <div>
+            <div className="calendar-container space-x-2 flex items-center">
+                {calendarDates.map((date) => {
+                    const currentDate = new Date();
+                    const formattedCurrentDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
+                        .toString()
+                        .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
+
+                    const displayDate =
+                        date === formattedCurrentDate
+                            ? 'Today'
+                            : date.split('-').slice(1).join('/');
+
+                    return (
+                        <a key={date} href={`./${date}`} className="pagination join-item btn">
+                            {displayDate}
+                        </a>
+                    );
+                })}
+            </div>
+        </div>
         
-        <div className="calendar-container">
-            
-            {calendarDates.map((date) => {
-                const currentDate = new Date();
-                const  formattedCurrentDate= `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-                    .toString()
-                    .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
-            
-                const displayDate =
-                date === formattedCurrentDate
-                    ? 'Today'
-                    : date.split('-').slice(1).join('/');
-                
-                return (
-                    <div key={date} className="calendar-date">
-                        {/* navLinkが使えない */}
-                        <a href={`./${date}`} activeclassname="active-link">{displayDate}</a>
-                    </div>
-                );
-            })}
-        </div>
-        </div>
     );
 };
 

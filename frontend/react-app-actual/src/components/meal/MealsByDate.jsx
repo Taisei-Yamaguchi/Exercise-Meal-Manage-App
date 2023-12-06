@@ -11,6 +11,7 @@ import MealCreateForm from './MealCreateForm';
 import MealCreateFormWithHistory from './MealCreateFormWithHistory';
 import MealUpdate from './MealUpdate';
 import MealDelete from './MealDelete';
+import FoodSearch from './FoodSearch';
 
 
 const MealsByDate = () => {
@@ -68,54 +69,82 @@ const MealsByDate = () => {
             <Navigation />
                 <div className='sub-container'>
                 <MealNavigation onUpdate={handleUpdate}/> 
-                    <div className='main meal-main'>
-                        {/* <h1>Meal {date}</h1> */}
-                        {mealTypes.map((type) => (
-                            <div key={type} className='meal-group'>
-                            <h2>{type}</h2>
-                                <div className='meal-add-container'>
-                                    <MealCreateForm meal_type={type} meal_date={date} onUpdate={handleUpdate}/>
-                                    <MealCreateFormWithHistory meal_type={type} meal_date={date} onUpdate={handleUpdate}/>
-                                    <NavLink to={`/meal/food-search/${type}/${date}`}>Search</NavLink>
-                                </div>
-                            {/* Filter meals based on the current type */}
-                            {meals
-                                .filter((meal) => meal.meal_type === type)
-                                .map((meal, index) => (
-                                <div className={`each-meal ${meal.meal_type}`} key={index}>
-                                    
-                                    <div className='basic-info'>
-                                        <p>{meal.food.name}</p>
+
+                <div className='main meal-main'>
+                {mealTypes.map((type) => (
+                    < div key={type}>
+                        
+                        <div className='meal-add-container'>
+                            <img src={`/mealType-svg/${type}.svg`} className="swap-off fill-current w-10 h-10"></img>
+                                <MealCreateForm meal_type={type} meal_date={date} onUpdate={handleUpdate}/>
+                                <MealCreateFormWithHistory meal_type={type} meal_date={date} onUpdate={handleUpdate}/>
+                                    {/* <NavLink to={`/meal/food-search/${type}/${date}` } className='btn btn-ghost'>Search</NavLink> */}
+                                    <button className="btn btn-primary btn-xs" onClick={()=>document.getElementById(`my_modal_3_${type}`).showModal()}>search</button>
+                                    <dialog id={`my_modal_3_${type}`} className="modal">
+                                        <div className="modal-box">
+                                            <form method="dialog">
+                                            {/* if there is a button in form, it will close the modal */}
+                                                <button className="btn btn-circle btn-ghost absolute right-2 top-2 btn-sm">✕</button>
+                                            </form>
+                                            <FoodSearch meal_type={type} date={date}/>
+                                        </div>
+                                    </dialog>
+                        </div>
+
+                        <div className="collapse">
+                            <input type="checkbox" className="peer" /> 
+                            <div className="collapse-title text-primary-content">
+                            <label className="swap">
+                                <input type="checkbox" />
+                                <div className="swap-on"></div>
+                                <div className="swap-off">-</div>
+                            </label>
+                            </div>
+                            <div className="collapse-content text-primary-content "> 
+                            
+                            <div className="overflow-x-auto">
+                    <table className="table table-xs table-pin-rows table-pin-cols">
+                        <thead>
+                            <tr>
+                                <td>Meal</td> 
+                                <td>Cals(kcal)</td> 
+                                <td>Amount(serving/g)</td> 
+                                <th></th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {meals
+                            .filter((meal) => meal.meal_type === type)
+                            .map((meal, index) => (
+                                <tr key={meal.id}>
+                                    <td>{meal.food.name}</td> 
+                                    <td> 
                                         {meal.serving !== null && meal.serving !== 0 ? (
-                                            <div>
-                                                <p>({Math.round(meal.food.cal * meal.serving)}kcal)</p>
-                                            </div>
+                                                <p>{Math.round(meal.food.cal * meal.serving)}</p>
                                             ) :(
                                             <div>
-                                                {meal.food.is_open_api ===true &&  meal.food.is_100g === true ? (
-                                                    
-                                                    <p>({Math.round(meal.food.cal * (meal.grams / meal.food.amount_per_serving))} kcal)</p>
-                                                    
-                                                ) : (
-                                                    <p>({Math.round(meal.food.cal * (meal.grams / meal.food.amount_per_serving))} kcal)</p>
-                                                )}
+                                                <p>{Math.round(meal.food.cal * (meal.grams / meal.food.amount_per_serving))} </p>
                                             </div>
                                         )}
-                                    </div>
-
-                                    <div className='meal-btns'>
-                                        <MealUpdate meal={meal} onUpdate={handleUpdate}/>
-                                        <MealDelete mealId={meal.id} onUpdate={handleUpdate}/>
-                                    </div>
-                                </div>
-                                ))}
-                            </div>
+                                    </td> 
+                                    
+                                    <td><MealUpdate meal={meal} onUpdate={handleUpdate}/></td>
+                                    <td><MealDelete mealId={meal.id} onUpdate={handleUpdate}/></td>
+                                    <th></th> 
+                                </tr>
                         ))}
+                        </tbody>
+                    </table>
                     </div>
+  </div>
+</div>
+                    
+                    </div>
+                ))}
                 </div>
             </div>
-        );
-        
+        </div>
+    );
 };
 
 export default MealsByDate;

@@ -19,7 +19,7 @@ import PasswordResetProcess from './components/account/PasswordResetProcess';
 import Dashboard from './components/dashboard/Dashboard';
 
 import MealsByDate from './components/meal/MealsByDate';
-import FoodSearch from './components/meal/FoodSearch';
+// import FoodSearch from './components/meal/FoodSearch';
 import FoodCreate from './components/meal/FoodCreate';
 import NutrientsByDateGraph from './components/meal/NutriensByDateGraph';
 
@@ -51,7 +51,7 @@ const App = () => {
           <Route path="/password-reset/process/:uid/:token" element={<PasswordResetProcess />}/>
 
           <Route path="/meal/:date" element={<MealsByDate />}/>
-          <Route path="/meal/food-search/:meal_type/:date" element={<FoodSearch />}/>
+          {/* <Route path="/meal/food-search/:meal_type/:date" element={<FoodSearch />}/> */}
           <Route path="/meal/food-create/:date" element={<FoodCreate/>}/>
           <Route path="/meal/nutrients-graph/:date" element={<NutrientsByDateGraph/>}/>
 
