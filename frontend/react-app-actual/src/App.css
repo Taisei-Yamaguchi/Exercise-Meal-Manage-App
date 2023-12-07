@@ -113,6 +113,10 @@ nav{
   padding-top: 20px;  /* 適切なパディングを設定します */
   padding-left: 1%;
   z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 
@@ -299,22 +303,59 @@ nav{
 
 
 /* exercise */
+.input-number{
+  width:30%;
+
+}
+
+.exercise-detail-update{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.update-container{
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.exercise-info{
+  display: flex;
+  flex-direction: row;
+}
+
+.textarea-width{
+  width: 200%;
+}
+
+
+
 .exercise-nav{
   border: solid;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+.exercise-create{
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .exercise-create-form{
   display: flex;
   flex-direction: column;
-  border: solid;
-  width:100%
+  width:100%;
+  
 }
 
 .exercise-create-form .exercise-create-detail{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  
 }
 
 .exercise-create-form .exercise-create-detail input{
@@ -328,17 +369,7 @@ nav{
 .exercise-create-form textarea{
   width:150%
 }
-.exercise-create-form button{
-  background-color: rgb(232, 60, 60);
-  color: #fff;
-  width: 50px;
-  height: 30px;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-}
+
 
 .exercise-create-form .exercise-create-others{
   
@@ -351,11 +382,10 @@ nav{
   width:80%;
 }
 
-.exercise-group .each-exercise{
-  border: solid;
-  background-color: rgb(251, 66, 24);
+.exercise-group {
+  margin-top: 1%;
+  padding: 3% 2% 3% 2%;
 }
-
 
 .exercise-update-form{
   display: flex;

@@ -10,9 +10,8 @@ const ExerciseNavigation = (onUpdate) => {
     const { date } = useParams();
     
     return (
-        <div className='exercise-nav'>
+        <div className='exercise-nav bg-gradient-to-r to-orange-400 from-red-500 text-neutral-100'>
             <h1>Exercise </h1>
-            <h2>{date}</h2>
             <Calendar selectedDate={date}  />
             <div className='exrcise-info'>
                 {/* <PFCByDate selectedDate={date} onUpdate={onUpdate}/> */}

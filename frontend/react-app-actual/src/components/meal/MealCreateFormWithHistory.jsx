@@ -83,7 +83,7 @@ function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
                 </select>
                 
                 <div className="indicator">
-                    <span className="indicator-item badge badge-secondary">serving</span> 
+                    <span className="indicator-item badge badge-secondary badge-xs">serving</span> 
                     <input 
                         type="number"
                         value={serving} 

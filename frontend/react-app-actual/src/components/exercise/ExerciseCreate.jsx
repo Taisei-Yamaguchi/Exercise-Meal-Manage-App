@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import getCookie from '../../hooks/getCookie';
 import useAuthCheck from '../../hooks/useAuthCheck';
+import WorkoutCreate from './WorkoutCreate';
 
 
 const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
@@ -44,7 +45,7 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
             setWorkouts(data.workout);
             setDefaultWorkouts(data.default_workout)
             onUpdate()
-            console.log(data)
+            
         } catch (error) {
             console.error('Error fetching workouts:', error);
         }
@@ -151,17 +152,15 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
     
     return (
         <div>
-            
-            <h3>{formData.date}</h3>
 
-            <form className='exercise-create-form'onSubmit={handleCreateExercise}>
-                <div className='exercise-create-detail' > 
-                        <label className='workout_id'>
-                            <select
+            <form className='exercise-create-form  'onSubmit={handleCreateExercise}>
+            <div className="join exercise-create">
+                <select
                                 name='workout_id'
                                 value={formData.workout_id === null ? '' : formData.workout_id}
                                 onChange={handleInputChange}
                                 required
+                                className='food-select select select-bordered join-item select-xs '
                             >
                                 <option value='' disabled>workout</option>
                                 {workouts
@@ -181,97 +180,106 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
                                     </option>
                                 ))}
                             </select>
-                        </label>
-
-                        <label className='sets'>
-                            <input
-                                name='sets'
-                                type="number"
-                                value={formData.sets === null ? '' : formData.sets}
-                                onChange={handleInputChange}
-                                min={1}
-                            />(sets)
-                        </label>
-
-                        <label className='reps'>
-                            <input
-                                name='reps'
-                                type="number"
-                                value={formData.reps === null ? '' : formData.reps}
-                                onChange={handleInputChange}
-                                min={1}
-                            />(reps)
-                        </label>
-
-                        <label className='weight_kg'>
-                            <input
-                                name='weight_kg'
-                                type="number"
-                                value={formData.weight_kg === null ? '' : formData.weight_kg}
-                                onChange={handleInputChange}
-                                min={0.1}
-                                step={0.1}
-                            />(kg)
-                        </label>
-                    
-
-                    {(workoutType !== 'Aerobic' && workoutType !== 'Other')? (
-                        <></>
-                    ) : (
-                        <>
-                            <label className='distance'>
-                                <input
-                                    name='distance'
-                                    type="number"
-                                    value={formData.distance === null ? '' : formData.distance}
-                                    onChange={handleInputChange}
-                                    min={0.1}
-                                    step={0.1}
-                                />(km)
-                            </label>
-
-                            <label className='duration_minutes'>
-                                <input
-                                    name="duration_minutes"
-                                    type="number"
-                                    value={formData.duration_minutes === null ? '' : formData.duration_minutes}
-                                    onChange={handleInputChange}
-                                    min={1}
-                                />(mins)
-                            </label>
-                        </>
-                    )}
-
-                    <label className='mets'>
-                        <input 
+                <div className="indicator">
+                    <span className="indicator-item badge badge-secondary badge-xs">set</span> 
+                    <input 
+                        name='sets'
+                        type="number"
+                        value={formData.sets === null ? '' : formData.sets}
+                        onChange={handleInputChange}
+                        min={1}
+                        className="food-select input select-bordered join-item input-xs" 
+                    />
+                </div>
+                <div className="indicator">
+                    <span className="indicator-item badge badge-secondary badge-xs">rep</span> 
+                    <input 
+                        name='reps'
+                        type="number"
+                        value={formData.reps === null ? '' : formData.reps}
+                        onChange={handleInputChange}
+                        min={1}
+                        className="food-select input select-bordered join-item input-xs" 
+                    />
+                </div>
+                <div className="indicator">
+                    <span className="indicator-item badge badge-secondary badge-xs">kg</span> 
+                    <input 
+                        name='weight_kg'
+                        type="number"
+                        value={formData.weight_kg === null ? '' : formData.weight_kg}
+                        onChange={handleInputChange}
+                        min={0.1}
+                        step={0.1}
+                        className="food-select input select-bordered join-item input-xs" 
+                    />
+                </div>
+                <div className="indicator">
+                    <span className="indicator-item badge badge-secondary badge-xs">met</span> 
+                    <input 
                         name='mets'
                         type="number" 
                         value={formData.mets ===null?'':formData.mets} 
                         onChange={handleInputChange} 
                         required
                         min={1}
-                        />(mets)
-                    </label>
-                    </div>
+                        className="food-select input select-bordered join-item input-xs" 
+                    />
+                </div>
+
+
+                {(workoutType !== 'Aerobic' && workoutType !== 'Other')? (
+                        <></>
+                    ) : (
+                        <>
+                        <div className="indicator">
+                            <span className="indicator-item badge badge-secondary badge-xs">km</span> 
+                            <input 
+                                name='distance'
+                                type="number"
+                                value={formData.distance === null ? '' : formData.distance}
+                                onChange={handleInputChange}
+                                min={0.1}
+                                step={0.1}
+                                className="food-select input select-bordered join-item input-xs" 
+                            />
+                        </div>
+                        <div className="indicator">
+                            <span className="indicator-item badge badge-secondary badge-xs">min</span> 
+                            <input 
+                                name="duration_minutes"
+                                type="number"
+                                value={formData.duration_minutes === null ? '' : formData.duration_minutes}
+                                onChange={handleInputChange}
+                                min={1}
+                                className="food-select input select-bordered join-item input-xs" 
+                            />
+                        </div>
+                        </>
+                    )}
                 
-                    <div className='exercise-create-others'>
-                        <label>
-                            <textarea 
+                    <button className='btn btn-xs btn-accent' type='submit'>Add</button>
+                </div>
+                <div className='exercise-create-others'>
+                        <textarea 
                             name='memos'
                             value={formData.memos ===null?'':formData.memos} 
                             onChange={handleInputChange} 
-                            placeholder='Memos'/>
-                        </label>
-
-                        <button type='submit' >
-                            +
-                        </button>
-                    </div>
-                
-                
+                            placeholder='Memos'
+                            className="textarea textarea-bordered textarea-xs w-full max-w-xs"
+                        />
+                    
+                </div>
             </form>
-
-        {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
+            <button className="btn btn-primary btn-xs" onClick={() => document.getElementById(`my_modal_3_${workoutType}`).showModal()}>workout</button>
+                    <dialog id={`my_modal_3_${workoutType}`} className="modal">
+                        <div className="modal-box">
+                            <form method="dialog">
+                            <button className="btn btn-circle btn-ghost absolute right-2 top-2 btn-sm">✕</button>
+                            </form>
+                            <WorkoutCreate workoutType={workoutType} />
+                        </div>
+                    </dialog>
         </div>
     );
 };

@@ -14,14 +14,11 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData,onUpdate}) => {
         mets: exerciseData.mets,
         memos: exerciseData.memos
     });
-    console.log(exerciseId,workoutType,exerciseData)
-    
     
     useAuthCheck()
     
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        console.log(name,value)
         const sanitizedValue = value === '' ? null : value;
         setUpdateData((prevData) => ({ ...prevData, [name]: sanitizedValue }));
     };
@@ -58,9 +55,9 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData,onUpdate}) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className='exercise-update-form'>
-                <div className='exercise-update-detail'>
+        <form onSubmit={handleSubmit} className='update-container'>
+            <ul className=" bg-base-200 rounded-box exercise-detail-update">
+                <li className='exercise-info'>
                     <label className='sets'>
                         <input
                             name='sets'
@@ -68,35 +65,43 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData,onUpdate}) => {
                             value={updateData.sets === null ? '' : updateData.sets}
                             onChange={handleInputChange}
                             min={1}
+                            className="input-number input input-bordered input-xs"
                         />(sets)
                     </label>
-
+                </li>
+                <li className='exercise-info'>
                     <label className='reps'>
-                        <input
-                            name='reps'
-                            type="number"
-                            value={updateData.reps === null ? '' : updateData.reps}
-                            onChange={handleInputChange}
-                            min={1}
-                        />(reps)
+                            <input
+                                name='reps'
+                                type="number"
+                                value={updateData.reps === null ? '' : updateData.reps}
+                                onChange={handleInputChange}
+                                min={1}
+                                className="input-number input input-bordered input-xs"
+                            />(reps)
                     </label>
-
-                    <label className='weight_kg'>
-                        <input
-                            name='weight_kg'
-                            type="number"
-                            value={updateData.weight_kg === null ? '' : updateData.weight_kg}
-                            onChange={handleInputChange}
-                            min={0.1}
-                            step={0.1}
-                        />(kg)
+                </li>
+                <li className='exercise-info'>
+                    <label className='kg'>
+                            <input
+                                name='weight_kg'
+                                type="number"
+                                value={updateData.weight_kg === null ? '' : updateData.weight_kg}
+                                onChange={handleInputChange}
+                                min={1}
+                                className="input-number input input-bordered input-xs max-w-xs"
+                            />(kg)
                     </label>
-            
+                </li>
+                
+                
                     {workoutType !== 'Aerobic' && workoutType !== 'Other'? (
-                        <>
+                        <><li className='exercise-info'></li>
+                        
                         </>
                     ) : (
                         <>
+                        <li className='exercise-info'>
                             <label className='distance'>
                                 <input
                                     name='distance'
@@ -105,9 +110,11 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData,onUpdate}) => {
                                     onChange={handleInputChange}
                                     min={0.1}
                                     step={0.1}
+                                    className=" input-number input input-bordered input-xs max-w-xs"
                                 />(km)
                             </label>
-
+                        </li>
+                        <li className='exercise-info'>
                             <label className='duration_minutes'>
                                 <input
                                     name="duration_minutes"
@@ -115,11 +122,16 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData,onUpdate}) => {
                                     value={updateData.duration_minutes === null ? '' : updateData.duration_minutes}
                                     onChange={handleInputChange}
                                     min={1}
+                                    className="input-number input input-bordered input-xs max-w-xs"
                                 />(mins)
+                                
                             </label>
+                        </li>
                         </>
                     )}
 
+
+                    <li className='exercise-info'>
                     <label className='mets'>
                         <input 
                             name='mets'
@@ -129,27 +141,25 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData,onUpdate}) => {
                             required
                             min={0.1}
                             step={0.1}
+                            className="input-number input input-xs max-w-xs"
                         />(mets)
                     </label>
-                </div>
-
-                <div className='exercise-update-others'>
+                    </li>
+            </ul>
+            
+            <div className='exercise-update-others'>
                     <label>
-                        
                         <textarea 
                         name='memos'
                         value={updateData.memos ===null?'':updateData.memos} 
                         onChange={handleInputChange}
                         placeholder='memos'
+                        className=" textarea textarea-bordered textarea-xs  max-w-xs textarea-width"
                         />
-                        
                     </label>
-
-                    <button type='submit' className='exercise-update-btn'>
-                        U
+                    <button type='submit' className='exercise-update-btn btn btn-xs btn-accent'>
+                        Update
                     </button>
-                </div>
-
             </div>
         </form>
     );

@@ -11,10 +11,10 @@ const MealNavigation = (onUpdate) => {
     const { date } = useParams();
     
     return (
-        <div className='meal-nav '>
+        <div className='meal-nav bg-gradient-to-r from-lime-400 to-green-300 text-neutral-100 '>
             <h1>Meal </h1>
             <Calendar selectedDate={date}  />
-            <ul className="menu bg-base-200 lg:menu-horizontal rounded-box">
+            <ul className="menu lg:menu-horizontal rounded-box">
                 <div className='meal-info'>
                     <PFCByDate selectedDate={date} onUpdate={onUpdate}/>
                     <CalsByDate selectedDate={date} onUpdate={onUpdate}/>

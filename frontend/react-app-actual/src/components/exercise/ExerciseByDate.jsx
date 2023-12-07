@@ -14,20 +14,12 @@ const ExerciseByDate = () => {
     const { date } = useParams();
     const [exerciseData, setExerciseData] = useState([]);
     // const [defaultExerciseData, setDefaultExerciseData] = useState([]);
-    const workoutTypes = ['Chest', 'Back', 'Shoulder', 'Arm','Leg','Abs'];
-    const workoutType_aerobic ='Aerobic';
-    const workoutType_other= 'Other';
+    const workoutTypes = ['Chest', 'Back', 'Shoulder', 'Arm','Leg','Abs','Aerobic','Other'];
+    
     const [loading, setLoading] = useState(true);
     const [updateTrigger, setUpdateTrigger] = useState(false);
 
     
-
-    useEffect(() => {
-        // fetchExerciseDataが完了したら実行される
-        // exerciseDataとdefaultExerciseDataが設定された後に実行される
-        console.log('Data has been updated:', exerciseData);
-    }, [exerciseData,]);
-
     
     const fetchExerciseData = async () => {
         try {
@@ -46,7 +38,7 @@ const ExerciseByDate = () => {
             }
 
             const data = await response.json();
-            console.log(data)
+            
             setExerciseData(data.exercise);
             
 
@@ -79,92 +71,54 @@ const ExerciseByDate = () => {
             
                 <div className='main exercise-main'>
                     {workoutTypes.map((workoutType)=>(
-                        <div key={workoutType} className='exercise-group'>
-                            <h2>{workoutType}</h2>
+                        <div key={workoutType} className='exercise-group '>
+                            <h2><strong>{workoutType}</strong></h2>
                             <ExerciseCreate exercise_date={date} workoutType={workoutType} onUpdate={handleUpdate}/>
-                            <WorkoutCreate workoutType={workoutType}/>
-                            {exerciseData
-                            .filter((exercise)=>exercise.workout.workout_type === workoutType)
-                            .map((exercise)=>(
-                                <div key={exercise.id} className={`each-exercise ${workoutType}`}>
-                                    <p>{exercise.workout.name}</p>
-                                    <ExerciseUpdate exerciseId={exercise.id} workoutType={workoutType} exerciseData={exercise} onUpdate={handleUpdate}/>
-                                    <ExerciseDelete exerciseId={exercise.id} onUpdate={handleUpdate}/>
-                                    
+                            
+                            <table className="table table-xs table-pin-rows table-pin-cols">
+                            <div className="collapse">
+                                <input type="checkbox" className="peer" />
+                                <div className="collapse-title text-primary-content">
+                                    <label className="swap">
+                                    <input type="checkbox" />
+                                    <div className="swap-on">
+                                    <thead>
+                                        <tr>
+                                        <td>Exercise lists...</td>
+                                        </tr>
+                                    </thead>
+                                    </div>
+                                    <div className="swap-off">
+                                        <thead>
+                                        <tr>
+                                        <td>Exercise lists...</td>
+                                        </tr>
+                                        </thead>
+                                    </div>
+                                    </label>
                                 </div>
-                            ))}
-
-                            {/* {defaultExerciseData
-                            .filter((exercise)=>exercise.default_workout.workout_type === workoutType)
-                            .map((exercise)=>(
-                                <div key={exercise.id} className={`each-exercise ${workoutType}`}>
-                                    <p>{exercise.default_workout.name}</p>
-                                    <ExerciseUpdate exerciseId={exercise.id} workoutType={workoutType} exerciseData={exercise} onUpdate={handleUpdate}/>
-                                    <ExerciseDelete exerciseId={exercise.id} onUpdate={handleUpdate}/>
-                                    
-                                    
+                                <div className="collapse-content text-primary-content ">
+                                    <div className="overflow-x-auto">
+                                        <tbody className='bg-pink-50'>
+                                            {exerciseData
+                                                .filter((exercise)=>exercise.workout.workout_type === workoutType)
+                                                .map((exercise)=>(
+                                                    <tr key={exercise.id} className='bg-pink-200'>
+                                                        <td><strong>{exercise.workout.name}</strong></td>
+                                                        <td><ExerciseUpdate exerciseId={exercise.id} workoutType={workoutType} exerciseData={exercise} onUpdate={handleUpdate}/>
+                                                        </td>
+                                                        <td><ExerciseDelete exerciseId={exercise.id} onUpdate={handleUpdate}/></td>
+                                                    </tr>
+                                                ))}
+                                                
+                                        </tbody>
+                                    </div>
                                 </div>
-                            ))} */}
+                            </div>
+                            </table>
                         </div>
                     ))}
-                    <div key={workoutType_aerobic} className='exercise-group'>
-                            <h2>{workoutType_aerobic}</h2>
-                            <ExerciseCreate exercise_date={date} workoutType={workoutType_aerobic} onUpdate={handleUpdate}/>
-                            <WorkoutCreate workoutType={workoutType_aerobic}/>
-                            {exerciseData
-                            .filter((exercise)=>exercise.workout.workout_type === workoutType_aerobic)
-                            .map((exercise)=>(
-                                <div key={exercise.id} className={`each-exercise ${workoutType_aerobic}`}>
-                                    <p>{exercise.workout.name}</p>
-                                    <ExerciseUpdate exerciseId={exercise.id} workoutType={workoutType_aerobic} exerciseData={exercise} onUpdate={handleUpdate}/>
-                                    <ExerciseDelete exerciseId={exercise.id} onUpdate={handleUpdate}/>
-                                    
-                                    
-                                </div>
-                            ))}
-
-                            {/* {defaultExerciseData
-                            .filter((exercise)=>exercise.default_workout.workout_type === workoutType_aerobic)
-                            .map((exercise)=>(
-                                <div key={exercise.id} className={`each-exercise ${workoutType_aerobic}`}>
-                                    
-                                    <p>{exercise.default_workout.name}</p>
-                                    <ExerciseUpdate exerciseId={exercise.id} workoutType={workoutType_aerobic} exerciseData={exercise} onUpdate={handleUpdate}/>
-                                    <ExerciseDelete exerciseId={exercise.id} onUpdate={handleUpdate}/>
-                                    
-                                </div>
-                            ))} */}
-                    </div>
-                    <div key={workoutType_other} className='exercise-group'>
-                    <h2>{workoutType_other}</h2>
-                            <ExerciseCreate exercise_date={date} workoutType={workoutType_other} onUpdate={handleUpdate}/>
-                            <WorkoutCreate workoutType={workoutType_other}/>
-                            {exerciseData
-                            .filter((exercise)=>exercise.workout.workout_type === workoutType_other)
-                            .map((exercise)=>(
-                                <div key={exercise.id} className={`each-exercise ${workoutType_other}`}>
-                                    <p>{exercise.workout.name}</p>
-                                    <ExerciseUpdate exerciseId={exercise.id} workoutType={workoutType_other} exerciseData={exercise} onUpdate={handleUpdate}/>
-                                    <ExerciseDelete exerciseId={exercise.id} onUpdate={handleUpdate}/>
-                                    
-                                </div>
-                            ))}
-
-                            {/* {defaultExerciseData
-                            .filter((exercise)=>exercise.default_workout.workout_type === workoutType_other)
-                            .map((exercise)=>(
-                                <div key={exercise.id} className={`each-exercise ${workoutType_other}`}>
-                                    <p>{exercise.default_workout.name}</p>
-                                    <ExerciseUpdate exerciseId={exercise.id} workoutType={workoutType_other} exerciseData={exercise} onUpdate={handleUpdate}/>
-                                    <ExerciseDelete exerciseId={exercise.id} onUpdate={handleUpdate}/>
-                                    
-                                </div>
-                            ))} */}
-                    </div>
-
-
                 </div>
-
             </div>
         </div>
     );

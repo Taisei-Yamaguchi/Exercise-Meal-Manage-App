@@ -33,16 +33,20 @@ const WorkoutCreate = ({workoutType}) => {
 
     return (
         <form onSubmit={handleCreateWorkout}>
-            <input
-                type="text"
-                value={workoutName}
-                onChange={(e) => setWorkoutName(e.target.value)}
-                required
-                pattern="\S+" // スペース以外の文字が1文字以上必要
-                title="スペースのみの入力は無効です"
-            />
             
-            <button type='submit'>new workout</button>
+            <div className="join">
+                <input 
+                    className="input input-bordered join-item input-sm" 
+                    placeholder="new Custom Workout"
+                    type="text"
+                    value={workoutName}
+                    onChange={(e) => setWorkoutName(e.target.value)}
+                    required
+                    pattern="\S+" // スペース以外の文字が1文字以上必要
+                    title="スペースのみの入力は無効です"
+                />
+                <button type='submit' className="btn join-item rounded-r-full btn-sm">Add</button>
+            </div>
         </form>
     );
     };
