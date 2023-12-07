@@ -89,18 +89,18 @@ const DailyExerciseWeightGraph = () => {
 
     return (
         <div className='container'>
-            <Navigation />
             <div className='sub-container'>
                 <ExerciseNavigation />
-                <h1>Daily Weight Graph</h1>
-                <div className='exercise-graph-type-links'>
-                    {workoutTypes.map((type)=>(
-                        <a key={type} href={type}>{type}</a>
-                    ))}
+                <div className='main'>
+                    <h1>Daily Weight Graph</h1>
+                    <div className='exercise-graph-type-links'>
+                        {workoutTypes.map((type)=>(
+                            <a key={type} href={type}>{type}</a>
+                        ))}
+                    </div>
+                    <h3>{workout_type}</h3>
+                    <Bar data={data} height={300}/>
                 </div>
-                <h3>{workout_type}</h3>
-                <Bar data={data} height={300}/>
-                
             </div>
         </div>
     );

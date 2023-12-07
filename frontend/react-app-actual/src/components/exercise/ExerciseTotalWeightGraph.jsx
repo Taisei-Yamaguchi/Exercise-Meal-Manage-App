@@ -73,12 +73,13 @@ const ExerciseTotalWeightGraph = () => {
 
     return (
         <div className='container'>
-            <Navigation />
             <div className='sub-container'>
                 <ExerciseNavigation />
-                <h1>Total Weight Graph</h1>
-                <Bar data={data} height={200}/>
-                <h2>Grand Total Weight: {grandWeight} (kg)</h2>
+                <div className='main'>
+                    <h1>Total Weight Graph</h1>
+                    <Bar data={data} height={200}/>
+                    <h2>Grand Total Weight: {grandWeight} (kg)</h2>
+                </div>
             </div>
         </div>
     );

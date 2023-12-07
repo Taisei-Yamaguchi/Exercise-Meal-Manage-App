@@ -14,7 +14,7 @@ const Navigation = () => {
         const formattedCurrentMonth = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}`;
     const yourAuthToken = localStorage.getItem('authToken');
     return (
-        <nav className='menu-nav'>
+        <nav className='menu-nav z-50'>
         <ul>
             <li>
             <Link to="/">Home</Link>

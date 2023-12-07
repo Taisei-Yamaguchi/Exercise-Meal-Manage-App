@@ -33,7 +33,6 @@ const SignUpConfirm = () => {
     
         return (
         <div className='container'>
-            <Navigation />
             <div className='sub-container'>
 
             {errorMes ==='' ?(

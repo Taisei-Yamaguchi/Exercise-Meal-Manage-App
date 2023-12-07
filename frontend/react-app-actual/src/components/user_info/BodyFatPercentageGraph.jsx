@@ -122,12 +122,13 @@ const BodyFatPercentageGraph = () => {
 
     return (
         <div className='container'>
-            <Navigation />
-            <div className='sub-container user-info-main-container'>
+            <div className='sub-container'>
                 <UserInfoNavigation />
-                <h1>Body Fat Graph</h1>
-                <canvas ref={chartRef} />
-                <Line data={data} options={options} height={400}/>
+                <div className='main'>
+                    <h1>Body Fat Graph</h1>
+                    <canvas ref={chartRef} />
+                    <Line data={data} options={options} height={400}/>
+                </div>
             </div>
         </div>
     );

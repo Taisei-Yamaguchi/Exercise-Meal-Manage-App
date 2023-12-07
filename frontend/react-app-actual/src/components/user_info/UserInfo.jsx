@@ -104,88 +104,103 @@ const UserInfo = () => {
 
     return (
         <div className='container'>
-            <Navigation />
-            <div className='sub-container user-info-main-container'>
+            <div className='sub-container '>
                 <UserInfoNavigation />
+                <div className='main'>
                 <h2>User Info Form</h2>
+                
                 <form onSubmit={handleSubmit} className='user-info-form'>
                     {/* Render form fields with their corresponding values */}
-                
-                    <label>Weight<input
-                        type="number"
-                        name="weight"
-                        value={formData.weight ===null?'':formData.weight}
-                        onChange={handleInputChange}
-                        required
-                        min={1}
-                        step={0.1}
-                    /></label>
+                    <label>
+                        <strong>Weight (kg) (必須)</strong>
+                        <input
+                            type="number"
+                            name="weight"
+                            value={formData.weight ===null?'':formData.weight}
+                            onChange={handleInputChange}
+                            required
+                            min={1}
+                            step={0.1}
+                            className="input input-bordered input-primary w-full max-w-xs"
+                        />
+                    </label>
 
-                    <label>Height<input
-                        type="number"
-                        name="height"
-                        value={formData.height ===null?'': formData.height}
-                        onChange={handleInputChange}
-                        required
-                        min={1}
-                        step={0.1}
-                    /></label>
+                    <label>
+                        <strong>Tall (cm) (必須)</strong>
+                        <input
+                            type="number"
+                            name="height"
+                            value={formData.height ===null?'': formData.height}
+                            onChange={handleInputChange}
+                            required
+                            min={1}
+                            step={0.1}
+                            className="input input-bordered input-primary w-full max-w-xs"
+                        />
+                    </label>
 
-                    <label>Body Fat Rate<input
+                    <label>Body Fat Rate (%)<input
                         type="number"
                         name="body_fat_percentage"
                         value={formData.body_fat_percentage ===null?'': formData.body_fat_percentage}
                         onChange={handleInputChange}
                         min={1}
                         step={0.1}
+                        className="input input-bordered input-primary w-full max-w-xs"
                     /></label>
 
-                    <label>Muscle Mass<input
+                    <label>Muscle Mass (kg) <input
                         type="number"
                         name="muscle_mass"
                         value={formData.muscle_mass ===null?'': formData.muscle_mass}
                         onChange={handleInputChange}
                         min={1}
                         step={0.1}
+                        className="input input-bordered input-primary w-full max-w-xs"
                     /></label>
 
-                    <label>Metablism<input
+                    <label>Basic Metabolism (kcal)<input
                         type="number"
                         name="metabolism"
                         value={formData.metabolism ===null?'': formData.metabolism}
                         onChange={handleInputChange}
                         min={1}
                         step={0.1}
+                        className="input input-bordered input-primary w-full max-w-xs"
                     /></label>
 
-                    <label>Target Weight<input
+                    <label>Target Weight (kg)<input
                         type="number"
                         name="target_weight"
                         value={formData.target_weight ===null?'': formData.target_weight}
                         onChange={handleInputChange}
                         min={1}
                         step={0.1}
+                        className="input input-bordered input-primary w-full max-w-xs"
                     /></label>
 
-                    <label>Target Body Fat Rate<input
+                    <label>Target Body Fat Rate (%)<input
                         type="number"
                         name="target_body_fat_percentage"
                         value={formData.target_body_fat_percentage ===null?'': formData.target_body_fat_percentage}
                         onChange={handleInputChange}
                         min={1}
                         step={0.1}
+                        className="input input-bordered input-primary w-full max-w-xs"
                     /></label>
 
-                    <label>Target Muscle Mass<input
+                    <label>Target Muscle Mass (kg)<input
                         type="number"
                         name="target_muscle_mass"
                         value={formData.target_muscle_mass ===null?'': formData.target_muscle_mass}
                         onChange={handleInputChange}
                         min={1}
                         step={0.1}
+                        className="input input-bordered input-primary w-full max-w-xs"
                     /></label>
-                    <button type="submit">Save</button>
+                    <button type="submit" className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg btn-secondary">Save</button>
                 </form>
+                </div>
             </div>
         </div>
     );

@@ -60,54 +60,55 @@ nav{
 .container{
   display: flex;
   flex-direction: row;
-  padding-left: 210px;
-  width:100%
+  
+  width:100%;
+  justify-self: center;
+  align-self: center;
 }
 
 .menu-nav {
   position: fixed;
   top: 0;  /* 上端に固定する場合 */
   left: 0;  /* 左端に固定する場合 */
-  width: 200px;  /* ナビゲーションの幅を調整してください */
+  width: 300px;  /* ナビゲーションの幅を調整してください */
   height: 100vh;  /* 画面の高さいっぱいに設定します */
   background-color: rgb(203, 202, 202);  /* ナビゲーションの背景色を指定してください */
   border-right: 1px solid #ccc;  /* ナビゲーションの右側に境界線を追加します */
   padding-top: 20px;  /* 適切なパディングを設定します */
+  z-index: 20000000;
 }
 
 .sub-container{
   display: flex;
   flex-direction: column;
-  padding-left: 1%;
-  padding-right: 0;
+  width: 100%;
+  justify-self: center;
+  align-self: center;
+  
 }
 
 .main{
   padding-top: 300px;
   
-  width: 100%;
+  width: 90%;
   padding-right: 0;
   justify-self: center;
   align-self: center;
 }
 
-.graph{
-  border: solid;
-  
+.open-nav{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
-
-
-
-
-/* meal */
-.meal-nav{
+.sub-nav{
   border: solid;
   position: fixed;
   top: 0;  /* 上端に固定する場合 */
-  left: 200px;  /* 左端に固定する場合 */
+  left: 0;  /* 左端に固定する場合 */
   right: 0; 
    /* ナビゲーションの幅を調整してください */
-  height: 270px;  /* 画面の高さいっぱいに設定します */
+  height: 250px;  /* 画面の高さいっぱいに設定します */
   background-color: rgb(196, 255, 100);  /* ナビゲーションの背景色を指定してください */
   border-right: 1px solid #ccc;  /* ナビゲーションの右側に境界線を追加します */
   padding-top: 20px;  /* 適切なパディングを設定します */
@@ -119,15 +120,14 @@ nav{
   align-items: center;
 }
 
-
-
-.meal-nav h1{
+.sub-nav h1{
   font-size: 30px;
 }
 
-.meal-nav h2{
+.sub-nav h2{
   font-size: 15px;
 }
+/* meal */
 
 .meal-links{
   display: flex;
@@ -144,9 +144,7 @@ nav{
   justify-content: space-around;
 }
 
-/* .meal-main{
-  border: solid;
-} */
+
 
 
 .calendar-container{
@@ -378,9 +376,7 @@ nav{
   justify-content: space-between;
 }
 
-.exercise-main-container{
-  width:80%;
-}
+
 
 .exercise-group {
   margin-top: 1%;
@@ -512,12 +508,12 @@ nav{
 }
 
 
-.user-info-nav .user-info-detail .user-info-info{
+/* .user-info-nav .user-info-detail .user-info-info{
   border: solid;
   width: 50%;
-}
+} */
 
-.user-info-nav .user-info-detail .user-info-info p{
+/* .user-info-nav .user-info-detail .user-info-info p{
   font-size: 5px;
 }
 
@@ -531,28 +527,30 @@ nav{
 .user-info-nav .user-info-links .user-info-link{
   font-size: 15px;
   padding-bottom: 1%;
-}
+} */
 
-
+/* 
 .user-info-nav h1{
   font-size: 30px;
 }
 
 .user-info-nav h2{
   font-size: 15px;
-}
+} */
 
 
 .user-info-form{
   display: flex;
   flex-direction: column;
+  
+  width: 90%;
 }
 
-/* .user-info-form input{
+.user-info-form label{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-} */
+}
 
 
 /* account */

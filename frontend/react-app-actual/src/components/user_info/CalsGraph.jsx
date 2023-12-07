@@ -82,11 +82,12 @@ const CalsGraph = () => {
 
     return (
         <div className='container'>
-            <Navigation />
-            <div className='sub-container user-info-main-container'>
+            <div className='sub-container '>
                 <UserInfoNavigation />
-                <h1>Cals Graph</h1>
-                <Bar data={data} height={300} options={options}/>
+                <div className='main'>    
+                    <h1>Cals Graph</h1>
+                    <Bar data={data} height={300} options={options}/>
+                </div>
             </div>
         </div>
     );

@@ -66,7 +66,6 @@ const MealsByDate = () => {
 
     return (
             <div className='container'>
-            <Navigation />
             <div className='sub-container'>
                 <MealNavigation onUpdate={handleUpdate} />
                 <div className='main meal-main'>

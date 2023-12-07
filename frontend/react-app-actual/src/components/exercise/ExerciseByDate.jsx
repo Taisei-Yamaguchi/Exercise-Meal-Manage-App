@@ -65,10 +65,8 @@ const ExerciseByDate = () => {
 
     return (
         <div className='container'>
-            <Navigation />
-            <div className='sub-container exercise-main-container'>
+            <div className='sub-container'>
             <ExerciseNavigation onUpdate={handleUpdate}/>
-            
                 <div className='main exercise-main'>
                     {workoutTypes.map((workoutType)=>(
                         <div key={workoutType} className='exercise-group '>

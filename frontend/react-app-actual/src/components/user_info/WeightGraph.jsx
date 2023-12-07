@@ -121,12 +121,13 @@ const WeightGraph = () => {
 
     return (
         <div className='container'> 
-            <Navigation />
-            <div className='subcontainer user-info-main-container'>
+            <div className='subcontainer'>
                 <UserInfoNavigation />
-                <h1>Weight Graph</h1>
-                <canvas ref={chartRef} />
-                <Line data={data} options={options} height={400}/>
+                <div className='main'>
+                    <h1>Weight Graph</h1>
+                    <canvas ref={chartRef} />
+                    <Line data={data} options={options} height={400}/>
+                </div>
             </div>
         </div>
     );

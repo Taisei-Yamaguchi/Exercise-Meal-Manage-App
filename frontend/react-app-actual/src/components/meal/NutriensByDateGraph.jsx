@@ -91,7 +91,6 @@ const DailyNutrientsGraph = () => {
 
     return (
         <div className='container'>
-            <Navigation />
             <div className='sub-container'>
                 <MealNavigation />
                 <div className='main graph'>

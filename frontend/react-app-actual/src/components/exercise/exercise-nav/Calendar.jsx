@@ -92,17 +92,20 @@ const Calendar = ({ selectedDate, onDateChange }) => {
     }, [selectedDate]);
 
     return (
-            <div className="calendar-container join">
-                
-                {calendarDates.map((date) => (
-                    <a key={date} href={`./${date}`} 
-                        className={`pagination join-item  btn ${date === selectedDate ? 'bg-amber-500/100' : 'bg-amber-400/100'}`}
-                    >
-                        {date.split('-').slice(1).join('/')}
-                    </a>
-                ))}
-                <NavLink to={`/calendar/${selectedDate.split('-').slice(0,2).join('-')}`}><img src='/icons/calendar.svg' className="swap-off fill-current w-10 h-10"></img></NavLink>
-            </div>
+        <div className='calendar-container'>  
+        <NavLink to={`/calendar/${selectedDate.split('-').slice(0,2).join('-')}`}><img src='/icons/calendar.svg' className="swap-off fill-current w-10 h-10"></img></NavLink>
+        <div className=" join">
+            
+            {calendarDates.map((date) => (
+                <a key={date} href={`./${date}`} 
+                    className={`pagination join-item  btn ${date === selectedDate ? ' btn-accent' : 'btn-outline btn-accent'}`}
+                >
+                    {date.split('-').slice(1).join('/')}
+                </a>
+            ))}
+        </div>
+        
+    </div>
     );
 };
 
