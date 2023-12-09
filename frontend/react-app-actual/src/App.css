@@ -88,7 +88,7 @@ nav{
 }
 
 .main{
-  padding-top: 300px;
+  padding-top: 350px;
   
   width: 90%;
   padding-right: 0;
@@ -108,7 +108,7 @@ nav{
   left: 0;  /* 左端に固定する場合 */
   right: 0; 
    /* ナビゲーションの幅を調整してください */
-  height: 250px;  /* 画面の高さいっぱいに設定します */
+  height: 260px;  /* 画面の高さいっぱいに設定します */
   background-color: rgb(196, 255, 100);  /* ナビゲーションの背景色を指定してください */
   border-right: 1px solid #ccc;  /* ナビゲーションの右側に境界線を追加します */
   padding-top: 20px;  /* 適切なパディングを設定します */
@@ -134,6 +134,11 @@ nav{
   flex-direction: row ;
   
   justify-content: space-around;
+}
+
+
+.cals-box{
+  border: solid;
 }
 .meal-group{
   border: solid;

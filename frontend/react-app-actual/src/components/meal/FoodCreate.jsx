@@ -65,21 +65,102 @@ const FoodCreate = () => {
 
 
     return (
-        <form className='food-form' onSubmit={handlePostFood}>
-            <label>Name:<input 
-                type="text" 
-                value={name} 
-                onChange={(e) => setName(e.target.value)} 
-                required
-                pattern="\S+" // スペース以外の文字が1文字以上必要
-                title="スペースのみの入力は無効です"/>(必須)</label>
-            <label>Cal (kcal):<input type="number" value={cal} onChange={(e) => setCal(e.target.value)} required min={1}/>(必須)</label>
-            <label>Amount per serving (g):<input type="number" value={amount_per_serving} onChange={(e) => setAmount_per_servnig(e.target.value)} required min={1}/>(必須)</label>
-            <label>Carbohydrate (g):<input type="number" value={carbohydrate} onChange={(e) => setCarbohydrate(e.target.value)}min={0}/></label>
-            <label>Fat (g):<input type="number" value={fat} onChange={(e) => setFat(e.target.value)} min={0}/></label>
-            <label>Protein (g):<input type="number" value={protein} onChange={(e) => setProtein(e.target.value)} min={0}/></label>
-            <button type="submit">Post Food</button>
+
+        <div className="card shrink-0 w-full max-w-sm shadow-2xl text-slate-400" onSubmit={handlePostFood}>
+        <form className="card-body">
+
+            <div className="form-control">
+                <label className="label">
+                    <span className="label-text">Name (必須)</span>
+                </label>
+                <input
+                    type="text" 
+                    placeholder="Name" 
+                    className="input input-bordered"
+                    value={name} 
+                    onChange={(e) => setName(e.target.value)} 
+                    required
+                    pattern="\S+" // スペース以外の文字が1文字以上必要
+                    title="スペースのみの入力は無効です" />
+            </div>
+
+            <div className="form-control">
+                <label className="label">
+                    <span className="label-text">Cal (kcal) (必須)</span>
+                </label>
+                <input 
+                    type="number" 
+                    value={cal} onChange={(e) => setCal(e.target.value)} 
+                    required 
+                    min={1}
+                    placeholder="Cal" className="input input-bordered"     
+                />
+            </div>
+
+            <div className="form-control">
+                <label className="label">
+                    <span className="label-text">Amout (g/serving) (必須)</span>
+                </label>
+                <input 
+                    type="number" 
+                    value={amount_per_serving} 
+                    onChange={(e) => setAmount_per_servnig(e.target.value)} 
+                    required 
+                    min={1}
+                    placeholder="Amount" className="input input-bordered"     
+                />
+            </div>
+
+            <div className="form-control">
+                <label className="label">
+                    <span className="label-text">Carbohydrate (g) (必須)</span>
+                </label>
+                <input 
+                    type="number" 
+                    value={carbohydrate} 
+                    onChange={(e) => setCarbohydrate(e.target.value)} 
+                    required 
+                    min={0}
+                    placeholder="Carbohydrate" className="input input-bordered"     
+                />
+            </div>
+
+            <div className="form-control">
+                <label className="label">
+                    <span className="label-text">Fat (g) (必須)</span>
+                </label>
+                <input 
+                    type="number" 
+                    value={fat} 
+                    onChange={(e) => setFat(e.target.value)} 
+                    required
+                    min={0}
+                    placeholder="Fat" className="input input-bordered"     
+                />
+            </div>
+
+            <div className="form-control">
+                <label className="label">
+                    <span className="label-text">Protein (g) (必須)</span>
+                </label>
+                <input 
+                    type="number" 
+                    value={protein} 
+                    onChange={(e) => setProtein(e.target.value)} 
+                    required 
+                    min={0}
+                    placeholder="Protein" className="input input-bordered"     
+                />
+            </div>
+
+            <div className="form-control mt-6">
+            <button className="btn btn-primary" type='submit'>Create Food</button>
+            </div>
         </form>
+    </div>
+
+
+            
     );
 };
 
