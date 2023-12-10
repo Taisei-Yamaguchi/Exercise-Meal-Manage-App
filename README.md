@@ -22,10 +22,11 @@ using Django &amp; React
 <del>・pet app <br></del>
 
 ・デザイン調整 (tailwindを使う)<br>
-・フロントエンドの整理 <br>
-・バックエンドの整理 <br>
+・design （グラフ、ダッシュボード、ホーム、カレンダー、モバイル版）<br>
 
+・コード整理(back,front) <br>
 ・詳細設定 <br>
+
 ・バックエンドテストケースの作成 <br>
 ・フロントエンドのテスト　<br>
 
