@@ -271,15 +271,6 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
                     
                 </div>
             </form>
-            <button className="btn btn-primary btn-xs" onClick={() => document.getElementById(`my_modal_3_${workoutType}`).showModal()}>workout</button>
-                    <dialog id={`my_modal_3_${workoutType}`} className="modal">
-                        <div className="modal-box">
-                            <form method="dialog">
-                            <button className="btn btn-circle btn-ghost absolute right-2 top-2 btn-sm">✕</button>
-                            </form>
-                            <WorkoutCreate workoutType={workoutType} />
-                        </div>
-                    </dialog>
         </div>
     );
 };

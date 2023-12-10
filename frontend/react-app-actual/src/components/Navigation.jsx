@@ -45,9 +45,6 @@ const Navigation = () => {
                     <Link to="/user_info">User Info</Link>
                 </li>
                 <li>
-                    <Link to={`/calendar/${formattedCurrentMonth}`}>Calendar</Link>
-                </li>
-                <li>
                     <Link to="/settings">Settings</Link>
                 </li>
                 

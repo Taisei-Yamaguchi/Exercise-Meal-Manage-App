@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-
+import MainCalendar from '../../calendar/MainCalendar';
 
 const Calendar = ({ selectedDate, onDateChange }) => {
     const [calendarDates, setCalendarDates] = useState([]);
@@ -25,7 +25,20 @@ const Calendar = ({ selectedDate, onDateChange }) => {
 
     return (
         <div className='calendar-container'>  
-            <NavLink to={`/calendar/${selectedDate.split('-').slice(0,2).join('-')}`}><img src='/icons/calendar.svg' className="swap-off fill-current w-10 h-10"></img></NavLink>
+            <img 
+                    src='/icons/calendar.svg' 
+                    className="swap-off fill-current w-10 h-10" 
+                    onClick={() => document.getElementById(`my_modal_calendar`).showModal()}>
+                </img>    
+                    <dialog id={`my_modal_calendar`} className="modal">
+                        <div className="modal-box text-slate-500">
+                            <MainCalendar  month={`${selectedDate.split('-').slice(0,2).join('-')}`}/>
+                        </div>
+                        <form method="dialog" className="modal-backdrop">
+                            <button >✕</button>
+                        </form>
+                    </dialog>
+            
             <div className=" join">
                 
                 {calendarDates.map((date) => (

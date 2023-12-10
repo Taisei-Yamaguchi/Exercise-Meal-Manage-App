@@ -19,9 +19,7 @@ import PasswordResetProcess from './components/account/PasswordResetProcess';
 import Dashboard from './components/dashboard/Dashboard';
 
 import MealsByDate from './components/meal/MealsByDate';
-// import FoodSearch from './components/meal/FoodSearch';
-import FoodCreate from './components/meal/FoodCreate';
-import NutrientsByDateGraph from './components/meal/NutriensByDateGraph';
+// import NutrientsByDateGraph from './components/meal/NutriensByDateGraph';
 
 import ExerciseByDate from './components/exercise/ExerciseByDate';
 import ExerciseTotalWeightGraph from './components/exercise/ExerciseTotalWeightGraph';
@@ -35,7 +33,6 @@ import CalsGraph from './components/user_info/CalsGraph';
 
 import SettingsAccount from './components/settings/SettingsAccount';
 
-import MainCalendar from './components/calendar/MainCalendar';
 
 const App = () => {
   return (
@@ -51,9 +48,7 @@ const App = () => {
           <Route path="/password-reset/process/:uid/:token" element={<PasswordResetProcess />}/>
 
           <Route path="/meal/:date" element={<MealsByDate />}/>
-          {/* <Route path="/meal/food-search/:meal_type/:date" element={<FoodSearch />}/> */}
-          <Route path="/meal/food-create/:date" element={<FoodCreate/>}/>
-          <Route path="/meal/nutrients-graph/:date" element={<NutrientsByDateGraph/>}/>
+          {/* <Route path="/meal/nutrients-graph/:date" element={<NutrientsByDateGraph/>}/> */}
 
           <Route path="/exercise/:date" element={<ExerciseByDate/>}/>
           <Route path="/exercise/exercise-total-weight-graph/:date" element={<ExerciseTotalWeightGraph/>}/>
@@ -66,8 +61,6 @@ const App = () => {
           <Route path="/user_info/cals-graph" element={<CalsGraph />}/>
 
           <Route path="/settings" element={<SettingsAccount/>}/>
-
-          <Route path="/calendar/:month" element={<MainCalendar/>}/>
 
           <Route path="/*" element={<NotFound />} />
         </Routes>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../../hooks/getCookie';
 import { Bar } from 'react-chartjs-2';
-
+import 'chartjs-plugin-annotation';
 
 
 const CalsByDate = ({ selectedDate,onUpdate}) => {
@@ -83,6 +83,30 @@ useEffect(()=>{
     const chartData = {
         labels: ' ',
         datasets: [
+            
+            {
+                label: '目標最低摂取',
+                type: 'line',
+                borderColor: 'blue',
+                pointBackgroundColor: 'blue', // ドットの内側の色を設定
+                pointRadius: 5, // ドットのサイズを設定
+                data: [
+                    calsData.bm_cals
+                    
+                ],
+                fill: false,
+            },
+            {
+                label: '目標消費cal',
+                type: 'line',
+                borderColor: 'red',
+                pointBackgroundColor: 'red', // ドットの内側の色を設定
+                pointRadius: 5, // ドットのサイズを設定
+                data: [
+                    calsData.food_cals+250
+                ],
+                fill: false,
+            },
             {
                 label: 'Intake Cals',
                 data: [calsData.intake_cals],
@@ -99,16 +123,16 @@ useEffect(()=>{
                 barThickness: 40
             },
             {
-                label: '活動量',
-                data: [calsData.exercise_cals],
-                backgroundColor: '#FF6633',
+                label: '食事誘発熱生産',
+                data: [calsData.food_cals],
+                backgroundColor: '#FF9966',
                 stack: 'stack2',
                 barThickness: 40
             },
             {
-                label: '食事誘発熱生産',
-                data: [calsData.food_cals],
-                backgroundColor: '#FF9966',
+                label: '活動量',
+                data: [calsData.exercise_cals],
+                backgroundColor: '#FF6633',
                 stack: 'stack2',
                 barThickness: 40
             },
@@ -132,8 +156,10 @@ useEffect(()=>{
                 stacked: true,
             },
         },
-        
+
     };
+
+    
     
 
     return (
@@ -144,6 +170,10 @@ useEffect(()=>{
             </ul> */}
             <div className=' border-solid'>
                 <Bar key={aspectRatio} data={chartData} options={chartOptions} />
+            </div>
+            <div className="text-xs">
+                <p >*基礎代謝量ぶんは最低限食べましょう！</p>
+                <p>*活動量は250kcalを超えるぐらいが健康的だそうです</p>
             </div>
         </div>
         );

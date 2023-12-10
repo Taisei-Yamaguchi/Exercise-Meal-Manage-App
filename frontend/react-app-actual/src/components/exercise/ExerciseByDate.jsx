@@ -63,40 +63,55 @@ const ExerciseByDate = () => {
         
     };
 
+    useEffect(() => {
+        // 初回レンダリング時に実行
+        document.querySelectorAll('.collapse').forEach((collapse) => {
+            const inputCheckbox = collapse.querySelector('.peer');
+            if (inputCheckbox) {
+                inputCheckbox.checked = true; // 初期状態で開いた状態にする
+            }
+        });
+    }, []); // 空の依存リストを指定して初回のみ実行
+
+
+
     return (
         <div className='container'>
             <div className='sub-container'>
             <ExerciseNavigation onUpdate={handleUpdate}/>
                 <div className='main exercise-main'>
                     {workoutTypes.map((workoutType)=>(
-                        <div key={workoutType} className='exercise-group '>
-                            <h2><strong>{workoutType}</strong></h2>
-                            <ExerciseCreate exercise_date={date} workoutType={workoutType} onUpdate={handleUpdate}/>
-                            
-                            <table className="table table-xs table-pin-rows table-pin-cols">
-                            <div className="collapse">
+                        <div key={workoutType} className='flex flex-row border-b'>
+                        
+                        <button className="btn btn-primary btn-xs" onClick={() => document.getElementById(`my_modal_3_${workoutType}`).showModal()}>+</button>
+                            <dialog id={`my_modal_3_${workoutType}`} className="modal">
+                                <div className="modal-box">
+                                    <WorkoutCreate workoutType={workoutType} />
+                                </div>
+                                <form method="dialog" className="modal-backdrop">
+                                    <button >✕</button>
+                                </form>
+                            </dialog>
+
+                        <div className="collapse">
                                 <input type="checkbox" className="peer" />
                                 <div className="collapse-title text-primary-content">
-                                    <label className="swap">
-                                    <input type="checkbox" />
-                                    <div className="swap-on">
-                                    <thead>
-                                        <tr>
-                                        <td>Exercise lists...</td>
-                                        </tr>
-                                    </thead>
-                                    </div>
-                                    <div className="swap-off">
-                                        <thead>
-                                        <tr>
-                                        <td>Exercise lists...</td>
-                                        </tr>
-                                        </thead>
-                                    </div>
+                                    <label className="swap">    
+                                    <input type="checkbox flex flex-row" />
+                                        <div className="swap-on">
+                                            <h2><strong>{workoutType}</strong></h2>
+                                        </div>
+                                        <div className="swap-off">
+                                            <h2><strong>{workoutType}</strong></h2>
+                                        </div>
+                                        
                                     </label>
                                 </div>
+                            
                                 <div className="collapse-content text-primary-content ">
-                                    <div className="overflow-x-auto">
+                                    <div className="overflow-x-auto mt-1 pt-1">
+                                    <ExerciseCreate exercise_date={date} workoutType={workoutType} onUpdate={handleUpdate}/>
+                                    <table className="table table-xs table-pin-rows table-pin-cols">
                                         <tbody className='bg-pink-50'>
                                             {exerciseData
                                                 .filter((exercise)=>exercise.workout.workout_type === workoutType)
@@ -110,10 +125,10 @@ const ExerciseByDate = () => {
                                                 ))}
                                                 
                                         </tbody>
+                                    </table>
                                     </div>
                                 </div>
                             </div>
-                            </table>
                         </div>
                     ))}
                 </div>

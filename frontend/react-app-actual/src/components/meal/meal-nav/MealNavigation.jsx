@@ -42,7 +42,7 @@ const MealNavigation = (onUpdate) => {
                     <PFCByDate selectedDate={date} onUpdate={onUpdate}/>
                 </div>
 
-                <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Cal" checked/>
+                <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Cal" defaultChecked/>
                 <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box w-screen p-6 tab-content p-10  text-zinc-900">
                     <CalsByDate selectedDate={date} onUpdate={onUpdate}/>
                 </div>
@@ -51,11 +51,11 @@ const MealNavigation = (onUpdate) => {
                 <button role="tab" className="tab" onClick={()=>document.getElementById('my_modal_4').showModal()}>Create</button>
                         <dialog id="my_modal_4" className="modal">
                             <div className="modal-box">
-                                <form method="dialog">
-                                    <button className="btn btn-circle btn-ghost absolute right-2 top-2 btn-sm">✕</button>
-                                </form>
-                                    <FoodCreate/>
+                                <FoodCreate/>
                             </div>
+                            <form method="dialog" className="modal-backdrop">
+                                    <button >✕</button>
+                                </form>
                         </dialog>
             </div>
         </div>
