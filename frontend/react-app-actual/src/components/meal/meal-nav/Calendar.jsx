@@ -31,13 +31,16 @@ const Calendar = ({ selectedDate, onDateChange }) => {
                     onClick={() => document.getElementById(`my_modal_calendar`).showModal()}>
                 </img>    
                     <dialog id={`my_modal_calendar`} className="modal">
-                        <div className="modal-box text-slate-500">
+                        <div className="modal-box w-11/12 max-w-5xl text-slate-500">
                             <MainCalendar  month={`${selectedDate.split('-').slice(0,2).join('-')}`}/>
                         </div>
                         <form method="dialog" className="modal-backdrop">
                             <button >✕</button>
                         </form>
                     </dialog>
+
+
+
             
             <div className=" join">
                 

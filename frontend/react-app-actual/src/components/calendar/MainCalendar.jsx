@@ -107,9 +107,9 @@ const renderDay = (day) => {
 
 
     return (
-        <div key={key} className={`${classNames} `}>
+        <div key={key} className={`${classNames} text-xs p-0`}>
             {isCurrentMonth && !day.isOtherMonth ? (
-            <>
+            <div className='border'>
                 {day.getDate()}
                 <br />
                 {day.toLocaleDateString('en-US', { weekday: 'short' })} {/* 曜日を表示 */}
@@ -118,7 +118,7 @@ const renderDay = (day) => {
                 <br />
                 <Link to={`/exercise/${formattedDate}`}>{dayData && dayData.exercise ? 'exercise ✔️' : 'exercise ◻︎'}</Link>
                 
-            </>
+            </div>
             ) : null}
         </div>
     );
@@ -133,7 +133,7 @@ return (
             <h2>{getMonthYearString()}</h2>
             <h2 onClick={handleNext}>Next</h2>
         </div>
-        <div className="calendar-days">
+        <div className="calendar-days max-sm:flex max-sm:flex-wrap">
             {getDaysInMonth().map(renderDay)}
         </div>
     </div>

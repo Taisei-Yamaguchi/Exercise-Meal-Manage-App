@@ -115,12 +115,13 @@ const DailyExerciseWeightGraph = () => {
                 <ExerciseNavigation />
                 <div className='main'>
                     <div className='graph-head flex flex-col items-center '>
+                        <h3>{workout_type}</h3>
                         <div className='flex flex-row justify-between  w-full border'>
                             {workoutTypes.map((type)=>(
                                 <a key={type} href={type} className='link'>{type}</a>
                             ))}
                         </div>
-                        <h3>{workout_type}</h3>
+                        
                     </div>
                         
                     <div className="flex border overflow-x-auto ml-px pl-px">
