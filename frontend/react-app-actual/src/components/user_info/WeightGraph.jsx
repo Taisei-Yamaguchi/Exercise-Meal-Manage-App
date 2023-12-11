@@ -10,6 +10,7 @@ const WeightGraph = () => {
     const [latestTargetWeight, setLatestTargetWeight] = useState(null);
     const [error, setError] = useState(null);
     const chartRef = useRef(null); // チャートの参照
+    const [graphWidth, setGraphWidth] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,6 +35,11 @@ const WeightGraph = () => {
             setLatestTargetWeight(data.latest_target_weight);
             console.log(data.latest_target_weight);
             console.log(data.weight_data);
+
+
+            const xAxisLabelMinWidth = 20; // データ当たりの幅を設定
+            const width = data.weight_data.length * xAxisLabelMinWidth;
+            setGraphWidth(width);
 
             // Chartを破棄
             if (chartRef.current) {
@@ -105,31 +111,60 @@ const WeightGraph = () => {
 
     const options = {
         scales: {
-        x: {
-            type: 'category',
-            labels: labels,
+            x: {
+                type: 'category',
+                labels: labels,
+            },
+            y: {
+                beginAtZero: true, // y軸を0から始めない
+                min: 0,
+                max: 150, // y軸の最大値
+                stepSize: 5,
+                position: 'right',
+                title: {
+                    display: true,
+                    text: '(kg)', // y軸のタイトルに単位を追加
+                    color: 'black', // タイトルの色
+                    font: {
+                        weight: 'bold', // タイトルの太さ
+                        size: 12, // タイトルのサイズ
+                    },
+                },
+            },
         },
-        y: {
-            beginAtZero: true, // y軸を0から始めない
-            min: 0,
-            max: 150, // y軸の最大値
-            stepSize: 5,
-            
+        layout: {
+            padding: {
+                left: 0, // 左側の余白を調整
+                right: 0,
+                top: 0,
+                bottom: 0,
+            },
+            margin:{
+                left:10,
+            }
         },
-        },
+        responsive: false,
     };
 
     return (
         <div className='container'> 
-            <div className='subcontainer'>
+            <div className='subcontainer flex justify-left'>
                 <UserInfoNavigation />
-                <div className='main'>
-                    <h1>Weight Graph</h1>
+                <div className='flex main graph-container border overflow-x-auto ml-px pl-px'>
                     <canvas ref={chartRef} />
-                    <Line data={data} options={options} height={400}/>
+                    {graphWidth && 
+                        <Line 
+                            data={data} 
+                            options={options} 
+                            height={400} 
+                            width={graphWidth}
+                            className='border'
+                        />
+                    }
                 </div>
             </div>
         </div>
+
     );
 };
 

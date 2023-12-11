@@ -10,6 +10,7 @@ const BodyFatPercentageGraph = () => {
     const [latestTargetBodyFat, setLatestTargetBodyFat] = useState(null);
     const [error, setError] = useState(null);
     const chartRef = useRef(null); // チャートの参照
+    const [graphWidth, setGraphWidth] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,6 +35,10 @@ const BodyFatPercentageGraph = () => {
             setLatestTargetBodyFat(data.latest_body_fat_target);
             console.log(data.body_fat_data);
             console.log(data.latest_body_fat_target);
+
+            const xAxisLabelMinWidth = 20; // データ当たりの幅を設定
+            const width = data.body_fat_data.length * xAxisLabelMinWidth;
+            setGraphWidth(width);
 
             // Chartを破棄
             if (chartRef.current) {
@@ -115,7 +120,17 @@ const BodyFatPercentageGraph = () => {
             min: 0,
             max: 30, // y軸の最大値
             stepSize: 5,
+            position: 'right',
             
+            title: {
+                display: true,
+                text: '(%)', // y軸のタイトルに単位を追加
+                color: 'black', // タイトルの色
+                font: {
+                    weight: 'bold', // タイトルの太さ
+                    size: 12, // タイトルのサイズ
+                },
+            },
         },
         },
     };
@@ -124,10 +139,17 @@ const BodyFatPercentageGraph = () => {
         <div className='container'>
             <div className='sub-container'>
                 <UserInfoNavigation />
-                <div className='main'>
-                    <h1>Body Fat Graph</h1>
+                <div className='flex main graph-container border overflow-x-auto ml-px pl-px'>
                     <canvas ref={chartRef} />
-                    <Line data={data} options={options} height={400}/>
+                    {graphWidth && 
+                        <Line 
+                            data={data} 
+                            options={options} 
+                            height={400} 
+                            width={graphWidth}
+                            className='border'
+                        />
+                    }
                 </div>
             </div>
         </div>

@@ -71,13 +71,30 @@ const ExerciseTotalWeightGraph = () => {
         ],
     };
 
+    const option ={
+        scales: {
+            y: {
+                
+                title: {
+                    display: true,
+                    text: '(kg)', // y軸のタイトルに単位を追加
+                    color: 'black', // タイトルの色
+                    font: {
+                        weight: 'bold', // タイトルの太さ
+                        size: 12, // タイトルのサイズ
+                    },
+                },
+            },
+        },
+    }
+
     return (
         <div className='container'>
             <div className='sub-container'>
                 <ExerciseNavigation />
                 <div className='main'>
                     <h1>Total Weight Graph</h1>
-                    <Bar data={data} height={200}/>
+                    <Bar data={data} height={200} options={option}/>
                     <h2>Grand Total Weight: {grandWeight} (kg)</h2>
                 </div>
             </div>

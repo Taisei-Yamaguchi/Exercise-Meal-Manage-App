@@ -37,13 +37,21 @@ const UserInfoNavigation = () => {
             </div>
 
             <div role="tablist" className="tabs tabs-bordered">
-                <NavLink to='/user_info' className="tab">Info Form</NavLink>
-                <NavLink to='/user_info/weight-graph' className='tab'>Weight</NavLink>
-                <NavLink to='/user_info/body-fat-percentage-graph' className='tab'>Body Fat</NavLink>
-                <NavLink to='/user_info/muscle-mass-graph' className='tab'>Muscle Mass</NavLink>
-                <NavLink to='/user_info/cals-graph' className='tab'>Cals</NavLink>
-                
+                <NavLink to='/user_info' className="tab link " activeclassname="link-warning" >Info Form</NavLink>
+                <NavLink to='/user_info/weight-graph' className='tab link' activeclassname="link-warning">Weight</NavLink>
+                <NavLink to='/user_info/body-fat-percentage-graph' className='tab link' activeclassname="link-warning">Body Fat</NavLink>
+                <NavLink to='/user_info/muscle-mass-graph' className='tab link' activeclassname="link-warning">Muscle Mass</NavLink>
+                <NavLink to='/user_info/cals-graph' className='tab link' activeclassname="link-warning">Cals</NavLink>
             </div>
+            
+            {/* 
+            <div role="tablist" className="tabs tabs-bordered">
+                <NavLink to='/user_info' className="tab link" activeClassName="link-warning">Info Form</NavLink>
+                <NavLink to='/user_info/weight-graph' className='tab link' activeClassName="link-warning">Weight</NavLink>
+                <NavLink to='/user_info/body-fat-percentage-graph' className='tab link' activeClassName="link-warning">Body Fat</NavLink>
+                <NavLink to='/user_info/muscle-mass-graph' className='tab link' activeClassName="link-warning">Muscle Mass</NavLink>
+                <NavLink to='/user_info/cals-graph' className='tab link' activeClassName="link-warning">Cals</NavLink> 
+             </div> */}
         </div>
     );
 };

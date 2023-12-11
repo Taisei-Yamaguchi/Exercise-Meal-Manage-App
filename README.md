@@ -23,6 +23,10 @@ using Django &amp; React
 
 ・デザイン調整 (tailwindを使う)<br>
 ・design （グラフ、ダッシュボード、ホーム、カレンダー、モバイル版）<br>
+・workout,foodの利用順に表示する機能
+・exercise,mealを最新の履歴をしゅとくし、ワンクリックで登録できてしまうようにする
+・exerciseのところに、生活イベント(mets指定済み)をminsだけ入力し登録できるようにする。
+・ここも、最新履歴を取得し、ワンクリックですべて取得できるようにしてしまう
 
 ・コード整理(back,front) <br>
 ・詳細設定 <br>

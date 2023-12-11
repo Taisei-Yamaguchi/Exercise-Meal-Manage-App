@@ -127,6 +127,22 @@ nav{
 .sub-nav h2{
   font-size: 15px;
 }
+
+
+/* graph */
+.graph-container {
+  margin-top: 250px;
+  padding-top: 0;
+  overflow-x:scroll;
+  border: 1px solid #cccccc; /* ボーダーのスタイルを追加 */
+  padding-left: 10px;
+  margin-left: 50px;
+}
+
+
+.selected{
+  color:red
+}
 /* meal */
 
 .meal-links{

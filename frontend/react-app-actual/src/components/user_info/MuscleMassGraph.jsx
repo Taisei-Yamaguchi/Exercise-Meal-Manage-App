@@ -10,6 +10,8 @@ const MuscleMassGraph = () => {
     const [targetMuscleMass,setTargetMuscleMass] =useState([]);
     const [error, setError] = useState(null);
     const chartRef = useRef(null); // チャートの参照
+    const [graphWidth, setGraphWidth] = useState(null);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -35,6 +37,10 @@ const MuscleMassGraph = () => {
             console.log(data.muscle_mass_data);
             console.log(data.latest_muscle_mass_target);
             
+            const xAxisLabelMinWidth = 20; // データ当たりの幅を設定
+            const width = data.muscle_mass_data.length * xAxisLabelMinWidth;
+            setGraphWidth(width);
+
 
             // Chartを破棄
             if (chartRef.current) {
@@ -116,7 +122,17 @@ const MuscleMassGraph = () => {
             min: 0,
             max: 100, // y軸の最大値
             stepSize: 5,
-            
+            position: 'right',
+
+            title: {
+                display: true,
+                text: '(kg)', // y軸のタイトルに単位を追加
+                color: 'black', // タイトルの色
+                font: {
+                    weight: 'bold', // タイトルの太さ
+                    size: 12, // タイトルのサイズ
+                },
+            },
         },
         },
     };
@@ -125,10 +141,17 @@ const MuscleMassGraph = () => {
         <div className='container'>
             <div className='sub-container'>
                 <UserInfoNavigation />
-                <div className='main'>
-                    <h1>Muscle Mass Graph</h1>
+                <div className='flex main graph-container border overflow-x-auto ml-px pl-px'>
                     <canvas ref={chartRef} />
-                    <Line data={data} options={options} height={400}/>
+                    {graphWidth && 
+                        <Line 
+                            data={data} 
+                            options={options} 
+                            height={400} 
+                            width={graphWidth}
+                            className='border'
+                        />
+                    }
                 </div>
                 
             </div>

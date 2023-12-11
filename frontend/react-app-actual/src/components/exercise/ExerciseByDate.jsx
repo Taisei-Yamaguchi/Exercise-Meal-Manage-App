@@ -83,7 +83,7 @@ const ExerciseByDate = () => {
                     {workoutTypes.map((workoutType)=>(
                         <div key={workoutType} className='flex flex-row border-b'>
                         
-                        <button className="btn btn-primary btn-xs" onClick={() => document.getElementById(`my_modal_3_${workoutType}`).showModal()}>+</button>
+                        <button className="btn btn-accent btn-xs" onClick={() => document.getElementById(`my_modal_3_${workoutType}`).showModal()}>+</button>
                             <dialog id={`my_modal_3_${workoutType}`} className="modal">
                                 <div className="modal-box">
                                     <WorkoutCreate workoutType={workoutType} />

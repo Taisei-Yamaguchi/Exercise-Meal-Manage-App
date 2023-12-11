@@ -63,17 +63,22 @@ const Pet = () => {
     useAuthCheck(fetchPetData)
 
     return (
-        <div>
-        <h1>Pet Information</h1>
-        {petData ? (
-            <div>
-                <p>Grow: {petData.grow}</p>
-                <p>Status: {petData.body_status}</p>
+        <div >
+        {/* {petData ? (
+            <div className='flex flex-row justify-between'>
+                <p>{petData.grow}</p>
+                <p>{petData.body_status}</p>
             </div>
         ) : (
             <p>Loading pet data...</p>
-        )}
-        <img src={getPetImage()} width={300}></img>
+        )} */}
+        
+
+            <div className=" shadow-xl image-full" style={{ backgroundImage: 'url(/pets-bg/brown-grass.jpeg)' }}>
+            <div className="card-body">
+                <img src={getPetImage()} width={200} alt="Pet" />
+            </div>
+            </div>
         </div>
     );
 };

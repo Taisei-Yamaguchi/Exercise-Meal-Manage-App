@@ -216,15 +216,37 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
                 </div>
                 <div className="indicator">
                     <span className="indicator-item badge badge-secondary badge-xs">met</span> 
-                    <input 
-                        name='mets'
-                        type="number" 
-                        value={formData.mets ===null?'':formData.mets} 
-                        onChange={handleInputChange} 
+                    <select
+                        name="mets"
+                        value={formData.mets === null ? '' : formData.mets}
+                        onChange={handleInputChange}
                         required
-                        min={1}
-                        className="food-select input select-bordered join-item input-xs" 
-                    />
+                        className="food-select input select-bordered join-item input-xs"
+                    >
+                        <option value="1">1 (Sitting)</option>
+                        <option value="1.5">1.5 (Standing)</option>
+                        <option value="2">2 (洗濯、料理、ストレッチ)</option>
+                        <option value="2.5">2.5 (Walk)</option>
+                        <option value="3">3 (掃除、荷造り)</option>
+                        <option value="3.5">3.5 (昇降運動)</option>
+                        <option value="4">4 (ドラム)</option>
+                        <option value="4.5">4.5 (早歩き、農耕)</option>
+                        <option value="5">5</option>
+                        <option value="5.5">5.5 (家具運搬)</option>
+                        <option value="6">6</option>
+                        <option value="6.5">6.5</option>
+                        <option value="7">7 (Light Jog)</option>
+                        <option value="7.5">7.5 (Climb)</option>
+                        <option value="8">8</option>
+                        <option value="8.5">8.5</option>
+                        <option value="9">9</option>
+                        <option value="9.5">9.5</option>
+                        <option value="10">10 (Bike,Swim)</option>
+                        <option value="10.5">10.5 </option>
+                        <option value="11">11 (Squat)</option>
+                        <option value="11.5">11.5 ()</option>
+                        <option value="12">12 (High Speed Run)</option>
+                    </select>
                 </div>
 
 
@@ -259,16 +281,6 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
                     )}
                 
                     <button className='btn btn-xs btn-accent' type='submit'>Add</button>
-                </div>
-                <div className='exercise-create-others'>
-                        <textarea 
-                            name='memos'
-                            value={formData.memos ===null?'':formData.memos} 
-                            onChange={handleInputChange} 
-                            placeholder='Memos'
-                            className="textarea textarea-bordered textarea-xs w-full max-w-xs"
-                        />
-                    
                 </div>
             </form>
         </div>

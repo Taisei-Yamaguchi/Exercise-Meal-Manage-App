@@ -95,7 +95,7 @@ function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
                 </div>
                 <div className="indicator">
                     
-                    <button className='meal-add-btn btn join-item btn-xs' type='submit'>+</button>
+                    <button className='meal-add-btn btn btn-primary join-item btn-xs' type='submit'>+</button>
                 </div>
             </div>
         </form>
