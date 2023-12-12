@@ -47,12 +47,12 @@ const MuscleMassGraph = () => {
             chartRef.current.destroy();
             }
 
-            // Chartを再描画
-            const newChart = new Chart(chartRef.current, {
-            type: 'line',
-            data: data,
-            options: options,
-            });
+            // // Chartを再描画
+            // const newChart = new Chart(chartRef.current, {
+            // type: 'line',
+            // data: data,
+            // options: options,
+            // });
         } catch (error) {
             setError('An error occurred while fetching data.');
             
@@ -135,25 +135,39 @@ const MuscleMassGraph = () => {
             },
         },
         },
+        layout: {
+            padding: {
+                left: 0, // 左側の余白を調整
+                right: 0,
+                top: 0,
+                bottom: 0,
+            },
+            margin:{
+                left:0,
+            }
+        },
+        responsive: false,
     };
 
     return (
         <div className='container'>
-            <div className='sub-container'>
+            <div className='sub-container flex justify-center'>
                 <UserInfoNavigation />
-                <div className='flex main graph-container border overflow-x-auto ml-px pl-px'>
-                    <canvas ref={chartRef} />
+                <div className='graph-container'>
+                <h2>Muscle Mass (kg)</h2>
+                <div className='flex  border overflow-x-auto ml-px pl-px'>
+                    {/* <canvas ref={chartRef} /> */}
                     {graphWidth && 
                         <Line 
                             data={data} 
                             options={options} 
-                            height={400} 
+                            height={450} 
                             width={graphWidth}
                             className='border'
                         />
                     }
                 </div>
-                
+                </div>
             </div>
         </div>
     );

@@ -22,11 +22,13 @@ using Django &amp; React
 <del>・pet app <br></del>
 
 ・デザイン調整 (tailwindを使う)<br>
-・design （<del>グラフ</del>、<del>ダッシュボード</del>、ホーム、<del>カレンダー</del>、モバイル版）<br>
-・workout,foodの利用順に表示する機能
-・exercise,mealを最新の履歴をしゅとくし、ワンクリックで登録できてしまうようにする
-・exerciseのところに、生活イベント(mets指定済み)をminsだけ入力し登録できるようにする。
-・ここも、最新履歴を取得し、ワンクリックですべて取得できるようにしてしまう
+<del>・design :<del>グラフ</del>、<del>ダッシュボード</del>、<del>カレンダー</del>、<del>モバイル</del><br></del>
+
+・design: dashboard, home , nav <br>
+・workout,foodの利用順に表示する機能 <br>
+・exercise,mealを最新の履歴をしゅとくし、ワンクリックで登録できてしまうようにする<br>
+・exerciseのところに、生活イベント(mets指定済み)をminsだけ入力し登録できるようにする。 <br>
+・ここも、最新履歴を取得し、ワンクリックですべて取得できるようにしてしまう <br>
 
 ・コード整理(back,front) <br>
 ・詳細設定 <br>

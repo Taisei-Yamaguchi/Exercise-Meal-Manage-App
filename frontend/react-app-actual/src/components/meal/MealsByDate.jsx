@@ -79,48 +79,58 @@ const MealsByDate = () => {
             <div className='container'>
             <div className='sub-container'>
                 <MealNavigation onUpdate={handleUpdate} />
-                <div className='main meal-main'>
+                <div className='sm:mt-14 pt-80 max-sm:pt-96'>
                 {mealTypes.map((type) => (
                     <div key={type} className='border-b'>
+
                     <div className="collapse">
                         <input type="checkbox" className="peer" />
-                        <div className="collapse-title text-primary-content">
+                        <div className="collapse-title text-primary-content pb-0">
                             <label className="swap">
                             <input type="checkbox" />
-                            <div className="swap-on">
-                                <img src={`/mealType-svg/${type}.svg`} className="swap-off fill-current w-10 h-10"></img>
+                            <div className="swap-on flex justify-between items-center">
+                                <img src={`/mealType-svg/${type}.svg`} className="swap-off fill-current w-8 h-8 pr-3"></img>
+                                <strong>{type}</strong>
                             </div>
-                            <div className="swap-off">
-                                <img src={`/mealType-svg/${type}.svg`} className="swap-off fill-current w-10 h-10"></img>
+                            <div className="swap-off flex justify-between items-center">
+                                <img src={`/mealType-svg/${type}.svg`} className=" swap-off fill-current w-8 h-8 pr-3"></img>
+                                <strong>{type}</strong>
                             </div>
                             </label>
-                        </div>
+                        </div> 
 
                         <div className="collapse-content text-primary-content ">
                             <div className="overflow-x-auto">
-                            <div className='meal-add-container mt-1 pt-1'>
-                                <MealCreateForm meal_type={type} meal_date={date} onUpdate={handleUpdate} />
-                                <MealCreateFormWithHistory meal_type={type} meal_date={date} onUpdate={handleUpdate} />
-                                <button className="btn btn-primary btn-xs" onClick={() => document.getElementById(`my_modal_3_${type}`).showModal()}>search</button>
-                                <dialog id={`my_modal_3_${type}`} className="modal">
-                                <div className="modal-box">
-                                    <FoodSearch meal_type={type} date={date} />
-                                </div>
-                                <form method="dialog" className="modal-backdrop">
+                            <div className='border  mt-1 pt-1 flex max-sm:flex-row max-sm:items-center'>
+                                <img 
+                                    src='/icons/search.svg'
+                                    className="btn btn-xs btn-ghost w-8 h-8" onClick={() => document.getElementById(`my_modal_3_${type}`).showModal()}
+                                ></img>
+                                    <dialog id={`my_modal_3_${type}`} className="modal">
+                                        <div className="modal-box">
+                                            <FoodSearch meal_type={type} date={date} />
+                                        </div>
+                                        <form method="dialog" className="modal-backdrop">
                                             <button >✕</button>
                                         </form>
-                                </dialog>
+                                    </dialog>
+                                    
+                                <div className='flex flex-row max-sm:flex-col'>
+                                    <MealCreateForm meal_type={type} meal_date={date} onUpdate={handleUpdate} />
+                                    <MealCreateFormWithHistory meal_type={type} meal_date={date} onUpdate={handleUpdate} />
+                                </div>
                             </div>
-                            <table className="table table-xs table-pin-rows table-pin-cols">
+
+                            <table className="border mr-1 table table-xs table-pin-rows table-pin-cols">
                                 <thead>
                                 <tr>
                                     <td>Meal</td>
-                                    <td>Cals(kcal)</td>
-                                    <td>Amount(serving/g)</td>
+                                    <td>kcal</td>
+                                    <td>Amount</td>
                                     
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody >
                                     {meals
                                     .filter((meal) => meal.meal_type === type)
                                     .map((meal, index) => (

@@ -85,12 +85,12 @@ const FoodSearch = ({meal_type,date}) => {
 
     return (
         <div className='food-search'>
+            <h2>You can use <strong>&</strong> , <strong>|</strong> search.</h2>
             <form onSubmit={handleSearch}>
             <div className="join">
-                <div>
-                    <div>
+                <div className='insicator'>
                     <input 
-                        className="input input-bordered join-item" 
+                        className="input input-bordered join-item max-sm:input-sm" 
                         type="text"
                         placeholder="Enter food name"
                         value={searchExpression}
@@ -99,11 +99,9 @@ const FoodSearch = ({meal_type,date}) => {
                         pattern="\S+" // スペース以外の文字が1文字以上必要
                         title="スペースのみの入力は無効です"
                     />
-                    </div>
                 </div>
                 <div className="indicator">
-                    <span className="indicator-item badge badge-secondary">& | available</span> 
-                    <button type='submit' className="btn join-item">Search</button>
+                    <button type='submit' className="btn bg-green-200 join-item max-sm:btn-sm">Search</button>
                 </div>
             </div>
             </form>
@@ -123,18 +121,16 @@ const FoodSearch = ({meal_type,date}) => {
                         <tbody>
                         {searchResults.map((result) =>(
                             <tr key={result.food_id}>
-                                <th></th>
+                                <th><button className='btn btn-xs btn-accent' onClick={() => handleFoodClick(result)}>Add</button>
+                                </th>
                                 <td>{result.name}</td>
                                 <td>
-                                    {Math.round(result.cal)} kcal
+                                    {Math.round(result.cal)} kcal<br></br>
                                         {result.is_100g==true && result.is_serving==false ?(
                                             <>(100g/1Per)</>
                                         ):(
                                             <>(1Per)</>
                                     )}    
-                                </td>
-                                <td>
-                                    <button className='btn' onClick={() => handleFoodClick(result)}>Add</button>
                                 </td>
                             </tr>
                         ))}

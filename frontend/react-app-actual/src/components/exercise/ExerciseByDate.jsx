@@ -79,11 +79,11 @@ const ExerciseByDate = () => {
         <div className='container'>
             <div className='sub-container'>
             <ExerciseNavigation onUpdate={handleUpdate}/>
-                <div className='main exercise-main'>
+                <div className='mt-14 pt-80 max-sm:pt-96'>
                     {workoutTypes.map((workoutType)=>(
-                        <div key={workoutType} className='flex flex-row border-b'>
+                        <div key={workoutType} className='flex flex-row'>
                         
-                        <button className="btn btn-accent btn-xs" onClick={() => document.getElementById(`my_modal_3_${workoutType}`).showModal()}>+</button>
+                        <button className="btn btn-accent btn-xs border" onClick={() => document.getElementById(`my_modal_3_${workoutType}`).showModal()}>+</button>
                             <dialog id={`my_modal_3_${workoutType}`} className="modal">
                                 <div className="modal-box">
                                     <WorkoutCreate workoutType={workoutType} />
@@ -93,31 +93,30 @@ const ExerciseByDate = () => {
                                 </form>
                             </dialog>
 
-                        <div className="collapse">
+                        <div className="collapse border">
                                 <input type="checkbox" className="peer" />
-                                <div className="collapse-title text-primary-content">
+                                <div className="collapse-title text-primary-content border pt-px pb-0">
                                     <label className="swap">    
                                     <input type="checkbox flex flex-row" />
-                                        <div className="swap-on">
-                                            <h2><strong>{workoutType}</strong></h2>
-                                        </div>
-                                        <div className="swap-off">
-                                            <h2><strong>{workoutType}</strong></h2>
-                                        </div>
-                                        
+                                        <h2 className="swap-off">
+                                            <strong>{workoutType}</strong>
+                                        </h2>
+                                        <h2 className="swap-off ">
+                                            <strong>{workoutType}</strong>
+                                        </h2>
                                     </label>
                                 </div>
                             
-                                <div className="collapse-content text-primary-content ">
+                                <div className="collapse-content text-primary-content">
                                     <div className="overflow-x-auto mt-1 pt-1">
                                     <ExerciseCreate exercise_date={date} workoutType={workoutType} onUpdate={handleUpdate}/>
                                     <table className="table table-xs table-pin-rows table-pin-cols">
-                                        <tbody className='bg-pink-50'>
+                                        <tbody className='bg-gradient-to-r from-orange-600 to-red-700 '>
                                             {exerciseData
                                                 .filter((exercise)=>exercise.workout.workout_type === workoutType)
                                                 .map((exercise)=>(
-                                                    <tr key={exercise.id} className='bg-pink-200'>
-                                                        <td><strong>{exercise.workout.name}</strong></td>
+                                                    <tr key={exercise.id} className=''>
+                                                        <td className='text-neutral-100'><strong>{exercise.workout.name}</strong></td>
                                                         <td><ExerciseUpdate exerciseId={exercise.id} workoutType={workoutType} exerciseData={exercise} onUpdate={handleUpdate}/>
                                                         </td>
                                                         <td><ExerciseDelete exerciseId={exercise.id} onUpdate={handleUpdate}/></td>

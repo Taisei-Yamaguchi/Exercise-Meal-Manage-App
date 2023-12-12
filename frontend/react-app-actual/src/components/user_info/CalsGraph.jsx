@@ -189,8 +189,9 @@ const CalsGraph = () => {
         <div className='container'>
             <div className='sub-container flex justify-center'>
                 <UserInfoNavigation />
-                <div className="flex main graph-container border overflow-x-auto ml-px pl-px">
-                    
+                <div className='graph-container'>
+                    <h2>Cals Transition</h2>
+                    <div className="flex border overflow-x-auto ml-px pl-px">
                     {graphWidth&& 
                     <Bar
                         ref={chartRef}
@@ -201,7 +202,7 @@ const CalsGraph = () => {
                         className='border'
                     />
                     }
-                
+                </div>
                 </div>
             </div>
         </div>

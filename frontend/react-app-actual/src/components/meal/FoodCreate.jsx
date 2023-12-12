@@ -99,7 +99,7 @@ const FoodCreate = () => {
 
             <div className="form-control">
                 <label className="label">
-                    <span className="label-text">Amout (g/serving) (必須)</span>
+                    <span className="label-text">Amount (g/serving) (必須)</span>
                 </label>
                 <input 
                     type="number" 

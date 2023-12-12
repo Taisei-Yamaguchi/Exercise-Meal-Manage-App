@@ -24,10 +24,10 @@ const Calendar = ({ selectedDate, onDateChange }) => {
     }, [selectedDate]);
 
     return (
-        <div className='calendar-container'>  
-            <img 
+        <div className='calendar-container flex items-between  w-full pl-4 pr-4'>  
+                <img 
                     src='/icons/calendar.svg' 
-                    className="swap-off fill-current w-10 h-10 cursor-pointer" 
+                    className="swap-off fill-current w-10 h-10 cursor-pointer max-sm:w-6 msx-sm:h-6" 
                     onClick={() => document.getElementById(`my_modal_calendar`).showModal()}>
                 </img>    
                     <dialog id={`my_modal_calendar`} className="modal">
@@ -38,21 +38,16 @@ const Calendar = ({ selectedDate, onDateChange }) => {
                             <button >✕</button>
                         </form>
                     </dialog>
-
-
-
             
-            <div className=" join">
-                
+            <div className=" join ">
                 {calendarDates.map((date) => (
                     <a key={date} href={`./${date}`} 
-                        className={`pagination join-item  btn ${date === selectedDate ? ' btn-primary' : 'btn-outline btn-primary'}`}
+                        className={`pagination join-item max-sm:btn-xs btn ${date === selectedDate ? ' btn-primary' : 'btn-outline btn-primary'}`}
                     >
                         {date.split('-').slice(1).join('/')}
                     </a>
                 ))}
             </div>
-            
         </div>
     );
 };

@@ -71,10 +71,10 @@ function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
     };
 
     return (
-        <form className='meal-create' onSubmit={handleCreateMeal}>
+        <form className='w-full' onSubmit={handleCreateMeal}>
             <div className="join">
-                <select className='food-select select select-bordered join-item select-xs' value={selectedFood} onChange={(e) => setSelectedFood(e.target.value)} required>
-                    <option value="" disabled>Your</option>
+                <select className=' food-select select select-bordered join-item select-xs' value={selectedFood} onChange={(e) => setSelectedFood(e.target.value)} required>
+                    <option value="" disabled>History</option>
                         {foods.map((food) => (
                             <option key={food.id} value={food.id}>
                             {food.name}
@@ -90,7 +90,7 @@ function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
                         onChange={(e) => setServing(e.target.value)} 
                         required min={0.1} 
                         step={0.1}
-                        className="food-select input select-bordered join-item select-xs" 
+                        className=" food-select input select-bordered join-item select-xs" 
                     />
                 </div>
                 <div className="indicator">

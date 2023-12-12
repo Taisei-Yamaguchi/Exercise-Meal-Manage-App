@@ -53,7 +53,7 @@ function MealUpdate({ meal,onUpdate }) {
             {
                 isServingSelected?(
                     <label>
-                        <input type="number"  className='food-amount-select' value={serving === null ? '':serving} 
+                        <input type="number"  className='input-bordered w-full' value={serving === null ? '':serving} 
                         onChange={(e) => setServing(e.target.value === '' ? null : parseFloat(e.target.value))} min={0.1} step={0.1}/>
 
                         {meal.food.is_open_api ===true &&  meal.food.is_serving === true ? (
@@ -73,7 +73,7 @@ function MealUpdate({ meal,onUpdate }) {
                     ):(
                         
                         <label>
-                            <input type="number" className='food-amount-select' value={grams === null ? '' : grams} 
+                            <input type="number" className='input input-xs input-bordered w-full' value={grams === null ? '' : grams} 
                             onChange={(e) => setGrams(e.target.value === '' ? null : parseFloat(e.target.value))} min={0.1} step={0.1}/>
 
                             <span className='unit-change' onClick={() => setIsServingSelected(!isServingSelected)}>
@@ -86,7 +86,7 @@ function MealUpdate({ meal,onUpdate }) {
                 </>
             )}
             
-            <button className='btn btn-xs btn-warning' type='submit'>Update</button>
+            <button className='btn btn-xs btn-warning' type='submit'>save</button>
         </form>
             
     </>

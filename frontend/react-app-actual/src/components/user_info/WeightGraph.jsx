@@ -47,11 +47,11 @@ const WeightGraph = () => {
             }
 
             // Chartを再描画
-            const newChart = new Chart(chartRef.current, {
-            type: 'line',
-            data: data,
-            options: options,
-            });
+            // const newChart = new Chart(chartRef.current, {
+            // type: 'line',
+            // data: data,
+            // options: options,
+            // });
         } catch (error) {
             setError('An error occurred while fetching data.');
         }
@@ -140,31 +140,33 @@ const WeightGraph = () => {
                 bottom: 0,
             },
             margin:{
-                left:10,
+                left:0,
             }
         },
         responsive: false,
     };
 
     return (
-        <div className='container'> 
-            <div className='subcontainer flex justify-left'>
+        <div className='container'>
+            <div className='sub-container flex justify-center'>
                 <UserInfoNavigation />
-                <div className='flex main graph-container border overflow-x-auto ml-px pl-px'>
-                    <canvas ref={chartRef} />
+                <div className='graph-container'>
+                <h2>Weight (kg)</h2>
+                <div className='flex  border overflow-x-auto ml-px pl-px'>
+                    {/* <canvas ref={chartRef} /> */}
                     {graphWidth && 
                         <Line 
                             data={data} 
                             options={options} 
-                            height={400} 
+                            height={450} 
                             width={graphWidth}
                             className='border'
                         />
                     }
                 </div>
+                </div>
             </div>
         </div>
-
     );
 };
 

@@ -55,134 +55,132 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData,onUpdate}) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className='update-container'>
-            <ul className=" bg-base-200 rounded-box exercise-detail-update">
-                <li className='exercise-info'>
-                    <label className='sets'>
-                        <input
-                            name='sets'
-                            type="number"
-                            value={updateData.sets === null ? '' : updateData.sets}
-                            onChange={handleInputChange}
-                            min={1}
-                            className="input-number input input-bordered input-xs"
-                        />(sets)
-                    </label>
-                </li>
-                <li className='exercise-info'>
-                    <label className='reps'>
-                            <input
+        <form onSubmit={handleSubmit} className='border'>
+                <div className='flex max-sm:flex-col max-sm:items-center'>
+                    <div className='max-sm:hidden'>
+                        <button type='submit' className='exercise-update-btn btn btn-xs btn-warning'>
+                            save
+                        </button>
+                    </div>
+                    <div className='sets-reps flex max-sm:flex-col'>
+                        <div className="flex pr-1 mr-0">
+                            <span className=" indicator-item badge badge-accent badge-xs">set</span> 
+                            <input 
+                                name='sets'
+                                type="number"
+                                value={updateData.sets === null ? '' : updateData.sets}
+                                onChange={handleInputChange}
+                                min={1}
+                                className="w-full input select-bordered join-item input-xs" 
+                            />
+                        </div>
+                        <div className="flex  pr-1">
+                            <span className="indicator-item badge badge-accent badge-xs">rep</span> 
+                            <input 
                                 name='reps'
                                 type="number"
                                 value={updateData.reps === null ? '' : updateData.reps}
                                 onChange={handleInputChange}
                                 min={1}
-                                className="input-number input input-bordered input-xs"
-                            />(reps)
-                    </label>
-                </li>
-                <li className='exercise-info'>
-                    <label className='kg'>
-                            <input
+                                className="w-full input select-bordered join-item input-xs" 
+                            />
+                        </div>
+                    </div>
+                    
+                    <div className='kg-mets flex max-sm:flex-col'>
+                        <div className="flex  pr-1">
+                            <span className="indicator-item badge badge-accent badge-xs">{`${'\u00A0'}kg${'\u00A0'}`}</span> 
+                            <input 
                                 name='weight_kg'
                                 type="number"
                                 value={updateData.weight_kg === null ? '' : updateData.weight_kg}
                                 onChange={handleInputChange}
-                                min={1}
-                                className="input-number input input-bordered input-xs max-w-xs"
-                            />(kg)
-                    </label>
-                </li>
-                
-                
-                    {workoutType !== 'Aerobic' && workoutType !== 'Other'? (
-                        <><li className='exercise-info'></li>
-                        
-                        </>
-                    ) : (
-                        <>
-                        <li className='exercise-info'>
-                            <label className='distance'>
-                                <input
+                                min={0.1}
+                                step={0.1}
+                                className="w-full input select-bordered join-item input-xs" 
+                            />
+                        </div>
+                        <div className="flex  pr-1">
+                            <span className="indicator-item badge badge-accent badge-xs">met</span> 
+                            <select
+                                name="mets"
+                                value={updateData.mets === null ? '' : updateData.mets}
+                                onChange={handleInputChange}
+                                required
+                                className="w-full input select-bordered join-item input-xs"
+                            >
+                                <option value="1">1 (Sitting)</option>
+                                <option value="1.5">1.5 (Standing)</option>
+                                <option value="2">2 (洗濯、料理、ストレッチ)</option>
+                                <option value="2.5">2.5 (Walk)</option>
+                                <option value="3">3 (掃除、荷造り)</option>
+                                <option value="3.5">3.5 (昇降運動)</option>
+                                <option value="4">4 (ドラム)</option>
+                                <option value="4.5">4.5 (早歩き、農耕)</option>
+                                <option value="5">5</option>
+                                <option value="5.5">5.5 (家具運搬)</option>
+                                <option value="6">6</option>
+                                <option value="6.5">6.5</option>
+                                <option value="7">7 (Light Jog)</option>
+                                <option value="7.5">7.5 (Climb)</option>
+                                <option value="8">8</option>
+                                <option value="8.5">8.5</option>
+                                <option value="9">9</option>
+                                <option value="9.5">9.5</option>
+                                <option value="10">10 (Bike,Swim)</option>
+                                <option value="10.5">10.5 </option>
+                                <option value="11">11 (Squat)</option>
+                                <option value="11.5">11.5 ()</option>
+                                <option value="12">12 (High Speed Run)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {(workoutType !== 'Aerobic' && workoutType !== 'Other')? (
+                            <></>
+                        ) : (
+                        <div className='km-mins flex max-sm:flex-col'>
+                            <div className="flex pr-1">
+                                <span className="indicator-item badge badge-accent badge-xs">{`${'\u00A0'}km${'\u00A0'}`}</span> 
+                                <input 
                                     name='distance'
                                     type="number"
                                     value={updateData.distance === null ? '' : updateData.distance}
                                     onChange={handleInputChange}
                                     min={0.1}
                                     step={0.1}
-                                    className=" input-number input input-bordered input-xs max-w-xs"
-                                />(km)
-                            </label>
-                        </li>
-                        <li className='exercise-info'>
-                            <label className='duration_minutes'>
-                                <input
+                                    className="w-full input select-bordered join-item input-xs" 
+                                />
+                            </div>
+                            <div className="flex pr-1">
+                                <span className="indicator-item badge badge-accent badge-xs">min</span> 
+                                <input 
                                     name="duration_minutes"
                                     type="number"
                                     value={updateData.duration_minutes === null ? '' : updateData.duration_minutes}
                                     onChange={handleInputChange}
                                     min={1}
-                                    className="input-number input input-bordered input-xs max-w-xs"
-                                />(mins)
-                                
-                            </label>
-                        </li>
-                        </>
-                    )}
+                                    className="w-full input select-bordered join-item input-xs" 
+                                />
+                            </div>
+                        </div>
+                        )}
+                    </div>
 
-
-                    <li className='exercise-info'>
-                    <label className='mets'>
-                    <select
-                        name="mets"
-                        value={updateData.mets === null ? '' : updateData.mets}
-                        onChange={handleInputChange}
-                        required
-                        className="input-number input input-xs max-w-xs"
-                    >
-                        <option value="1">1 (Sitting)</option>
-                        <option value="1.5">1.5 (Standing)</option>
-                        <option value="2">2 (洗濯、料理、ストレッチ)</option>
-                        <option value="2.5">2.5 (Walk)</option>
-                        <option value="3">3 (掃除、荷造り)</option>
-                        <option value="3.5">3.5 (昇降運動)</option>
-                        <option value="4">4 (ドラム)</option>
-                        <option value="4.5">4.5 (早歩き、農耕)</option>
-                        <option value="5">5</option>
-                        <option value="5.5">5.5 (家具運搬)</option>
-                        <option value="6">6</option>
-                        <option value="6.5">6.5</option>
-                        <option value="7">7 (Light Jog)</option>
-                        <option value="7.5">7.5 (Climb)</option>
-                        <option value="8">8</option>
-                        <option value="8.5">8.5</option>
-                        <option value="9">9</option>
-                        <option value="9.5">9.5</option>
-                        <option value="10">10 (Bike,Swim)</option>
-                        <option value="10.5">10.5 </option>
-                        <option value="11">11 (Squat)</option>
-                        <option value="11.5">11.5 ()</option>
-                        <option value="12">12 (High Speed Run)</option>
-                    </select>
-                        (mets)
-                    </label>
-                    </li>
-            </ul>
-            
-            <div className='exercise-update-others'>
-                    <label>
+                    <div className='flex items-end mt-1'>
                         <textarea 
                         name='memos'
                         value={updateData.memos ===null?'':updateData.memos} 
                         onChange={handleInputChange}
                         placeholder='memos'
-                        className=" textarea textarea-bordered textarea-xs  max-w-xs textarea-width"
+                        className="w-full textarea textarea-bordered textarea-xs  textarea-width"
                         />
-                    </label>
-                    <button type='submit' className='exercise-update-btn btn btn-xs btn-accent'>
-                        Update
-                    </button>
-            </div>
+                        <div className='sm:hidden '>
+                            <button type='submit' className='exercise-update-btn btn btn-xs btn-warning'>
+                                save
+                            </button>
+                        </div>
+                    </div>
         </form>
     );
 };

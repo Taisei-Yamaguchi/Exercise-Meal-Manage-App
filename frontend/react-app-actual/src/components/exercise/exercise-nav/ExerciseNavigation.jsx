@@ -34,7 +34,7 @@ const ExerciseNavigation = (onUpdate) => {
             {/* カレンダー */}
             <Calendar selectedDate={date}  />
             {/* メッセージ */}
-            <p className='text-sm'>*Metsはカロリー計算の指標です。mins,sets,repsおよびUser Infoの最新の体重データ、性別から計算しています。</p>
+            <p className='text-xs'>*Metsはカロリー計算の指標です。mins,sets,repsおよびUser Infoの最新の体重データ、性別から計算しています。</p>
 
             {/* Select 　Show*/}
             <div role="tablist" className="z-0 tabs tabs-lifted">
@@ -43,7 +43,6 @@ const ExerciseNavigation = (onUpdate) => {
                 <div className="bg-base-100 border-base-300 rounded-box w-screen p-6 tab-content p-10  text-zinc-900">
                     <CalsByDate selectedDate={date} onUpdate={onUpdate}/>
                 </div>
-
                 
                 <input type="radio" name="my_tabs_2" role="tab" className="tab w-10" aria-label="Graph" defaultChecked/>
                 <div className="bg-base-100 border-base-300 rounded-box w-screen p-6 tab-content p-10 text-zinc-900">

@@ -114,9 +114,17 @@ const renderDay = (day) => {
                 <br />
                 {day.toLocaleDateString('en-US', { weekday: 'short' })} {/* 曜日を表示 */}
                 <br />
-                <Link to={`/meal/${formattedDate}`}>{dayData && dayData.meal ? 'meal ✔️' : 'meal ◻︎'}</Link>
-                <br />
-                <Link to={`/exercise/${formattedDate}`}>{dayData && dayData.exercise ? 'exercise ✔️' : 'exercise ◻︎'}</Link>
+
+                
+                <Link to={`/meal/${formattedDate}`} className='flex flex-row justify-between'>
+                    <img src='../icons/meal-icon.svg' className='w-4 h-4'></img>
+                    <div className=''>{dayData && dayData.meal ? '✔️' : '◻︎'}</div>
+                </Link>
+                
+                <Link to={`/exercise/${formattedDate}`} className='flex flex-row justify-between'>
+                    <img src='../icons/exercise-icon.svg' className=' w-4 h-4'></img>
+                    <div className=''>{dayData && dayData.exercise ? '✔️' : '◻︎'}</div>
+                </Link>
                 
             </div>
             ) : null}
@@ -129,11 +137,11 @@ const renderDay = (day) => {
 return (
     <div >
         <div className="calendar-header">
-            <h2 onClick={handlePrevious}>Previous</h2>
+            <h2 onClick={handlePrevious} className='cursor-pointer'>Previous</h2>
             <h2>{getMonthYearString()}</h2>
-            <h2 onClick={handleNext}>Next</h2>
+            <h2 onClick={handleNext} className='cursor-pointer'>Next</h2>
         </div>
-        <div className="calendar-days max-sm:flex max-sm:flex-wrap">
+        <div className="calendar-days max-xs:flex max-xs:flex-wrap">
             {getDaysInMonth().map(renderDay)}
         </div>
     </div>

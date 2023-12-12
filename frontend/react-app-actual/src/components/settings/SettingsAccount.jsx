@@ -97,7 +97,7 @@ const SettingsAccount = () => {
                     <div className="text-center lg:text-left">
                     
                     <div className="drawer open-nav">
-                        <h1 className="text-5xl font-bold">Account Setting</h1>
+                        <h1 className="text-5xl font-bold">Setting</h1>
                             <input id="my-drawer" type="checkbox" className="drawer-toggle" />
                             <div className="drawer-content">
                                 <label htmlFor="my-drawer" className="btn btn-circle swap swap-rotate drawer-button">
