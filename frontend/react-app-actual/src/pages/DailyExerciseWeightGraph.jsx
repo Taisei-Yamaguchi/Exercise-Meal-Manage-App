@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import getCookie from '../../hooks/getCookie';
+import getCookie from '../hooks/getCookie';
 import { Bar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
-import Navigation from '../Navigation';
+import Navigation from '../components/Navigation';
 import { useParams } from 'react-router-dom';
-import ExerciseNavigation from './exercise-nav/ExerciseNavigation';
-import useAuthCheck from '../../hooks/useAuthCheck';
+import ExerciseNavigation from '../components/exercise/exercise-nav/ExerciseNavigation';
+import useAuthCheck from '../hooks/useAuthCheck';
 
 const DailyExerciseWeightGraph = () => {
     const [dailyExerciseWeightData, setDailyExerciseWeightData] = useState([]);

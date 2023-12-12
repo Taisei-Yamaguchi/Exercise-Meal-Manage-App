@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import getCookie from '../../hooks/getCookie';
+import getCookie from '../hooks/getCookie';
 import { Bar,Line } from 'react-chartjs-2';
-import Navigation from '../Navigation';
-import UserInfoNavigation from './user_info-nav/UserInfoNavigation';
+import Navigation from '../components/Navigation';
+import UserInfoNavigation from '../components/user_info/user_info-nav/UserInfoNavigation';
 
 const CalsGraph = () => {
     const [intakeCals, setIntakeCals] = useState([]);

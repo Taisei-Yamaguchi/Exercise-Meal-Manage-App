@@ -1,11 +1,11 @@
 // src/components/Home.jsx
 import React from 'react';
 
-import useAuthCheck from '../../hooks/useAuthCheck';
-import Navigation from '../Navigation';
-import Pet from './pet/Pet';
+import useAuthCheck from '../hooks/useAuthCheck';
+import Navigation from '../components/Navigation';
+import Pet from '../components/dashboard/pet/Pet';
 import { NavLink } from 'react-router-dom';
-import MainCalendar from '../calendar/MainCalendar';
+import MainCalendar from '../components/calendar/MainCalendar';
 
 const Dashboard = () => {
     useAuthCheck();
@@ -31,7 +31,7 @@ const Dashboard = () => {
                             </p> */}
                             <input id="my-drawer" type="checkbox" className="drawer-toggle" />
                             <div className="drawer-content">
-                                <label htmlFor="my-drawer" className="btn btn-circle swap swap-rotate drawer-button">
+                                <label htmlFor="my-drawer" className="bg-gradient-to-r from-stone-400 to-transparent btn btn-circle swap swap-rotate drawer-button">
                                     {/* this hidden checkbox controls the state */}
                                     <input type="checkbox" />
                                     <svg className="swap-off fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"/></svg>
@@ -39,7 +39,7 @@ const Dashboard = () => {
                                 </label>
                             </div> 
                             <div className="drawer-side z-10">
-                                <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
+                                <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay "></label>
                                 <Navigation />
                             </div>
                         </div>

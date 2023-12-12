@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import Navigation from '../Navigation';
-import useAuthCheck from '../../hooks/useAuthCheck';
-import getCookie from '../../hooks/getCookie';
+import Navigation from '../components/Navigation';
+import useAuthCheck from '../hooks/useAuthCheck';
+import getCookie from '../hooks/getCookie';
 
-import MealNavigation from './meal-nav/MealNavigation';
+import MealNavigation from '../components/meal/meal-nav/MealNavigation';
 
-import MealCreateForm from './MealCreateForm';
-import MealCreateFormWithHistory from './MealCreateFormWithHistory';
-import MealUpdate from './MealUpdate';
-import MealDelete from './MealDelete';
-import FoodSearch from './FoodSearch';
+import MealCreateForm from '../components/meal/MealCreateForm';
+import MealCreateFormWithHistory from '../components/meal/MealCreateFormWithHistory';
+import MealUpdate from '../components/meal/MealUpdate';
+import MealDelete from '../components/meal/MealDelete';
+import FoodSearch from '../components/meal/FoodSearch';
 
 
 const MealsByDate = () => {

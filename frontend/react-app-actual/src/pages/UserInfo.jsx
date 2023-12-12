@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import getCookie from '../../hooks/getCookie';
+import getCookie from '../hooks/getCookie';
 import { useNavigate } from 'react-router-dom';
-import Navigation from '../Navigation';
-import useAuthCheck from '../../hooks/useAuthCheck';
-import UserInfoNavigation from './user_info-nav/UserInfoNavigation';
+import Navigation from '../components/Navigation';
+import useAuthCheck from '../hooks/useAuthCheck';
+import UserInfoNavigation from '../components/user_info/user_info-nav/UserInfoNavigation';
 
 
 const UserInfo = () => {

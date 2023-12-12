@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import getCookie from '../../hooks/getCookie';
+import getCookie from '../hooks/getCookie';
 import { useNavigate, useParams } from 'react-router-dom';
-import Navigation from '../Navigation';
-import useAuthCheck from '../../hooks/useAuthCheck';
-import ExerciseCreate from './ExerciseCreate';
-import ExerciseDelete from './ExerciseDelete';
-import ExerciseUpdate from './ExerciseUpdate';
-import ExerciseNavigation from './exercise-nav/ExerciseNavigation';
-import WorkoutCreate from './WorkoutCreate';
+import Navigation from '../components/Navigation';
+import useAuthCheck from '../hooks/useAuthCheck';
+import ExerciseCreate from '../components/exercise/ExerciseCreate';
+import ExerciseDelete from '../components/exercise/ExerciseDelete';
+import ExerciseUpdate from '../components/exercise/ExerciseUpdate';
+import ExerciseNavigation from '../components/exercise/exercise-nav/ExerciseNavigation';
+import WorkoutCreate from '../components/exercise/WorkoutCreate';
 
 const ExerciseByDate = () => {
     const navigate = useNavigate();

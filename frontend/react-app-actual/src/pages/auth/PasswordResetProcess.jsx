@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import Navigation from '../Navigation';
+import Navigation from '../../components/Navigation';
 import { Link } from 'react-router-dom';
 
 const PasswordResetProcess = () => {

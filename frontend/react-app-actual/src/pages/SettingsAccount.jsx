@@ -1,81 +1,103 @@
 import React, { useState } from 'react';
-import Navigation from '../Navigation';
+import Navigation from '../components/Navigation';
+import getCookie from '../hooks/getCookie';
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import useAuthCheck from '../hooks/useAuthCheck';
 
-const SignUp = () => {
-    const [userData, setUserData] = useState({
-        name: '',
-        email: '',
-        password: '',
-        passwordAgain: '',
-        picture: null,
-        sex: 0,
-        birthday: '',
-    });
-    const [successMes,setSuccessMes]=useState('')
-    const [errorMes,setErrorMes] =useState('')
+const SettingsAccount = () => {
+    const [name, setName] = useState('');
+    const [picture, setPicture] = useState(null);
+    const [sex, setSex] = useState(false);
+    const [birthday, setBirthday] = useState('');
+    const [email, setEmail] = useState('');
+    const [mes,setMes]=useState('')
+    
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if(userData.name=='' || userData.email==''||userData.birthday==''){
-            setErrorMes('fill the form.')
-            return 
-        }
-        if (userData.password !== userData.passwordAgain) {
-            console.log("Passwords do not match");
-            setErrorMes("Passwords do not match");
-            return;
-        }
-        if (userData.password.length <6){
-            console.log("Input more than 6 words as password.");
-            setErrorMes("Input more than 6 words as password.")
-            return;
-        }
+    const fetchAccount = async () => {
         try {
-            const dataToSend = {
-                ...userData,
-                username: userData.email // emailをusernameに自動割り当て
-            };
-
-            const response = await fetch('http://127.0.0.1:8000/accounts/signup/', {
-                method: 'POST',
+            const authToken = localStorage.getItem('authToken');
+            const response = await fetch('http://127.0.0.1:8000/accounts/get/', {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(dataToSend),
+                    'Authorization': `Token ${authToken}`,
+                    'X-CSRFToken': getCookie('csrftoken'),
+                }
             });
+            const data = await response.json();
 
-            if (response.ok) {
-                // リクエストが成功した場合
-                const data = await response.json();
-                console.log(data);
-                setErrorMes('')
-                setSuccessMes('We sent the link to your email. Please check and activate your account. Your account is not available yet.');
-            }else{
-                // リクエストが失敗した場合
-                const data = await response.json();
-                console.log(data);
-                setErrorMes(' email is already registered.')
-            }
-
+            console.log(data); // サーバーからのレスポンスをログ出力
+            setName(data.name);
+            setPicture(data.picture);
+            setSex(data.sex);
+            setBirthday(data.birthday);
+            setEmail(data.email_address)
+            
         } catch (error) {
             console.error('Error:', error);
             // エラーハンドリング
         }
     };
 
-    const handleChange = (e) => {
-        setUserData({ ...userData, [e.target.name]: e.target.value });
+    useAuthCheck(fetchAccount)
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const authToken = localStorage.getItem('authToken');
+            const response = await fetch('http://127.0.0.1:8000/accounts/update/', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${authToken}`,
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({ name, picture, sex, birthday }),
+            });
+            const data = await response.json();
+            console.log(data); // サーバーからのレスポンスをログ出力
+            
+            setMes('Update Success')
+        } catch (error) {
+            console.error('Error:', error);
+            // エラーハンドリング
+        }
     };
+
+    
+    const handleChange = (e) => {
+        switch (e.target.name) {
+            case 'name':
+                setName(e.target.value);
+                break;
+            case 'picture':
+                // 画像の処理を実装
+                setPicture(e.target.value);
+                break;
+            case 'sex':
+                // setSex(e.target.checked);
+                setSex(e.target.value === 'true');
+                break;
+            case 'birthday':
+                setBirthday(e.target.value);
+                break;
+            default:
+                break;
+        }
+    };
+
+
 
     return (
         <div className='container'>
             <div className='sub-container'>
-                <div className="hero min-h-screen bg-base-200">
+                <div className="hero min-h-screen ">
                 <div className="hero-content flex-col lg:flex-row-reverse">
                     <div className="text-center lg:text-left">
                     
                     <div className="drawer open-nav">
-                        <h1 className="text-5xl font-bold">SignUp!</h1>
+                        <h1 className="text-5xl font-bold">Setting</h1>
                             <input id="my-drawer" type="checkbox" className="drawer-toggle" />
                             <div className="drawer-content">
                                 <label htmlFor="my-drawer" className="btn btn-circle swap swap-rotate drawer-button">
@@ -102,52 +124,21 @@ const SignUp = () => {
                             placeholder="Name" 
                             name="name"
                             className="input input-bordered" 
-                            value={userData.name}
+                            value={name}
                             onChange={handleChange}
-                            required 
+                            required
+                            pattern="\S+" // スペース以外の文字が1文字以上必要
+                            title="スペースのみの入力は無効です"
                         />
-                        
                         </div>
 
                         <div className="form-control">
                         <label className="label">
                             <span className="label-text">Email</span>
                         </label>
-                        <input 
-                            type="email" 
-                            placeholder="Email" 
-                            name="email"
-                            className="input input-bordered" 
-                            value={userData.email}
-                            onChange={handleChange}
-                            required 
-                        />
-                        </div>
-
-                        <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Password</span>
-                        </label>
-                        <input 
-                            type="password" 
-                            placeholder="Password" 
-                            name='password'
-                            className="input input-bordered" 
-                            value={userData.password}
-                            onChange={handleChange}
-                            required 
-                        />
-                        </div>
-                        <div className="form-control">
-                        <input 
-                            type="password" 
-                            placeholder="Re-entaer Password" 
-                            name="passwordAgain"
-                            className="input input-bordered" 
-                            value={userData.passwordAgain}
-                            onChange={handleChange}
-                            required 
-                        />
+                        <p className="input input-bordered" > 
+                            {email}
+                        </p>
                         </div>
 
                         <div className="form-control">
@@ -157,7 +148,7 @@ const SignUp = () => {
                         <input 
                             type="date" 
                             name="birthday" 
-                            value={userData.birthday} 
+                            value={birthday} 
                             onChange={handleChange} 
                         />             
                         </div>
@@ -168,18 +159,20 @@ const SignUp = () => {
                                 Male
                                 <input
                                     type="radio"
-                                    value={0}
-                                    checked={userData.sex === 0}
-                                    onChange={(e) => setUserData({ ...userData, sex: parseInt(e.target.value) })}
-                                />
+                                    name='sex'
+                                    value={false}
+                                    checked={sex === false}
+                                    onChange={handleChange}
+                                    />
                             </label>
                             <label>
                                 Female
                                 <input
                                     type="radio"
-                                    value={1}
-                                    checked={userData.sex === 1}
-                                    onChange={(e) => setUserData({ ...userData, sex: parseInt(e.target.value) })}
+                                    name='sex'
+                                    value={true}
+                                    checked={sex === true}
+                                    onChange={handleChange}
                                 />
                             </label>
                         </div>
@@ -188,11 +181,10 @@ const SignUp = () => {
                             {/* <NavLink className="label-text-alt link link-hover" to="/password-reset/request">Forgot password?</NavLink> */}
                         </label>
                         
-
                         <div className="form-control mt-6">
-                            <button type='submit'className="btn btn-primary">SignUp</button>
+                            <button type='submit'className="btn btn-primary">Account Update</button>
                         </div>
-                        {errorMes ==='' ?(
+                        {/* {errorMes ==='' ?(
                             <></>
                         ):(
                             <div role="alert" className="alert alert-error">
@@ -208,15 +200,14 @@ const SignUp = () => {
                                 <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 <span>{successMes}</span>
                             </div>
-                        )}
+                        )} */}
                     </form>
                     </div>
                 </div>
                 </div>
             </div>
         </div>
-
     );
 };
 
-export default SignUp;
+export default SettingsAccount;

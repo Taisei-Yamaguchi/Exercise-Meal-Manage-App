@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import Navigation from '../Navigation';
+import Navigation from '../../components/Navigation';
 
 const PasswordResetRequestPage = () => {
     const [email, setEmail] = useState('');
