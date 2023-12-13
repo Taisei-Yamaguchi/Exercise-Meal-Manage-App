@@ -8,6 +8,7 @@ import ExerciseDelete from '../components/exercise/ExerciseDelete';
 import ExerciseUpdate from '../components/exercise/ExerciseUpdate';
 import ExerciseNavigation from '../components/exercise/exercise-nav/ExerciseNavigation';
 import WorkoutCreate from '../components/exercise/WorkoutCreate';
+import LatestExerciseByType from '../components/exercise/LatestExerciseByType';
 
 const ExerciseByDate = () => {
     const navigate = useNavigate();
@@ -83,15 +84,18 @@ const ExerciseByDate = () => {
                     {workoutTypes.map((workoutType)=>(
                         <div key={workoutType} className='flex flex-row'>
                         
-                        <button className="btn btn-accent btn-xs border" onClick={() => document.getElementById(`my_modal_3_${workoutType}`).showModal()}>+</button>
-                            <dialog id={`my_modal_3_${workoutType}`} className="modal">
-                                <div className="modal-box">
-                                    <WorkoutCreate workoutType={workoutType} />
-                                </div>
-                                <form method="dialog" className="modal-backdrop">
-                                    <button >✕</button>
-                                </form>
-                            </dialog>
+                            <div className=''>
+                            <button className="btn btn-accent btn-xs border" onClick={() => document.getElementById(`my_modal_3_${workoutType}`).showModal()}>+</button>
+                                <dialog id={`my_modal_3_${workoutType}`} className="modal">
+                                    <div className="modal-box">
+                                        <WorkoutCreate workoutType={workoutType} />
+                                    </div>
+                                    <form method="dialog" className="modal-backdrop">
+                                        <button >✕</button>
+                                    </form>
+                                </dialog>
+                            <LatestExerciseByType className="z-50" exercise_date={date} workout_type={workoutType} onUpdate={handleUpdate} />
+                            </div>    
 
                         <div className="collapse border">
                                 <input type="checkbox" className="peer" />

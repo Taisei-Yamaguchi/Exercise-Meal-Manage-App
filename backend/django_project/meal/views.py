@@ -285,7 +285,6 @@ class GetLatestMealsByType(APIView):
             .aggregate(max_date=Max('meal_date'))
             .get('max_date')
         )
-        
         meals = Meal.objects.filter(meal_type=meal_type,account=user.id,meal_date=latest_meal_date).order_by('id')   # ログインユーザーのmealを取得
 
         serialized_meals = GetMealSerializer(meals, many=True)
