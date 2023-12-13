@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "graph.apps.GraphConfig",
     "main.apps.MainConfig",
     "pet.apps.PetConfig",
+    "goal.apps.GoalConfig",
     
     "django.contrib.sites",
     "allauth",

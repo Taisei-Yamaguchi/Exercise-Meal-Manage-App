@@ -33,6 +33,8 @@ import CalsGraph from './pages/CalsGraph';
 
 import SettingsAccount from './pages/SettingsAccount';
 
+import Goal from './pages/Goal';
+
 
 const App = () => {
   return (
@@ -61,6 +63,8 @@ const App = () => {
           <Route path="/user_info/cals-graph" element={<CalsGraph />}/>
 
           <Route path="/settings" element={<SettingsAccount/>}/>
+
+          <Route path="/goal" element={<Goal />}/>
 
           <Route path="/*" element={<NotFound />} />
         </Routes>

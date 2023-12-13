@@ -51,6 +51,14 @@ const UserInfoNavigation = () => {
                         </img>
                     </NavLink>
 
+                    <NavLink to='/goal' className='flex items-center'>
+                        <img 
+                        src='/icons/goal-icon.svg' 
+                            className="swap-off fill-current w-5 h-5 mr-1" 
+                        >
+                        </img>
+                    </NavLink>
+
                     <NavLink to='/dashboard' className='flex items-center'>
                         <img 
                         src='/app-favicon.png' 
@@ -83,7 +91,6 @@ const UserInfoNavigation = () => {
             </div>
 
             <div role="tablist" className="tabs tabs-bordered">
-                <NavLink to='/user_info' className="tab link " activeclassname="link-warning" >Info Form</NavLink>
                 <NavLink to='/user_info/weight-graph' className='tab link' activeclassname="link-warning">Weight</NavLink>
                 <NavLink to='/user_info/body-fat-percentage-graph' className='tab link' activeclassname="link-warning">Body Fat</NavLink>
                 <NavLink to='/user_info/muscle-mass-graph' className='tab link' activeclassname="link-warning">Muscle Mass</NavLink>

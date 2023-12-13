@@ -2,37 +2,30 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import Calendar from './Calendar';
-import CalsByDate from './CalsByDate';
-import Navigation from '../../Navigation';
+// import CalsByDate from './CalsByDate';
+import Navigation from '../Navigation';
 
-
-const ExerciseNavigation = (onUpdate) => {
-    const { date } = useParams();
+const GoalNavigation = () => {
     const currentDate = new Date();
-    const  formattedCurrentDate= `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
+    const  date= `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
         .toString()
         .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
     
-    
     return (
-        <div className='sub-nav bg-gradient-to-r from-orange-600 to-red-700 text-neutral-100'>
+        <div className='sub-nav bg-gradient-to-r from-fuchsia-400 to-sky-500 text-neutral-100'>
             {/* head & nav ハンバ-ガー */}
             <div className="border-teal-100 mb-1 mt-1 flex flex-row  border rounded w-full justify-between">
-                <NavLink to={`/exercise/${date}`} className='flex items-center'>
+                <NavLink to='/user_info' className='flex items-center'>
                     <img 
-                    src='/icons/exercise-icon.svg' 
+                    src='/icons/goal-icon.svg' 
                         className="swap-off fill-current w-8 h-8 mr-1" 
                     >
                     </img>
-                    <h1>Exercise</h1> 
+                    <h1>Goal</h1> 
                 </NavLink> 
 
                 <div className='flex items-center justify-between'>
                     {/* links */}
-                    {/* <NavLink to={`/exercise/${formattedCurrentDate}`} className='flex items-center'>
-                        <strong className='w-5 h-5'>today</strong>
-                    </NavLink> */}
 
                     <NavLink to={`/meal/${date}`} className='flex items-center'>
                         <img 
@@ -90,36 +83,29 @@ const ExerciseNavigation = (onUpdate) => {
                 </div>
             </div>
 
-
-            {/* カレンダー */}
-            <Calendar selectedDate={date}  />
-            {/* メッセージ */}
-            <p className='text-xs'>*Metsはカロリー計算の指標です。mins,sets,repsおよびUser Infoの最新の体重データ、性別から計算しています。</p>
-
-            {/* Select 　Show*/}
-            <div role="tablist" className="z-0 tabs tabs-lifted">
-
-                <input type="radio" name="my_tabs_2" role="tab" className="tab w-10" aria-label="Cal" defaultChecked/>
-                <div className="bg-base-100 border-base-300 rounded-box w-screen p-6 tab-content p-10  text-zinc-900">
-                    <CalsByDate selectedDate={date} onUpdate={onUpdate}/>
-                </div>
-                
-                <input type="radio" name="my_tabs_2" role="tab" className="tab w-10" aria-label="Graph" defaultChecked/>
-                <div className="bg-base-100 border-base-300 rounded-box w-screen p-6 tab-content p-10 text-zinc-900">
-                    <NavLink to={`/exercise/exercise-total-weight-graph/${date}`} className="tab">Total</NavLink>
-                    <NavLink to={`/exercise/daily-exercise-weight-graph/${date}/All`} className="tab">Daily </NavLink>
-                    <NavLink to='/user_info' className="tab">Info Form</NavLink>
-                    <NavLink to='/user_info/weight-graph' className='tab'>Weight</NavLink>
-                    <NavLink to='/user_info/body-fat-percentage-graph' className='tab'>Body Fat</NavLink>
-                    <NavLink to='/user_info/muscle-mass-graph' className='tab'>Muscle Mass</NavLink>
-                    <NavLink to='/user_info/cals-graph' className='tab'>Cals</NavLink>
-                
-                </div>
+            <h2>{date}</h2>
+            
+            <div className='text-sm'>
+                    <p>*基礎代謝が入力されない場合、体重、身長、年齢、性別から自動で計算されます</p>
+                    <p>*ここのフォームでsave処理をしなかった日は、それ以前の最新日のデータが使用されます。</p>
             </div>
+
+            <div role="tablist" className="tabs tabs-bordered">
+                <NavLink to='/user_info/weight-graph' className='tab link' activeclassname="link-warning">Weight</NavLink>
+                <NavLink to='/user_info/body-fat-percentage-graph' className='tab link' activeclassname="link-warning">Body Fat</NavLink>
+                <NavLink to='/user_info/muscle-mass-graph' className='tab link' activeclassname="link-warning">Muscle Mass</NavLink>
+                <NavLink to='/user_info/cals-graph' className='tab link' activeclassname="link-warning">Cals</NavLink>
+            </div>
+            
+            {/* 
+            <div role="tablist" className="tabs tabs-bordered">
+                <NavLink to='/user_info' className="tab link" activeClassName="link-warning">Info Form</NavLink>
+                <NavLink to='/user_info/weight-graph' className='tab link' activeClassName="link-warning">Weight</NavLink>
+                <NavLink to='/user_info/body-fat-percentage-graph' className='tab link' activeClassName="link-warning">Body Fat</NavLink>
+                <NavLink to='/user_info/muscle-mass-graph' className='tab link' activeClassName="link-warning">Muscle Mass</NavLink>
+                <NavLink to='/user_info/cals-graph' className='tab link' activeClassName="link-warning">Cals</NavLink> 
+             </div> */}
         </div>
     );
 };
-
-// 他のコンポーネントをimportして使う部分は後で実装
-
-export default ExerciseNavigation;
+export default GoalNavigation;
