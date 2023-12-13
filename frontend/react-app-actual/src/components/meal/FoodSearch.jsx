@@ -3,7 +3,7 @@ import getCookie from '../../hooks/getCookie';
 import { useParams } from 'react-router-dom';
 import useAuthCheck from '../../hooks/useAuthCheck';
 
-const FoodSearch = ({meal_type,date}) => {
+const FoodSearch = ({meal_type,date,onUpdate}) => {
     // const {meal_type,date}=useParams();
     const [searchExpression, setSearchExpression] = useState('');
     const [searchResults, setSearchResults] = useState([]);
@@ -13,13 +13,13 @@ const FoodSearch = ({meal_type,date}) => {
         'meal_type':meal_type,
     }
     const [mes,setMes] = useState('')
-    const [updateTrigger, setUpdateTrigger] = useState(false);
+    // const [updateTrigger, setUpdateTrigger] = useState(false);
 
 
-    const handleUpdate = () => {
-        // 何らかのアクションが発生した時にupdateTriggerをトグル
-        setUpdateTrigger((prev) => !prev);
-    };
+    // const handleUpdate = () => {
+    //     // 何らかのアクションが発生した時にupdateTriggerをトグル
+    //     setUpdateTrigger((prev) => !prev);
+    // };
 
     useAuthCheck()
 
@@ -72,7 +72,7 @@ const FoodSearch = ({meal_type,date}) => {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Meal created successfully:', data);
-                handleUpdate();
+                onUpdate();
                 
             } else {
                 console.error('Failed to create Meal:', response.statusText);

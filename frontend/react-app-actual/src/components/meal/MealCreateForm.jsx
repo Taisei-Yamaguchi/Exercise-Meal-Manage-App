@@ -9,7 +9,16 @@ function MealCreateForm({meal_type,meal_date,onUpdate}) {
     const [foods, setFoods] = useState([]);
     const [selectedFood, setSelectedFood] = useState('');
     const [serving, setServing] = useState(1);
-    
+    const [foodCreateTrigger, setFoodCreateTrigger] = useState(false);
+
+    useEffect(() => {
+        fetchFoods()
+    }, [foodCreateTrigger]);
+
+    const handleFoodUpdate = () => {
+        // 何らかのアクションが発生した時にupdateTriggerをトグル
+        setFoodCreateTrigger((prev) => !prev);
+    };
 
     // API経由でログインユーザーのfoodを取得
     const fetchFoods = async() => {

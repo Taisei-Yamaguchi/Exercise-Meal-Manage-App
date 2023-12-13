@@ -21,11 +21,11 @@ using Django &amp; React
 <del>・バックエンド　コード整理 3(exercise　default_workoutの扱い) <br></del>
 <del>・pet app <br></del>
 
-・デザイン調整 (tailwindを使う)<br>
+<del>・デザイン調整 (tailwindを使う)<br><del>
 <del>・design :<del>グラフ</del>、<del>ダッシュボード</del>、<del>カレンダー</del>、<del>モバイル</del><br></del>
 
 <del>・design: dashboard, home , nav <br></del>
-・workout create, food create, food searchを実行後データを再フェッチ
+・workout create, food create, food searchを実行後データを再フェッチ（redux?）<br>
 ・workout,foodの利用順に表示する機能 <br>
 ・exercise,mealを最新の履歴をしゅとくし、ワンクリックで登録できてしまうようにする<br>
 ・exerciseのところに、生活イベント(mets指定済み)をminsだけ入力し登録できるようにする。 <br>

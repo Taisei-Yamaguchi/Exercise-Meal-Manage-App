@@ -108,7 +108,7 @@ const MealsByDate = () => {
                                 ></img>
                                     <dialog id={`my_modal_3_${type}`} className="modal">
                                         <div className="modal-box">
-                                            <FoodSearch meal_type={type} date={date} />
+                                            <FoodSearch meal_type={type} date={date} onUpdate={handleUpdate}/>
                                         </div>
                                         <form method="dialog" className="modal-backdrop">
                                             <button >✕</button>

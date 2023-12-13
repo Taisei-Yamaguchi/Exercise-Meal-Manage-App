@@ -4,7 +4,7 @@ import getCookie from '../../hooks/getCookie';
 import useAuthCheck from '../../hooks/useAuthCheck';
 import MealNavigation from './meal-nav/MealNavigation';
 
-const FoodCreate = () => {
+const FoodCreate = ({ onUpdate }) => {
     
     const [name, setName] = useState('');
     const [cal, setCal] = useState('');
@@ -52,6 +52,7 @@ const FoodCreate = () => {
             if (response.ok) {
                 // ログイン成功時の処理
                 console.log('Food posted successfully:', response.data);
+                onUpdate() 
             } else {
                 // ログイン失敗時の処理
                 console.log(response.json());
