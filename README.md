@@ -26,7 +26,7 @@ using Django &amp; React
 
 <del>・design: dashboard, home , nav <br></del>
 ・workout create, food create, food searchを実行後データを再フェッチ（redux?）<br>
-・workout,foodの利用順に表示する機能 <br>
+<del>・workout,foodの利用順に表示する機能 <br></del>
 ・exercise,mealを最新の履歴をしゅとくし、ワンクリックで登録できてしまうようにする<br>
 ・exerciseのところに、生活イベント(mets指定済み)をminsだけ入力し登録できるようにする。 <br>
 ・ここも、最新履歴を取得し、ワンクリックですべて取得できるようにしてしまう <br>

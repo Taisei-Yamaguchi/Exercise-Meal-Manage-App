@@ -12,6 +12,7 @@ import MealCreateFormWithHistory from '../components/meal/MealCreateFormWithHist
 import MealUpdate from '../components/meal/MealUpdate';
 import MealDelete from '../components/meal/MealDelete';
 import FoodSearch from '../components/meal/FoodSearch';
+import LatestMealByType from '../components/meal/LatestMealsByType';
 
 
 const MealsByDate = () => {
@@ -118,6 +119,7 @@ const MealsByDate = () => {
                                 <div className='flex flex-row max-sm:flex-col'>
                                     <MealCreateForm meal_type={type} meal_date={date} onUpdate={handleUpdate} />
                                     <MealCreateFormWithHistory meal_type={type} meal_date={date} onUpdate={handleUpdate} />
+                                    <LatestMealByType meal_type={type} meal_date={date} onUpdate={handleUpdate}/>
                                 </div>
                             </div>
 
