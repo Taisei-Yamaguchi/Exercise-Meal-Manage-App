@@ -9,7 +9,16 @@ function MealCreateForm({meal_type,meal_date,onUpdate}) {
     const [foods, setFoods] = useState([]);
     const [selectedFood, setSelectedFood] = useState('');
     const [serving, setServing] = useState(1);
-    
+    const [foodCreateTrigger, setFoodCreateTrigger] = useState(false);
+
+    useEffect(() => {
+        fetchFoods()
+    }, [foodCreateTrigger]);
+
+    const handleFoodUpdate = () => {
+        // 何らかのアクションが発生した時にupdateTriggerをトグル
+        setFoodCreateTrigger((prev) => !prev);
+    };
 
     // API経由でログインユーザーのfoodを取得
     const fetchFoods = async() => {
@@ -78,28 +87,34 @@ function MealCreateForm({meal_type,meal_date,onUpdate}) {
     };
 
     return (
-        <form className='meal-create' onSubmit={handleCreateMeal}>
-            {/* Dropdown for selecting a food item */}
-            <label>
-                
-                <select className='food-select' value={selectedFood} onChange={(e) => setSelectedFood(e.target.value)} required>
-                <option value="" disabled>Your</option>
-                {foods.map((food) => (
-                    <option key={food.id} value={food.id}>
-                    {food.name}
-                    </option>
-                ))}
-                </select>
-            </label>
-            <label>
-                
-                <input type="number" className='food-amount-select' value={serving} onChange={(e) => setServing(e.target.value)} required min={0.1} step={0.1}/>
-                (servings)
-            </label>
+        <form className='w-full' onSubmit={handleCreateMeal}>
+        <div className="join">
+            <select className='food-select select select-bordered join-item select-xs' value={selectedFood} onChange={(e) => setSelectedFood(e.target.value)} required>
+                <option value="" disabled>Custom</option>
+                    {foods.map((food) => (
+                        <option key={food.id} value={food.id}>
+                        {food.name}
+                        </option>
+                    ))}
+            </select>
             
-            {/* Button to create the meal */}
-            <button className='meal-add-button' type='submit'>+</button>
+            <div className=" indicator">
+                <span className="indicator-item badge badge-secondary badge-xs">serving</span> 
+                <input 
+                    type="number"
+                    value={serving} 
+                    onChange={(e) => setServing(e.target.value)} 
+                    required min={0.1} 
+                    step={0.1}
+                    className=" food-select input select-bordered join-item select-xs" 
+                />
+            </div>
+            <div className="indicator">
+                <button className='meal-add-btn btn btn-primary join-item btn-xs' type='submit'>+</button>
+            </div>
+        </div>
         </form>
+        
     );
 }
 

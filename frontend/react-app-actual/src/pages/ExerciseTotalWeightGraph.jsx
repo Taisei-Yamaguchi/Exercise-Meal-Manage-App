@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import getCookie from '../../hooks/getCookie';
+import getCookie from '../hooks/getCookie';
 import { Bar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
-import Navigation from '../Navigation';
-import useAuthCheck from '../../hooks/useAuthCheck';
-import ExerciseNavigation from './exercise-nav/ExerciseNavigation';
+import Navigation from '../components/Navigation';
+import useAuthCheck from '../hooks/useAuthCheck';
+import ExerciseNavigation from '../components/exercise/exercise-nav/ExerciseNavigation';
 
 const ExerciseTotalWeightGraph = () => {
     const [totalWeightData, setTotalWeightData] = useState([]);
@@ -71,14 +71,32 @@ const ExerciseTotalWeightGraph = () => {
         ],
     };
 
+    const option ={
+        scales: {
+            y: {
+                
+                title: {
+                    display: true,
+                    text: '(kg)', // y軸のタイトルに単位を追加
+                    color: 'black', // タイトルの色
+                    font: {
+                        weight: 'bold', // タイトルの太さ
+                        size: 12, // タイトルのサイズ
+                    },
+                },
+            },
+        },
+    }
+
     return (
         <div className='container'>
-            <Navigation />
             <div className='sub-container'>
                 <ExerciseNavigation />
-                <h1>Total Weight Graph</h1>
-                <Bar data={data} height={200}/>
-                <h2>Grand Total Weight: {grandWeight} (kg)</h2>
+                <div className='main'>
+                    <h1>Total Weight Graph</h1>
+                    <Bar data={data} height={200} options={option}/>
+                    <h2>Grand Total Weight: {Math.round(grandWeight)/1000} (t)</h2>
+                </div>
             </div>
         </div>
     );

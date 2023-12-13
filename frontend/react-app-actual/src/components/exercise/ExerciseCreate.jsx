@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import getCookie from '../../hooks/getCookie';
 import useAuthCheck from '../../hooks/useAuthCheck';
+import WorkoutCreate from './WorkoutCreate';
 
 
 const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
@@ -44,7 +45,7 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
             setWorkouts(data.workout);
             setDefaultWorkouts(data.default_workout)
             onUpdate()
-            console.log(data)
+            
         } catch (error) {
             console.error('Error fetching workouts:', error);
         }
@@ -151,127 +152,144 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
     
     return (
         <div>
-            
-            <h3>{formData.date}</h3>
-
-            <form className='exercise-create-form'onSubmit={handleCreateExercise}>
-                <div className='exercise-create-detail' > 
-                        <label className='workout_id'>
-                            <select
-                                name='workout_id'
-                                value={formData.workout_id === null ? '' : formData.workout_id}
-                                onChange={handleInputChange}
-                                required
-                            >
-                                <option value='' disabled>workout</option>
-                                {workouts
-                                .filter((workout)=>workout.workout_type===workoutType)
-                                .map((workout) => (
-                                    <option key={workout.id} value={workout.id}>
-                                    {workout.name}
-                                </option>
-
-                                    
-                                ))}
-                                {default_workouts
-                                .filter((workout)=>workout.workout_type===workoutType)
-                                .map((workout) => (
-                                    <option key={workout.id} value={workout.id}>
-                                        {workout.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </label>
-
-                        <label className='sets'>
-                            <input
+            <form className='border'onSubmit={handleCreateExercise}>
+            <div className="">
+                <div className='flex'>
+                    <select
+                        name='workout_id'
+                        value={formData.workout_id === null ? '' : formData.workout_id}
+                        onChange={handleInputChange}
+                        required
+                        className=' select select-bordered join-item select-xs '
+                    >
+                    <option value='' disabled>workout</option>
+                    {workouts
+                        .filter((workout)=>workout.workout_type===workoutType)
+                        .map((workout) => (
+                            <option key={workout.id} value={workout.id}>
+                                {workout.name}
+                            </option>                    
+                    ))}
+                    {default_workouts
+                        .filter((workout)=>workout.workout_type===workoutType)
+                        .map((workout) => (
+                            <option key={workout.id} value={workout.id}>
+                                {workout.name}
+                            </option>
+                        ))}
+                    </select>
+                    <div className='indicator'>
+                        <button className='btn btn-xs btn-accent' type='submit'>Add</button>
+                    </div>
+                </div>
+                
+                <div className='flex max-sm:flex-col max-sm:items-center'>
+                    <div className='sets-reps flex '>
+                        <div className="flex pr-1 mr-0">
+                            <span className=" indicator-item badge badge-secondary badge-xs">set</span> 
+                            <input 
                                 name='sets'
                                 type="number"
                                 value={formData.sets === null ? '' : formData.sets}
                                 onChange={handleInputChange}
                                 min={1}
-                            />(sets)
-                        </label>
-
-                        <label className='reps'>
-                            <input
+                                className="w-full input select-bordered join-item input-xs" 
+                            />
+                        </div>
+                        <div className="flex  pr-1">
+                            <span className="indicator-item badge badge-secondary badge-xs">rep</span> 
+                            <input 
                                 name='reps'
                                 type="number"
                                 value={formData.reps === null ? '' : formData.reps}
                                 onChange={handleInputChange}
                                 min={1}
-                            />(reps)
-                        </label>
-
-                        <label className='weight_kg'>
-                            <input
+                                className="w-full input select-bordered join-item input-xs" 
+                            />
+                        </div>
+                    </div>
+                    
+                    <div className='kg-mets flex '>
+                        <div className="flex  pr-1">
+                            <span className="indicator-item badge badge-secondary badge-xs">kg</span> 
+                            <input 
                                 name='weight_kg'
                                 type="number"
                                 value={formData.weight_kg === null ? '' : formData.weight_kg}
                                 onChange={handleInputChange}
                                 min={0.1}
                                 step={0.1}
-                            />(kg)
-                        </label>
-                    
+                                className="w-full input select-bordered join-item input-xs" 
+                            />
+                        </div>
+                        <div className="flex  pr-1">
+                            <span className="indicator-item badge badge-secondary badge-xs">met</span> 
+                            <select
+                                name="mets"
+                                value={formData.mets === null ? '' : formData.mets}
+                                onChange={handleInputChange}
+                                required
+                                className="w-full input select-bordered join-item input-xs"
+                            >
+                                <option value="1">1 (Sitting)</option>
+                                <option value="1.5">1.5 (Standing)</option>
+                                <option value="2">2 (洗濯、料理、ストレッチ)</option>
+                                <option value="2.5">2.5 (Walk)</option>
+                                <option value="3">3 (掃除、荷造り)</option>
+                                <option value="3.5">3.5 (昇降運動)</option>
+                                <option value="4">4 (ドラム)</option>
+                                <option value="4.5">4.5 (早歩き、農耕)</option>
+                                <option value="5">5</option>
+                                <option value="5.5">5.5 (家具運搬)</option>
+                                <option value="6">6</option>
+                                <option value="6.5">6.5</option>
+                                <option value="7">7 (Light Jog)</option>
+                                <option value="7.5">7.5 (Climb)</option>
+                                <option value="8">8</option>
+                                <option value="8.5">8.5</option>
+                                <option value="9">9</option>
+                                <option value="9.5">9.5</option>
+                                <option value="10">10 (Bike,Swim)</option>
+                                <option value="10.5">10.5 </option>
+                                <option value="11">11 (Squat)</option>
+                                <option value="11.5">11.5 ()</option>
+                                <option value="12">12 (High Speed Run)</option>
+                            </select>
+                        </div>
+                    </div>
 
                     {(workoutType !== 'Aerobic' && workoutType !== 'Other')? (
-                        <></>
-                    ) : (
-                        <>
-                            <label className='distance'>
-                                <input
+                            <></>
+                        ) : (
+                            <div className='km-mins flex'>
+                            <div className="flex pr-1">
+                                <span className="indicator-item badge badge-secondary badge-xs">km</span> 
+                                <input 
                                     name='distance'
                                     type="number"
                                     value={formData.distance === null ? '' : formData.distance}
                                     onChange={handleInputChange}
                                     min={0.1}
                                     step={0.1}
-                                />(km)
-                            </label>
-
-                            <label className='duration_minutes'>
-                                <input
+                                    className="w-full input select-bordered join-item input-xs" 
+                                />
+                            </div>
+                            <div className="flex pr-1">
+                                <span className="indicator-item badge badge-secondary badge-xs">min</span> 
+                                <input 
                                     name="duration_minutes"
                                     type="number"
                                     value={formData.duration_minutes === null ? '' : formData.duration_minutes}
                                     onChange={handleInputChange}
                                     min={1}
-                                />(mins)
-                            </label>
-                        </>
-                    )}
-
-                    <label className='mets'>
-                        <input 
-                        name='mets'
-                        type="number" 
-                        value={formData.mets ===null?'':formData.mets} 
-                        onChange={handleInputChange} 
-                        required
-                        min={1}
-                        />(mets)
-                    </label>
+                                    className="w-full input select-bordered join-item input-xs" 
+                                />
+                            </div>
+                            </div>
+                        )}
                     </div>
-                
-                    <div className='exercise-create-others'>
-                        <label>
-                            <textarea 
-                            name='memos'
-                            value={formData.memos ===null?'':formData.memos} 
-                            onChange={handleInputChange} 
-                            placeholder='Memos'/>
-                        </label>
-
-                        <button type='submit' >
-                            +
-                        </button>
-                    </div>
-                
-                
+                </div>
             </form>
-
-        {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
         </div>
     );
 };

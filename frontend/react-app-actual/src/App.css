@@ -60,63 +60,92 @@ nav{
 .container{
   display: flex;
   flex-direction: row;
-  padding-left: 210px;
-  width:100%
+  
+  width:100%;
+  justify-self: center;
+  align-self: center;
 }
 
 .menu-nav {
   position: fixed;
   top: 0;  /* 上端に固定する場合 */
   left: 0;  /* 左端に固定する場合 */
-  width: 200px;  /* ナビゲーションの幅を調整してください */
+  width: 300px;  /* ナビゲーションの幅を調整してください */
   height: 100vh;  /* 画面の高さいっぱいに設定します */
   background-color: rgb(203, 202, 202);  /* ナビゲーションの背景色を指定してください */
   border-right: 1px solid #ccc;  /* ナビゲーションの右側に境界線を追加します */
   padding-top: 20px;  /* 適切なパディングを設定します */
+  z-index: 20000000;
 }
 
 .sub-container{
   display: flex;
   flex-direction: column;
-  padding-left: 1%;
-}
-
-.main{
-  padding-top: 280px;
-}
-
-.graph{
-  border: solid;
+  width: 100%;
+  justify-self: center;
+  align-self: center;
   
 }
 
+.main{
+  padding-top: 350px;
+  
+  width: 90%;
+  padding-right: 0;
+  justify-self: center;
+  align-self: center;
+}
 
-
-
-/* meal */
-.meal-nav{
+.open-nav{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.sub-nav{
   border: solid;
   position: fixed;
   top: 0;  /* 上端に固定する場合 */
-  left: 200px;  /* 左端に固定する場合 */
+  left: 0;  /* 左端に固定する場合 */
   right: 0; 
    /* ナビゲーションの幅を調整してください */
-  height: 270px;  /* 画面の高さいっぱいに設定します */
+  height: 230px;  /* 画面の高さいっぱいに設定します */
   background-color: rgb(196, 255, 100);  /* ナビゲーションの背景色を指定してください */
   border-right: 1px solid #ccc;  /* ナビゲーションの右側に境界線を追加します */
   padding-top: 20px;  /* 適切なパディングを設定します */
   padding-left: 1%;
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-
-
-.meal-nav h1{
+.sub-nav h1{
   font-size: 30px;
 }
 
-.meal-nav h2{
+.sub-nav h2{
   font-size: 15px;
 }
+
+
+/* graph */
+.graph-container {
+  margin-top: 250px;
+  padding-top: 0;
+  overflow-x:scroll;
+  border: 1px solid #cccccc; /* ボーダーのスタイルを追加 */
+  padding-left: 1%;
+  margin-left: 1%;
+  padding-right: 1%;
+  margin-right: 1%;
+}
+
+
+.selected{
+  color:red
+}
+/* meal */
 
 .meal-links{
   display: flex;
@@ -124,11 +153,15 @@ nav{
   
   justify-content: space-around;
 }
+
+
+.cals-box{
+  border: solid;
+}
 .meal-group{
   border: solid;
 }
 .meal-add-container{
-  border: solid;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -136,11 +169,12 @@ nav{
 
 
 
+
 .calendar-container{
   display: flex;
   flex-direction: row;
   justify-content: space-between;  
-  border: solid;
+  
 }
 
 .food-form{
@@ -181,7 +215,7 @@ nav{
 } */
 
 .food-select{
-  width:70px
+  width:90px
 }
 
 .food-amount-select{
@@ -224,7 +258,7 @@ nav{
   border-radius: 50%;
 }
 
-.serving-toggle-button{
+/* .serving-toggle-button{
   background-color: rgb(189, 185, 185);
   color: aliceblue;
   width: 50px;
@@ -234,6 +268,10 @@ nav{
   align-items: center;
   justify-content: center;
   border-radius: 50%;
+} */
+
+.unit-change{
+  cursor: pointer;
 }
 
 .each-meal{
@@ -264,6 +302,11 @@ nav{
 .meal-update{
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+}
+
+.meal-update label{
+  display: flex;
 }
 
 .each-searched-food{
@@ -281,22 +324,59 @@ nav{
 
 
 /* exercise */
+.input-number{
+  width:30%;
+
+}
+
+.exercise-detail-update{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.update-container{
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.exercise-info{
+  display: flex;
+  flex-direction: row;
+}
+
+.textarea-width{
+  width: 200%;
+}
+
+
+
 .exercise-nav{
   border: solid;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+.exercise-create{
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .exercise-create-form{
   display: flex;
   flex-direction: column;
-  border: solid;
-  width:100%
+  width:100%;
+  
 }
 
 .exercise-create-form .exercise-create-detail{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  
 }
 
 .exercise-create-form .exercise-create-detail input{
@@ -310,17 +390,7 @@ nav{
 .exercise-create-form textarea{
   width:150%
 }
-.exercise-create-form button{
-  background-color: rgb(232, 60, 60);
-  color: #fff;
-  width: 50px;
-  height: 30px;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-}
+
 
 .exercise-create-form .exercise-create-others{
   
@@ -329,15 +399,12 @@ nav{
   justify-content: space-between;
 }
 
-.exercise-main-container{
-  width:80%;
-}
 
-.exercise-group .each-exercise{
-  border: solid;
-  background-color: rgb(251, 66, 24);
-}
 
+.exercise-group {
+  margin-top: 1%;
+  padding: 3% 2% 3% 2%;
+}
 
 .exercise-update-form{
   display: flex;
@@ -464,12 +531,12 @@ nav{
 }
 
 
-.user-info-nav .user-info-detail .user-info-info{
+/* .user-info-nav .user-info-detail .user-info-info{
   border: solid;
   width: 50%;
-}
+} */
 
-.user-info-nav .user-info-detail .user-info-info p{
+/* .user-info-nav .user-info-detail .user-info-info p{
   font-size: 5px;
 }
 
@@ -483,28 +550,30 @@ nav{
 .user-info-nav .user-info-links .user-info-link{
   font-size: 15px;
   padding-bottom: 1%;
-}
+} */
 
-
+/* 
 .user-info-nav h1{
   font-size: 30px;
 }
 
 .user-info-nav h2{
   font-size: 15px;
-}
+} */
 
 
 .user-info-form{
   display: flex;
   flex-direction: column;
+  
+  width: 90%;
 }
 
-/* .user-info-form input{
+.user-info-form label{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-} */
+}
 
 
 /* account */

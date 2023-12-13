@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import getCookie from '../../hooks/getCookie';
+import getCookie from '../hooks/getCookie';
 import { Bar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
-import Navigation from '../Navigation';
+import Navigation from '../components/Navigation';
 import { useParams } from 'react-router-dom';
-import ExerciseNavigation from './exercise-nav/ExerciseNavigation';
-import useAuthCheck from '../../hooks/useAuthCheck';
+import ExerciseNavigation from '../components/exercise/exercise-nav/ExerciseNavigation';
+import useAuthCheck from '../hooks/useAuthCheck';
 
 const DailyExerciseWeightGraph = () => {
     const [dailyExerciseWeightData, setDailyExerciseWeightData] = useState([]);
     const {workout_type} =useParams();
     const [error, setError] = useState(null);
     const workoutTypes = ['All','Chest', 'Back', 'Shoulder', 'Arm','Leg','Abs','Other'];
+    const [graphWidth, setGraphWidth] = useState(null);
     // const chartRef = useRef(null); // チャートの参照
 
     useAuthCheck()
@@ -40,19 +41,12 @@ const DailyExerciseWeightGraph = () => {
             const data = await response.json();
             setDailyExerciseWeightData(data);
             console.log(data)
+
+            const xAxisLabelMinWidth = 24; // データ当たりの幅を設定
+            const width = data.length * xAxisLabelMinWidth;
+            setGraphWidth(width);
             
 
-            // // Chartを破棄
-            // if (chartRef.current) {
-            // chartRef.current.destroy();
-            // }
-
-            // Chartを再描画
-            // const newChart = new Chart(chartRef.current, {
-            // type: 'line',
-            // data: data,
-            // options: options,
-            // });
         } catch (error) {
             setError('An error occurred while fetching data.');
         }
@@ -87,20 +81,55 @@ const DailyExerciseWeightGraph = () => {
         ],
     };
 
+
+    const option ={
+        scales: {
+            y: {
+                position:'right',
+                title: {
+                    display: true,
+                    text: '(kg)', // y軸のタイトルに単位を追加
+                    color: 'black', // タイトルの色
+                    font: {
+                        weight: 'bold', // タイトルの太さ
+                        size: 12, // タイトルのサイズ
+                    },
+                },
+            },
+        },
+        layout: {
+            padding: {
+                left: 0, // 左側の余白を調整
+                right: 0,
+                top: 0,
+                bottom: 0,
+            },
+        },
+        responsive: false,
+    }
+
+
     return (
         <div className='container'>
-            <Navigation />
-            <div className='sub-container'>
+            <div className='sub-container flex justify-center'>
                 <ExerciseNavigation />
-                <h1>Daily Weight Graph</h1>
-                <div className='exercise-graph-type-links'>
-                    {workoutTypes.map((type)=>(
-                        <a key={type} href={type}>{type}</a>
-                    ))}
+                <div className='main'>
+                    <div className='graph-head flex flex-col items-center '>
+                        <h3>{workout_type}</h3>
+                        <div className='flex flex-row justify-between  w-full border'>
+                            {workoutTypes.map((type)=>(
+                                <a key={type} href={type} className='link'>{type}</a>
+                            ))}
+                        </div>
+                        
+                    </div>
+                        
+                    <div className="flex border overflow-x-auto ml-px pl-px">
+                        {graphWidth&&
+                            <Bar data={data} height={300} options={option} width={graphWidth}/>
+                        }
+                    </div>
                 </div>
-                <h3>{workout_type}</h3>
-                <Bar data={data} height={300}/>
-                
             </div>
         </div>
     );

@@ -45,7 +45,7 @@ class SignupAPIView(APIView):
             # # 実際にはここでメール送信
             # send_mail('Confirm your email', message, 'from@example.com', [user.email])
 
-            return Response({'detail': 'Check your email for confirmation.'}, status=status.HTTP_201_CREATED)
+            return Response({'detail': 'Success! Check your email for confirmation.'}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

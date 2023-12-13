@@ -6,36 +6,33 @@ import store from './redux/store'; // 作成したRedux Storeをインポート
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css'
 
-import Home from './components/Home';
+import Home from './pages/Home';
 
-import NotFound from './components/404NotFound';
+import NotFound from './pages/404NotFound';
 
-import Login from './components/account/Login';
-import SignUp from './components/account/SignUp';
-import SignUpConfirm from './components/account/SignUpConfirm';
-import PasswordResetRequest from './components/account/PasswordResetRequest';
-import PasswordResetProcess from './components/account/PasswordResetProcess';
+import Login from './pages/auth/Login';
+import SignUp from './pages/auth/SignUp';
+import SignUpConfirm from './pages/auth/SignUpConfirm';
+import PasswordResetRequest from './pages/auth/PasswordResetRequest';
+import PasswordResetProcess from './pages/auth/PasswordResetProcess';
 
-import Dashboard from './components/dashboard/Dashboard';
+import Dashboard from './pages/Dashboard';
 
-import MealsByDate from './components/meal/MealsByDate';
-import FoodSearch from './components/meal/FoodSearch';
-import FoodCreate from './components/meal/FoodCreate';
-import NutrientsByDateGraph from './components/meal/NutriensByDateGraph';
+import MealsByDate from './pages/MealsByDate';
+// import NutrientsByDateGraph from './components/meal/NutriensByDateGraph';
 
-import ExerciseByDate from './components/exercise/ExerciseByDate';
-import ExerciseTotalWeightGraph from './components/exercise/ExerciseTotalWeightGraph';
-import DailyExerciseWeightGraph from './components/exercise/DailyExerciseWeightGraph';
+import ExerciseByDate from './pages/ExerciseByDate';
+import ExerciseTotalWeightGraph from './pages/ExerciseTotalWeightGraph';
+import DailyExerciseWeightGraph from './pages/DailyExerciseWeightGraph';
 
-import UserInfo from './components/user_info/UserInfo';
-import WeightGraph from './components/user_info/WeightGraph';
-import BodyFatPercentageGraph from './components/user_info/BodyFatPercentageGraph';
-import MuscleMassGraph from './components/user_info/MuscleMassGraph';
-import CalsGraph from './components/user_info/CalsGraph';
+import UserInfo from './pages/UserInfo';
+import WeightGraph from './pages/WeightGraph';
+import BodyFatPercentageGraph from './pages/BodyFatPercentageGraph';
+import MuscleMassGraph from './pages/MuscleMassGraph';
+import CalsGraph from './pages/CalsGraph';
 
-import SettingsAccount from './components/settings/SettingsAccount';
+import SettingsAccount from './pages/SettingsAccount';
 
-import MainCalendar from './components/calendar/MainCalendar';
 
 const App = () => {
   return (
@@ -51,9 +48,7 @@ const App = () => {
           <Route path="/password-reset/process/:uid/:token" element={<PasswordResetProcess />}/>
 
           <Route path="/meal/:date" element={<MealsByDate />}/>
-          <Route path="/meal/food-search/:meal_type/:date" element={<FoodSearch />}/>
-          <Route path="/meal/food-create/:date" element={<FoodCreate/>}/>
-          <Route path="/meal/nutrients-graph/:date" element={<NutrientsByDateGraph/>}/>
+          {/* <Route path="/meal/nutrients-graph/:date" element={<NutrientsByDateGraph/>}/> */}
 
           <Route path="/exercise/:date" element={<ExerciseByDate/>}/>
           <Route path="/exercise/exercise-total-weight-graph/:date" element={<ExerciseTotalWeightGraph/>}/>
@@ -66,8 +61,6 @@ const App = () => {
           <Route path="/user_info/cals-graph" element={<CalsGraph />}/>
 
           <Route path="/settings" element={<SettingsAccount/>}/>
-
-          <Route path="/calendar/:month" element={<MainCalendar/>}/>
 
           <Route path="/*" element={<NotFound />} />
         </Routes>

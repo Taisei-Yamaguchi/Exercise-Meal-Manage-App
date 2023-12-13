@@ -1,12 +1,10 @@
 import React, { useState,useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
 import { useParams } from 'react-router-dom';
-import Navigation from '../Navigation';
 import useAuthCheck from '../../hooks/useAuthCheck';
-import MealNavigation from './meal-nav/MealNavigation';
 
-const FoodSearch = () => {
-    const {meal_type,date}=useParams();
+const FoodSearch = ({meal_type,date,onUpdate}) => {
+    // const {meal_type,date}=useParams();
     const [searchExpression, setSearchExpression] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const mealData ={
@@ -15,13 +13,13 @@ const FoodSearch = () => {
         'meal_type':meal_type,
     }
     const [mes,setMes] = useState('')
-    const [updateTrigger, setUpdateTrigger] = useState(false);
+    // const [updateTrigger, setUpdateTrigger] = useState(false);
 
 
-    const handleUpdate = () => {
-        // 何らかのアクションが発生した時にupdateTriggerをトグル
-        setUpdateTrigger((prev) => !prev);
-    };
+    // const handleUpdate = () => {
+    //     // 何らかのアクションが発生した時にupdateTriggerをトグル
+    //     setUpdateTrigger((prev) => !prev);
+    // };
 
     useAuthCheck()
 
@@ -74,7 +72,7 @@ const FoodSearch = () => {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Meal created successfully:', data);
-                handleUpdate();
+                onUpdate();
                 
             } else {
                 console.error('Failed to create Meal:', response.statusText);
@@ -85,50 +83,66 @@ const FoodSearch = () => {
     };
 
 
-
-
-
     return (
-        <div className='container'>
-            <Navigation />
-            <div className='sub-container'>
-                <MealNavigation onChange={handleUpdate}/>
-                <div className='main'>
-                    <form onSubmit={handleSearch}>
-                        <input
-                            type="text"
-                            placeholder="Enter food name"
-                            value={searchExpression}
-                            onChange={(e) => setSearchExpression(e.target.value)}
-                            required
-                            pattern="\S+" // スペース以外の文字が1文字以上必要
-                            title="スペースのみの入力は無効です"
-                        />
-                        <button type='submit'>Search</button>
-                    </form>
-                    
-                    <p>* You can do 'and' ,'or' search with '&' ,'|'. </p>
-                    <ul>
-                        {searchResults.map((result) => (
-                            <li className='each-searched-food' key={result.food_id} >
-                                <p>{result.name}</p>
-                                <div className='searched-food-detail'>
-                                    <p>
-                                        {Math.round(result.cal)} kcal
-                                        {result.is_100g==true && result.is_serving==false ?(
-                                                <>(100g/1Per)</>
-                                            ):(
-                                                <>(1Per)</>
-                                        )}
-                                    </p>
-                                    <button className='meal-add-button' onClick={() => handleFoodClick(result)}>+</button>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                    <p>{mes}</p>
+        <div className='food-search'>
+            <h2>You can use <strong>&</strong> , <strong>|</strong> search.</h2>
+            <form onSubmit={handleSearch}>
+            <div className="join">
+                <div className='insicator'>
+                    <input 
+                        className="input input-bordered join-item max-sm:input-sm" 
+                        type="text"
+                        placeholder="Enter food name"
+                        value={searchExpression}
+                        onChange={(e) => setSearchExpression(e.target.value)}
+                        required
+                        pattern="\S+" // スペース以外の文字が1文字以上必要
+                        title="スペースのみの入力は無効です"
+                    />
+                </div>
+                <div className="indicator">
+                    <button type='submit' className="btn bg-green-200 join-item max-sm:btn-sm">Search</button>
                 </div>
             </div>
+            </form>
+
+            {mes ==='' ?(
+                    <div className="overflow-x-auto">
+                    <table className="table table-zebra">
+                        {/* head */}
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Cals</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {searchResults.map((result) =>(
+                            <tr key={result.food_id}>
+                                <th><button className='btn btn-xs btn-accent' onClick={() => handleFoodClick(result)}>Add</button>
+                                </th>
+                                <td>{result.name}</td>
+                                <td>
+                                    {Math.round(result.cal)} kcal<br></br>
+                                        {result.is_100g==true && result.is_serving==false ?(
+                                            <>(100g/1Per)</>
+                                        ):(
+                                            <>(1Per)</>
+                                    )}    
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
+                ):(
+                    <div role="alert" className="alert alert-warning">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                        <span>{mes}</span>
+                    </div>
+                )}
         </div>
     );
 };

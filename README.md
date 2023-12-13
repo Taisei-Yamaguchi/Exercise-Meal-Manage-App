@@ -21,11 +21,20 @@ using Django &amp; React
 <del>・バックエンド　コード整理 3(exercise　default_workoutの扱い) <br></del>
 <del>・pet app <br></del>
 
-・デザイン調整 (tailwindを使う)<br>
-・フロントエンドの整理 <br>
-・バックエンドの整理 <br>
+<del>・デザイン調整 (tailwindを使う)<br><del>
+<del>・design :<del>グラフ</del>、<del>ダッシュボード</del>、<del>カレンダー</del>、<del>モバイル</del><br></del>
 
+<del>・design: dashboard, home , nav <br></del>
+・workout create, food create, food searchを実行後データを再フェッチ（redux?）<br>
+・workout,foodの利用順に表示する機能 <br>
+・exercise,mealを最新の履歴をしゅとくし、ワンクリックで登録できてしまうようにする<br>
+・exerciseのところに、生活イベント(mets指定済み)をminsだけ入力し登録できるようにする。 <br>
+・ここも、最新履歴を取得し、ワンクリックですべて取得できるようにしてしまう <br>
+・目標のmodelを作る　（user, target_consuming_cals,target_intake_cals,target_weight,target_body_fat,target_muscle_mass,weekly_target_weight(type別)）?
+
+・コード整理(back,front) <br>
 ・詳細設定 <br>
+
 ・バックエンドテストケースの作成 <br>
 ・フロントエンドのテスト　<br>
 

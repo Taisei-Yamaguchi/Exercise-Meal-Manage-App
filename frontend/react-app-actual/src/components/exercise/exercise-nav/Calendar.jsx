@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-
+import MainCalendar from '../../calendar/MainCalendar';
 
 const Calendar = ({ selectedDate, onDateChange }) => {
     const [calendarDates, setCalendarDates] = useState([]);
@@ -11,7 +11,6 @@ const Calendar = ({ selectedDate, onDateChange }) => {
     useEffect(() => {
         // 今回は前後2日間分を表示する例ですが、必要に応じて変更してください
         const daysToShow = [-2, -1, 0, 1, 2];
-
         
         const currentDate = new Date(selectedDate);
         const formattedDates = daysToShow.map((day) => {
@@ -24,39 +23,31 @@ const Calendar = ({ selectedDate, onDateChange }) => {
         setCalendarDates(formattedDates);
     }, [selectedDate]);
 
-    const currentDate = new Date();
-    const  formattedCurrentDate= `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
-
-
-    
-
     return (
-        <div>
-        
-        <div className="calendar-container">
+        <div className='calendar-container flex items-between  w-full pl-4 pr-4'>  
+                <img 
+                    src='/icons/calendar.svg' 
+                    className="swap-off fill-current w-10 h-10 cursor-pointer max-sm:w-6 msx-sm:h-6" 
+                    onClick={() => document.getElementById(`my_modal_calendar`).showModal()}>
+                </img>    
+                    <dialog id={`my_modal_calendar`} className="modal">
+                        <div className="modal-box w-11/12 max-w-5xl text-slate-500">
+                            <MainCalendar  month={`${selectedDate.split('-').slice(0,2).join('-')}`}/>
+                        </div>
+                        <form method="dialog" className="modal-backdrop">
+                            <button >✕</button>
+                        </form>
+                    </dialog>
             
-            {calendarDates.map((date) => {
-                const currentDate = new Date();
-                const  formattedCurrentDate= `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-                    .toString()
-                    .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
-            
-                const displayDate =
-                date === formattedCurrentDate
-                    ? 'Today'
-                    : date.split('-').slice(1).join('/');
-                
-                return (
-                    <div key={date} className="calendar-date">
-                        {/* navLinkが使えない NavLinkだとページ移動後、fetchExerciseがされない*/}
-                        {/* <NavLink to={`/exercise/${date}`}>{displayDate}</NavLink> */}
-                        <a href={`/exercise/${date}`}>{displayDate}</a>
-                    </div>
-                );
-            })}
-        </div>
+            <div className=" join ">
+                {calendarDates.map((date) => (
+                    <a key={date} href={`./${date}`} 
+                        className={`pagination join-item max-sm:btn-xs btn ${date === selectedDate ? ' btn-accent' : 'btn-outline btn-accent'}`}
+                    >
+                        {date.split('-').slice(1).join('/')}
+                    </a>
+                ))}
+            </div>
         </div>
     );
 };
