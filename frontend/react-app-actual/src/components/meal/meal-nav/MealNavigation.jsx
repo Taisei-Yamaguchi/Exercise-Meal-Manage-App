@@ -56,6 +56,14 @@ const MealNavigation = (onUpdate) => {
                         </img>
                     </NavLink>
 
+                    <NavLink to='/goal' className='flex items-center'>
+                        <img 
+                        src='/icons/goal-icon.svg' 
+                            className="swap-off fill-current w-5 h-5 mr-1" 
+                        >
+                        </img>
+                    </NavLink>
+
                     <NavLink to='/dashboard' className='flex items-center'>
                         <img 
                         src='/app-favicon.png' 

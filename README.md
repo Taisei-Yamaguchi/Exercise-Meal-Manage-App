@@ -30,7 +30,8 @@ using Django &amp; React
 ・exercise,mealを最新の履歴をしゅとくし、ワンクリックで登録できてしまうようにする<br>
 ・exerciseのところに、生活イベント(mets指定済み)をminsだけ入力し登録できるようにする。 <br>
 ・ここも、最新履歴を取得し、ワンクリックですべて取得できるようにしてしまう <br>
-・目標のmodelを作る　（user, target_consuming_cals,target_intake_cals,target_weight,target_body_fat,target_muscle_mass,weekly_target_weight(type別)）?
+
+<del>・目標のmodelを作る　（user, target_consuming_cals,target_intake_cals,target_weight,target_body_fat,target_muscle_mass,weekly_target_weight(type別)）?<br></del>
 
 ・コード整理(back,front) <br>
 ・詳細設定 <br>

@@ -84,6 +84,14 @@ const Dashboard = () => {
                                         >
                                     </img> 
                                 </NavLink>
+
+                                <NavLink to='/goal'>
+                                    <img 
+                                        src='/icons/goal-icon.svg' 
+                                        className="swap-off fill-current w-10 h-10" 
+                                        >
+                                    </img> 
+                                </NavLink>
                                 
                             </div>
                             <Pet />

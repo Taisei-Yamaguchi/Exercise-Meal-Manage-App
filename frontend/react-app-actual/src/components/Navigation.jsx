@@ -37,6 +37,9 @@ const Navigation = () => {
                     <Link to="/settings">Settings</Link>
                 </li>
                 <li>
+                    <Link to="/goal">Goal</Link>
+                </li>
+                <li>
                     <LogoutButton />
                 </li>
             </div>
