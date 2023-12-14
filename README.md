@@ -32,7 +32,7 @@ using Django &amp; React
 <del>・exerciseのところに、生活イベント(mets,mins)だけ入力し登録できるようにする。 <br></del>
 <del>・ここも、最新履歴を取得し、ワンクリックですべて取得できるようにしてしまう <br></del>
 
-・workout create, food create, food searchを実行後データを再フェッチ（redux?）<br>
+<del>・workout create, food create, food searchを実行後データを再フェッチ（context）<br></del>
 
 ・コード整理(back,front) <br>
 ・詳細設定 <br>
