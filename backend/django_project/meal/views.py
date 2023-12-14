@@ -7,6 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import DestroyAPIView
 import requests
+from collections import OrderedDict
+from django.db.models import Max
 
 from .helpers.extract_nutritional_values import extract_nutritional_values
 from .helpers.prepare_fatsecret_search_request import prepare_fatsecret_search_request
@@ -44,9 +46,24 @@ class FoodListView(APIView):
         # ログインユーザーに関連するFoodを取得
         user = self.request.user
         
-        foods = Food.objects.filter(account=user.id,is_open_api=False)
-            
-        serialized_foods = FoodSerializer(foods, many=True)
+        # Mealで利用されたのが新しいにfood取得
+        # Mealで利用されているFoodのIDリスト
+        used_food_ids = Meal.objects.filter(account=user.id).values_list('food_id', flat=True)
+        # Mealで利用されているFoodをmeal_dateの降順に取得
+        used_foods = Food.objects.filter(id__in=used_food_ids,is_open_api=False).order_by('-meal__meal_date')
+
+        # Mealで利用されていないFoodを取得
+        unused_foods = Food.objects.filter(account=user.id, is_open_api=False).exclude(id__in=used_food_ids).order_by('-id')
+
+        all_foods = list(used_foods) + list(unused_foods)
+    
+        # 重複を除いて順序を保持するOrderedDictを作成
+        unique_foods_dict = OrderedDict.fromkeys(all_foods)
+
+        # ダブりのないリストに変換
+        unique_foods_list = list(unique_foods_dict.keys())
+        
+        serialized_foods = FoodSerializer(unique_foods_list, many=True)
         return Response({'foods':serialized_foods.data})
     
     
@@ -230,6 +247,88 @@ class GetSearchedFoodHistoryView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
         user = self.request.user
-        foods = Food.objects.filter(account=user.id,is_open_api=True)   
-        serialized_foods = FoodSerializer(foods, many=True)
+        
+        # Mealで利用されたのが新しいにfood取得
+        # Mealで利用されているFoodのIDリスト
+        used_food_ids = Meal.objects.filter(account=user.id).values_list('food_id', flat=True)
+        # Mealで利用されているFoodをmeal_dateの降順に取得
+        used_foods = Food.objects.filter(id__in=used_food_ids,is_open_api=True).order_by('-meal__meal_date')
+
+        # Mealで利用されていないFoodを取得
+        unused_foods = Food.objects.filter(account=user.id, is_open_api=True).exclude(id__in=used_food_ids).order_by('-id')
+
+        all_foods = list(used_foods) + list(unused_foods)
+    
+        # 重複を除いて順序を保持するOrderedDictを作成
+        unique_foods_dict = OrderedDict.fromkeys(all_foods)
+
+        # ダブりのないリストに変換
+        unique_foods_list = list(unique_foods_dict.keys())[:20]
+                
+        serialized_foods = FoodSerializer(unique_foods_list, many=True)
         return Response({'foods':serialized_foods.data})
+    
+    
+    
+# GetSearchedFoodHistory (検索して登録したfoodの履歴を返す)
+class GetLatestMealsByType(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = self.request.user
+        
+        meal_type = request.query_params.get('meal_type', None)
+        
+        # 最新のmeal_dateを持つMealオブジェクトのmeal_dateを取得
+        # 最新のmeal_dateを取得
+        latest_meal_date = (
+            Meal.objects.filter(meal_type=meal_type, account=user.id)
+            .aggregate(max_date=Max('meal_date'))
+            .get('max_date')
+        )
+        meals = Meal.objects.filter(meal_type=meal_type,account=user.id,meal_date=latest_meal_date).order_by('id')   # ログインユーザーのmealを取得
+
+        serialized_meals = GetMealSerializer(meals, many=True)
+        return Response({'meals':serialized_meals.data})
+    
+    
+    
+# 最新履歴からデータを登録する
+class CreateMealsWithLatestHistoryByType(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        user = self.request.user
+        
+        meal_type = request.data['meal_type']
+        meal_date = request.data['meal_date']
+        
+        # 最新のmeal_dateを取得
+        latest_meal_date = (
+            Meal.objects.filter(meal_type=meal_type, account=user.id)
+            .aggregate(max_date=Max('meal_date'))
+            .get('max_date')
+        )
+        latest_meals = Meal.objects.filter(meal_type=meal_type,account=user.id,meal_date=latest_meal_date).order_by('id')   # ログインユーザーのmealを取得
+
+        new_meals = []
+        for meal in latest_meals:
+            # 例として現在の日時を新しいmeal_dateとして設定
+            new_meal = Meal.objects.create(
+                meal_date=meal_date,
+                
+                food=meal.food,
+                serving=meal.serving,
+                grams= meal.grams,
+                meal_type=meal.meal_type,
+                account=meal.account,
+            )
+            
+            serializer = MealSerializer(data=new_meal)
+            if serializer.is_valid():
+                serializer.save()
+                new_meals.append(new_meal)
+            else:
+                print(serializer.errors)
+
+        # 新しいMealオブジェクトをシリアライズしてレスポンス
+        serialized_new_meals = GetMealSerializer(new_meals, many=True)
+        return Response({'meals': serialized_new_meals.data})

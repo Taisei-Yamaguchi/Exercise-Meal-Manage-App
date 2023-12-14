@@ -9,6 +9,7 @@ from .default_workout import default_workout_data
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import  DestroyAPIView
 
+from django.db.models import Max
 
 
 # get Workout
@@ -174,3 +175,71 @@ class ExerciseDeleteView(DestroyAPIView):
         else:
             # if they dosen't match, response authority error.
             return Response({'detail': 'You do not have permission to delete this meal.'}, status=status.HTTP_403_FORBIDDEN)
+        
+        
+        
+#get latest exercise by type
+class GetLatestExerciseByTypeView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        user = self.request.user
+        workout_type = request.query_params.get('workout_type', None)
+        
+        # 最新のexercise_dateを取得
+        latest_exercise_date = (
+            Exercise.objects.filter(workout__workout_type=workout_type, account=user.id)
+            .aggregate(max_date=Max('exercise_date'))
+            .get('max_date')
+        )
+        exercises = Exercise.objects.filter(workout__workout_type=workout_type,account=user.id,exercise_date=latest_exercise_date).order_by('id')   # ログインユーザーのmealを取得
+
+        serialized_exercises = GetExerciseSerializer(exercises, many=True)
+        return Response({'exercises':serialized_exercises.data})
+    
+    
+    
+    
+# 最新履歴からデータを登録する
+class CreateExercisesWithLatestHistoryByType(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        user = self.request.user
+    
+        workout_type = request.data['workout_type']
+        exercise_date = request.data['exercise_date']
+        
+        # 最新のmeal_dateを取得
+        latest_exercise_date = (
+            Exercise.objects.filter(workout__workout_type=workout_type, account=user.id)
+            .aggregate(max_date=Max('exercise_date'))
+            .get('max_date')
+        )
+        latest_exercises = Exercise.objects.filter(workout__workout_type=workout_type,account=user.id,exercise_date=latest_exercise_date).order_by('id')   # ログインユーザーのexerciseを取得
+
+        new_exercises = []
+        for exercise in latest_exercises:
+            # 例として現在の日時を新しいmeal_dateとして設定
+            new_exercise = Exercise.objects.create(
+                exercise_date=exercise_date,
+                workout=exercise.workout,
+                sets=exercise.sets,
+                reps= exercise.reps,
+                weight_kg=exercise.weight_kg,
+                duration_minutes=exercise.duration_minutes,
+                distance=exercise.distance,
+                mets=exercise.mets,
+                memos=exercise.memos,
+                account=exercise.account,
+            )
+            
+            serializer = POSTExerciseSerializer(data=new_exercise)
+            if serializer.is_valid():
+                serializer.save()
+                new_exercises.append(new_exercise)
+            else:
+                print(serializer.errors)
+
+        # 新しいMealオブジェクトをシリアライズしてレスポンス
+        serialized_new_exercise = GetExerciseSerializer(new_exercises, many=True)
+        return Response({'exercises': serialized_new_exercise.data})
