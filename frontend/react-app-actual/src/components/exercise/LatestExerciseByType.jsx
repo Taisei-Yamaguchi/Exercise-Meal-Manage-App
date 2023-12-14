@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import getCookie from '../../hooks/getCookie';
 import useAuthCheck from '../../hooks/useAuthCheck';
 
 
-const LatestExerciseByType = ({exercise_date,workout_type, onUpdate }) => {
+const LatestExerciseByType = ({exercise_date,workout_type, fetchTrigger,onUpdate }) => {
     
     const [latestExercises,setLatestExercises] =useState([])
 
+    useEffect(()=>{
+        fetchLatestExercises()
+    },[fetchTrigger])
     // 最新meal
     const fetchLatestExercises = async() => {
         const yourAuthToken = localStorage.getItem('authToken'); 

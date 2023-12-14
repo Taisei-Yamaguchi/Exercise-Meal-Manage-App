@@ -21,6 +21,9 @@ const MealsByDate = () => {
     const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack'];
     const [updateTrigger, setUpdateTrigger] = useState(false);
 
+    // latestMealのトリガーにする変化をuseEffectで見る
+    const [fetchTrigger,setFetchTrigger] =useState(false);
+
     // API経由でログインユーザーのmealを取得
     const fetchMealsByDate = async() => {
         // const user_id = localStorage.getItem'user_id'); // ユーザーIDをlocalStorageから取得
@@ -40,11 +43,13 @@ const MealsByDate = () => {
             if (response.ok) {
                 return response.json();
             }
+            
             throw new Error('Failed to fetch meals');
         })
         .then(mealData => {
             setMeals(mealData.meals);
             console.log(mealData.meals)
+            setFetchTrigger((prev) => !prev);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -54,9 +59,9 @@ const MealsByDate = () => {
     //ログインチェック、パスすればeftchMealsByDateを実行
     useAuthCheck(fetchMealsByDate);
 
-    useEffect(() => {
-        fetchMealsByDate();
-    }, [updateTrigger]);
+    useEffect(()=>{
+        fetchMealsByDate()
+    },[updateTrigger])
 
     const handleUpdate = () => {
         // 何らかのアクションが発生した時にupdateTriggerをトグル
@@ -116,10 +121,12 @@ const MealsByDate = () => {
                                         </form>
                                     </dialog>
                                     
-                                <div className='flex flex-row max-sm:flex-col'>
-                                    <MealCreateForm meal_type={type} meal_date={date} onUpdate={handleUpdate} />
-                                    <MealCreateFormWithHistory meal_type={type} meal_date={date} onUpdate={handleUpdate} />
-                                    <LatestMealByType meal_type={type} meal_date={date} onUpdate={handleUpdate}/>
+                                <div className='flex flex-row'>
+                                    <div className='flex flex-row max-sm:flex-col'>
+                                        <MealCreateForm meal_type={type} meal_date={date} onUpdate={handleUpdate} />
+                                        <MealCreateFormWithHistory meal_type={type} meal_date={date} onUpdate={handleUpdate} />    
+                                    </div>
+                                    <LatestMealByType meal_type={type} meal_date={date} fetchTrigger={fetchTrigger} onUpdate={handleUpdate}/>
                                 </div>
                             </div>
 

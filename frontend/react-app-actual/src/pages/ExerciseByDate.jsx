@@ -14,7 +14,7 @@ import ExerciseLivingCreate from '../components/exercise/ExerciseLivingCreate';
 import ExerciseLivingUpdate from '../components/exercise/ExerciseLivingUpdate';
 
 const ExerciseByDate = () => {
-    const navigate = useNavigate();
+    
     const { date } = useParams();
     const [exerciseData, setExerciseData] = useState([]);
     // const [defaultExerciseData, setDefaultExerciseData] = useState([]);
@@ -23,6 +23,8 @@ const ExerciseByDate = () => {
     const [loading, setLoading] = useState(true);
     const [updateTrigger, setUpdateTrigger] = useState(false);
 
+    // latestExerciseのトリガーにする変化をuseEffectで見る
+    const [fetchTrigger,setFetchTrigger] =useState(false);
     
     
     const fetchExerciseData = async () => {
@@ -44,6 +46,7 @@ const ExerciseByDate = () => {
             const data = await response.json();
             
             setExerciseData(data.exercise);
+            setFetchTrigger((prev) => !prev);
             
 
         } catch (error) {
@@ -89,7 +92,7 @@ const ExerciseByDate = () => {
                     <div key='Living' className='flex flex-row'>
                             <div className=''>
                             
-                            <LatestExerciseByType className="z-50" exercise_date={date} workout_type='Living' onUpdate={handleUpdate} />
+                            <LatestExerciseByType className="z-50" exercise_date={date} workout_type='Living' onUpdate={handleUpdate} fetchTrigger={fetchTrigger} />
                             </div>    
 
                             <div className="collapse border">
@@ -110,7 +113,7 @@ const ExerciseByDate = () => {
                                     <div className="overflow-x-auto mt-1 pt-1">
                                     <ExerciseLivingCreate exercise_date={date} onUpdate={handleUpdate}/>
                                     <table className="table table-xs table-pin-rows table-pin-cols">
-                                        <tbody className='bg-gradient-to-r from-violet-600 to-sky-700 '>
+                                        <tbody className='bg-gradient-to-r from-violet-600 to-sky-200 '>
                                             {exerciseData
                                                 .filter((exercise)=>exercise.workout.workout_type === 'Living')
                                                 .map((exercise)=>(

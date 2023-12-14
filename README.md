@@ -41,6 +41,7 @@ using Django &amp; React
 ・フロントエンドのテスト　<br>
 
 ・email送信は後で設定。<br>
+・sign up用tokenが、email confirmされずに、期限切れたらaccount自動削除<br>
 ・garden app <br>
 ・デプロイ用設定 <br>
 ・デプロイ

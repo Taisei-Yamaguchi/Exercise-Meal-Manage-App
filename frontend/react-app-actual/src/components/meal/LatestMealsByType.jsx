@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navigation from '../Navigation';
 import getCookie from '../../hooks/getCookie';
 import useAuthCheck from '../../hooks/useAuthCheck';
 import MealNavigation from './meal-nav/MealNavigation';
 
-const LatestMealByType = ({meal_date,meal_type, onUpdate }) => {
+const LatestMealByType = ({meal_date,meal_type,fetchTrigger,onUpdate }) => {
     
     const [latestMeals,setLatestMeals] =useState([])
+
+    useEffect(()=>{
+        fetchLatestMeals()
+    },[fetchTrigger])
 
     // 最新meal
     const fetchLatestMeals = async() => {
@@ -70,7 +74,7 @@ const LatestMealByType = ({meal_date,meal_type, onUpdate }) => {
 
 
     return (
-        <div className="dropdown dropdown-right dropdown-hover">
+        <div className="dropdown dropdown-left dropdown-hover">
             <img 
                 src='/icons/copy.svg'
                 tabIndex={0} 

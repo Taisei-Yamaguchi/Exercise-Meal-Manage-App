@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, {  createContext, useContext,useState } from 'react';
 import Navigation from '../Navigation';
 import getCookie from '../../hooks/getCookie';
 import useAuthCheck from '../../hooks/useAuthCheck';
 import MealNavigation from './meal-nav/MealNavigation';
+import { useFetchFoodContext } from '../../hooks/fetchFoodContext';
+
 
 const FoodCreate = ({ onUpdate }) => {
     
@@ -12,6 +14,10 @@ const FoodCreate = ({ onUpdate }) => {
     const [carbohydrate,setCarbohydrate] =useState('');
     const [fat,setFat] =useState('');
     const [protein,setProtein] =useState('');
+
+
+    const { toggleFoodCreateTrigger } = useFetchFoodContext();
+
     
     
     useAuthCheck()
@@ -52,7 +58,9 @@ const FoodCreate = ({ onUpdate }) => {
             if (response.ok) {
                 // ログイン成功時の処理
                 console.log('Food posted successfully:', response.data);
-                onUpdate() 
+                // onUpdate() 
+                toggleFoodCreateTrigger()
+                
             } else {
                 // ログイン失敗時の処理
                 console.log(response.json());
