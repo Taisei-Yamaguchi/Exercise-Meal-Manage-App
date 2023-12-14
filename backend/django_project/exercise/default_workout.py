@@ -1,4 +1,6 @@
 default_workout_data=[
+    {"id": 'living', "name": "Living", "workout_type": "Living"},
+    
     {"id": 'd1', "name": "Running", "workout_type": "Aerobic"},
     
     {"id": 'd2', "name": "Bench Press", "workout_type": "Chest"},

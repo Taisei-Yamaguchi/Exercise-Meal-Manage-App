@@ -13,6 +13,7 @@ class Workout(models.Model):
         ('Arm', 'Arm'),
         ('Abs', 'Abs'),
         ('Other', 'Other'),
+        ('Living', 'Living'),
     ]
     
     account = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

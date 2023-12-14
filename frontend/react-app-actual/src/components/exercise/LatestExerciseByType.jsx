@@ -79,10 +79,15 @@ const LatestExerciseByType = ({exercise_date,workout_type, onUpdate }) => {
             </img>
             
             <ul tabIndex={0} className="absolute top-full left-0 dropdown-content z-30 menu p-2 shadow bg-base-100 rounded-box w-52">
-                
-                {latestExercises.map((exercise)=>(
-                    <li>{exercise.workout.name}</li>
-                ))}
+                {workout_type !== 'Living' ? (
+                    latestExercises.map((exercise) => (
+                        <li key={exercise.id}>{exercise.workout.name}</li>
+                    ))
+                ) : (
+                    latestExercises.map((exercise) => (
+                        <li key={exercise.id}>{`${exercise.workout.name}-${exercise.mets}Mets(${exercise.duration_minutes} mins)`}</li>
+                    ))
+                )}
             </ul>
         </div>
         </div>

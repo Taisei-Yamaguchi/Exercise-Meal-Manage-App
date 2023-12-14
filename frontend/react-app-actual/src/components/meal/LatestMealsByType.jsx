@@ -80,7 +80,7 @@ const LatestMealByType = ({meal_date,meal_type, onUpdate }) => {
             <ul tabIndex={0} className="dropdown-content z-10 menu p-2 shadow bg-base-100 rounded-box w-52">
                 
                 {latestMeals.map((meal)=>(
-                    <li>{meal.food.name}</li>
+                    <li key={meal.id}>{meal.food.name}</li>
                 ))}
             </ul>
         </div>

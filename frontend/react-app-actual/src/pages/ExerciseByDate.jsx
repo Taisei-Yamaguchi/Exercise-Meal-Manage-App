@@ -10,6 +10,9 @@ import ExerciseNavigation from '../components/exercise/exercise-nav/ExerciseNavi
 import WorkoutCreate from '../components/exercise/WorkoutCreate';
 import LatestExerciseByType from '../components/exercise/LatestExerciseByType';
 
+import ExerciseLivingCreate from '../components/exercise/ExerciseLivingCreate';
+import ExerciseLivingUpdate from '../components/exercise/ExerciseLivingUpdate';
+
 const ExerciseByDate = () => {
     const navigate = useNavigate();
     const { date } = useParams();
@@ -81,6 +84,52 @@ const ExerciseByDate = () => {
             <div className='sub-container'>
             <ExerciseNavigation onUpdate={handleUpdate}/>
                 <div className='mt-14 pt-80 max-sm:pt-96'>
+
+                    {/* workout living */}
+                    <div key='Living' className='flex flex-row'>
+                            <div className=''>
+                            
+                            <LatestExerciseByType className="z-50" exercise_date={date} workout_type='Living' onUpdate={handleUpdate} />
+                            </div>    
+
+                            <div className="collapse border">
+                                <input type="checkbox" className="peer" />
+                                <div className="collapse-title text-primary-content border pt-px pb-0">
+                                    <label className="swap">    
+                                    <input type="checkbox flex flex-row" />
+                                        <h2 className="swap-off">
+                                            <strong>{'Living'}</strong>
+                                        </h2>
+                                        <h2 className="swap-off ">
+                                            <strong>{'Living'}</strong>
+                                        </h2>
+                                    </label>
+                                </div>
+                            
+                                <div className="collapse-content text-primary-content">
+                                    <div className="overflow-x-auto mt-1 pt-1">
+                                    <ExerciseLivingCreate exercise_date={date} onUpdate={handleUpdate}/>
+                                    <table className="table table-xs table-pin-rows table-pin-cols">
+                                        <tbody className='bg-gradient-to-r from-violet-600 to-sky-700 '>
+                                            {exerciseData
+                                                .filter((exercise)=>exercise.workout.workout_type === 'Living')
+                                                .map((exercise)=>(
+                                                    <tr key={exercise.id} className=''>
+                                                        <td className='text-neutral-100'><strong>{`${exercise.workout.name}-${exercise.mets}Mets`}</strong></td>
+                                                        <td><ExerciseLivingUpdate exerciseId={exercise.id} exerciseData={exercise} onUpdate={handleUpdate}/>
+                                                        </td>
+                                                        <td><ExerciseDelete exerciseId={exercise.id} onUpdate={handleUpdate}/></td>
+                                                    </tr>
+                                                ))}
+                                                
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    {/* workout type */}
                     {workoutTypes.map((workoutType)=>(
                         <div key={workoutType} className='flex flex-row'>
                         
@@ -97,7 +146,7 @@ const ExerciseByDate = () => {
                             <LatestExerciseByType className="z-50" exercise_date={date} workout_type={workoutType} onUpdate={handleUpdate} />
                             </div>    
 
-                        <div className="collapse border">
+                            <div className="collapse border">
                                 <input type="checkbox" className="peer" />
                                 <div className="collapse-title text-primary-content border pt-px pb-0">
                                     <label className="swap">    
