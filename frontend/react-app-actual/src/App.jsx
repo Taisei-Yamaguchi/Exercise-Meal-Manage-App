@@ -35,10 +35,15 @@ import SettingsAccount from './pages/SettingsAccount';
 
 import Goal from './pages/Goal';
 
+import { FetchFoodProvider } from './hooks/fetchFoodContext';
+import { FetchWorkoutProvider } from './hooks/fetchWorkoutContext';
+
 
 const App = () => {
   return (
     <Provider store={store}>
+      <FetchFoodProvider>
+      <FetchWorkoutProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -69,6 +74,8 @@ const App = () => {
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </Router>
+      </FetchWorkoutProvider>
+      </FetchFoodProvider>
     </Provider>
   );
 };

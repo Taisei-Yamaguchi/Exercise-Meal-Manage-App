@@ -4,10 +4,10 @@ import { useParams } from 'react-router-dom';
 import getCookie from '../../hooks/getCookie';
 import useAuthCheck from '../../hooks/useAuthCheck';
 import WorkoutCreate from './WorkoutCreate';
+import { useFetchWorkoutContext } from '../../hooks/fetchWorkoutContext';
 
 
 const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
-    const navigate=useNavigate()
     
     const [workouts,setWorkouts]= useState([])
     const [default_workouts,setDefaultWorkouts]= useState([])
@@ -26,7 +26,11 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
         memos: null
     });
 
-    const [workoutUpdateTrigger, setWorkoutUpdateTrigger] = useState(false);
+    const { workoutCreateTrigger, toggleWorkoutCreateTrigger } = useFetchWorkoutContext();
+
+    useEffect(() => {
+        fetchWorkouts();
+    }, [workoutCreateTrigger]);
 
     // fetch workouts and use in form.
     const fetchWorkouts = async () => {
@@ -44,7 +48,6 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
             const data = await response.json();
             setWorkouts(data.workout);
             setDefaultWorkouts(data.default_workout)
-            onUpdate()
             
         } catch (error) {
             console.error('Error fetching workouts:', error);
@@ -138,15 +141,6 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
     };
 
 
-    useEffect(()=>{
-        fetchWorkouts()
-    },[workoutUpdateTrigger])
-
-    const handleUpdate = () => {
-        // 何らかのアクションが発生した時にupdateTriggerをトグル
-        setWorkoutUpdateTrigger((prev) => !prev);
-        
-    };
 
 
     

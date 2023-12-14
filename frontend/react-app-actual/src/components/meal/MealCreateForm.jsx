@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import useAuthCheck from '../../hooks/useAuthCheck';
 import getCookie from '../../hooks/getCookie';
+import { useFetchFoodContext } from '../../hooks/fetchFoodContext';
 
 
 function MealCreateForm({meal_type,meal_date,onUpdate}) {
@@ -9,7 +10,9 @@ function MealCreateForm({meal_type,meal_date,onUpdate}) {
     const [foods, setFoods] = useState([]);
     const [selectedFood, setSelectedFood] = useState('');
     const [serving, setServing] = useState(1);
-    const [foodCreateTrigger, setFoodCreateTrigger] = useState(false);
+    // const [foodCreateTrigger, setFoodCreateTrigger] = useState(false);
+
+    const { foodCreateTrigger, toggleFoodCreateTrigger } = useFetchFoodContext();
 
     useEffect(() => {
         fetchFoods()

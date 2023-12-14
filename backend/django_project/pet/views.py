@@ -123,7 +123,7 @@ def determine_pet_status(user, pet_date,user_info):
         exercise_cals = calc_daily_exercise_cals(user,date)
         consuming_cals= bm_cals+food_cals+exercise_cals
         
-        if intake_cals < consuming_cals+500: #消費カロリーが多い場合
+        if intake_cals < consuming_cals: #消費カロリーが多い場合
             meal_count_last_30_days -= 1
 
     print('30日で摂取カロリーが消費カロリーよりも多い日',meal_count_last_30_days)

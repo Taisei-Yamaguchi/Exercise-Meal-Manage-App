@@ -3,11 +3,14 @@ import getCookie from '../../hooks/getCookie';
 import Navigation from '../Navigation';
 import useAuthCheck from '../../hooks/useAuthCheck';
 import { useNavigate } from 'react-router-dom';
+import { useFetchWorkoutContext } from '../../hooks/fetchWorkoutContext';
 
 const WorkoutCreate = ({workoutType}) => {
     const [workoutName, setWorkoutName] = useState('');    
 
     useAuthCheck();
+
+    const { toggleWorkoutCreateTrigger } = useFetchWorkoutContext();
 
     const handleCreateWorkout = async (e) => {
         e.preventDefault()
@@ -26,6 +29,7 @@ const WorkoutCreate = ({workoutType}) => {
         const data = await response.json();
         console.log('Workout created successfully:', data);
         setWorkoutName('')
+        toggleWorkoutCreateTrigger()
         } catch (error) {
         console.error('Error creating workout:', error);
         }
