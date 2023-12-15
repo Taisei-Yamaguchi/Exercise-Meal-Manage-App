@@ -3,6 +3,7 @@ import getCookie from '../hooks/getCookie';
 import { Line } from 'react-chartjs-2';
 import UserInfoNavigation from '../components/user_info/user_info-nav/UserInfoNavigation';
 import { BACKEND_ENDPOINT } from '../settings';
+import useAuthCheck from '../hooks/useAuthCheck';
 
 const BodyFatPercentageGraph = () => {
     const [bodyFatData, setBodyFatData] = useState([]);
@@ -11,9 +12,8 @@ const BodyFatPercentageGraph = () => {
     const chartRef = useRef(null); // チャートの参照
     const [graphWidth, setGraphWidth] = useState(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-        
+    
+    const fetchData = async () => {    
         try {
             const authToken = localStorage.getItem('authToken');
             const response = await fetch(`${BACKEND_ENDPOINT}/graph/body_fat_percentage-graph/`, {
@@ -32,12 +32,11 @@ const BodyFatPercentageGraph = () => {
             const data = await response.json();
             setBodyFatData(data.body_fat_data);
             setLatestTargetBodyFat(data.latest_body_fat_target);
-            // console.log(data.body_fat_data);
-            // console.log(data.latest_body_fat_target);
 
             const xAxisLabelMinWidth = 20; // データ当たりの幅を設定
             const width = data.body_fat_data.length * xAxisLabelMinWidth;
             setGraphWidth(width);
+            console.log('Success fetch BodyFat Data!')
 
             // Chartを破棄
             if (chartRef.current) {
@@ -48,10 +47,9 @@ const BodyFatPercentageGraph = () => {
             setError('An error occurred while fetching data.');
             
         }
-        };
+    };
 
-        fetchData();
-    }, []); 
+    useAuthCheck(fetch)
 
     // ラベルとデータを用意
     const labels = bodyFatData.map(entry => entry.date);

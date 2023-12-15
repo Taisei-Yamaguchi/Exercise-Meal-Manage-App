@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import getCookie from '../../../hooks/getCookie';
+import getCookie from '../../hooks/getCookie';
 import { Bar } from 'react-chartjs-2';
 // import { authToken } from '../../../helpers/getAuthToken';
-import { BACKEND_ENDPOINT } from '../../../settings';
+import { BACKEND_ENDPOINT } from '../../settings';
+import { Chart, registerables } from 'chart.js';
+
+Chart.register(...registerables);
 
 const CalsByDate = ({ selectedDate,onUpdate}) => {
     
     const [calsData, setCalsData] = useState([]);
-    const [totalConsumedCals,setTotalConsume] =useState(0);
-    // const [totalCals,setTotalCal]= useState(0);
     const [aspectRatio, setAspectRatio] = useState(3);
-
-    useEffect(()=>(
-        setTotalConsume(calsData.bm_cals + calsData.exercise_cals + calsData.food_cals)
-        // setTotalCal(Math.max(totalConsumedCals, calsData.intake_cals))
-    ),[calsData])
     
     useEffect(() => {
         fetchData()
@@ -45,7 +41,7 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
 
             const data = await response.json();
             setCalsData(data);
-            // console.log('cals',data)
+            console.log('Success fetchCals!')
         } catch (error) {
             console.error('Error fetching data.:', error);
         }
@@ -54,9 +50,7 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
     
 
     const handleWindowResize = () => {
-        // Windowのサイズに基づいてaspectRatioを計算する
-
-        
+        // Windowのサイズに基づいてaspectRatioを計算する        
         const width = window.innerWidth;
         if(width<=400){
             setAspectRatio(2)
@@ -74,7 +68,7 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
 
 
     const chartData = {
-        labels: ' ',
+        labels: [' '],
         datasets: [
             
             {

@@ -16,10 +16,8 @@ const DailyExerciseWeightGraph = () => {
     const [graphWidth, setGraphWidth] = useState(null);
     // const chartRef = useRef(null); // チャートの参照
 
-    useAuthCheck()
 
-    useEffect(() => {
-        const fetchData = async () => {
+    const fetchData = async () => {
         console.log('start fetch');
         try {
             const authToken = localStorage.getItem('authToken')
@@ -42,7 +40,7 @@ const DailyExerciseWeightGraph = () => {
             const data = await response.json();
             setDailyExerciseWeightData(data);
             // console.log(data)
-            console.log('success fetch')
+            console.log('success fetch Daily Exercise Weight Data!')
 
             const xAxisLabelMinWidth = 24; // データ当たりの幅を設定
             const width = data.length * xAxisLabelMinWidth;
@@ -52,10 +50,9 @@ const DailyExerciseWeightGraph = () => {
         } catch (error) {
             setError('An error occurred while fetching data.');
         }
-        };
+    };
 
-        fetchData();
-    }, []); 
+    useAuthCheck(fetchData)
 
     // Extracting labels and total weights from the data
     const labels = dailyExerciseWeightData.map(entry => entry.exercise_date);

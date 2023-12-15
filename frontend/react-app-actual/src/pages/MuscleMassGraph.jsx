@@ -3,6 +3,7 @@ import getCookie from '../hooks/getCookie';
 import { Line } from 'react-chartjs-2';
 import UserInfoNavigation from '../components/user_info/user_info-nav/UserInfoNavigation';
 import { BACKEND_ENDPOINT } from '../settings';
+import useAuthCheck from '../hooks/useAuthCheck';
 
 const MuscleMassGraph = () => {
     const [muscleMassData, setMuscleMassData] = useState([]);
@@ -12,9 +13,7 @@ const MuscleMassGraph = () => {
     const [graphWidth, setGraphWidth] = useState(null);
 
 
-    useEffect(() => {
-        const fetchData = async () => {
-        
+    const fetchData = async () => {
         try {
             const authToken = localStorage.getItem('authToken');
             const response = await fetch(`${BACKEND_ENDPOINT}/graph/muscle_mass-graph/`, {
@@ -49,10 +48,9 @@ const MuscleMassGraph = () => {
             setError('An error occurred while fetching data.');
             
         }
-        };
+    };
 
-        fetchData();
-    }, []); 
+    useAuthCheck(fetchData)
 
     // ラベルとデータを用意
     const labels = muscleMassData.map(entry => entry.date);

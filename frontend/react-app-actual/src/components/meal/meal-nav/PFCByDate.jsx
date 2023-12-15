@@ -3,6 +3,7 @@ import getCookie from '../../../hooks/getCookie';
 // import { NavLink } from 'react-router-dom';
 import 'chartjs-plugin-datalabels';
 // import { authToken } from '../../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../../settings';
 
 
 const PFCByDate = ({ selectedDate,onUpdate}) => {
@@ -76,11 +77,12 @@ const PFCByDate = ({ selectedDate,onUpdate}) => {
     useEffect(() => {
         fetchData()
     }, [selectedDate,onUpdate]);
+
     // API経由でログインユーザーのpfcを取得
     const fetchData = async() => {
         try {
             const authToken = localStorage.getItem('authToken')
-            const response = await fetch(`http://127.0.0.1:8000/main/pfc-by-date/?date=${selectedDate}`, {
+            const response = await fetch(`${BACKEND_ENDPOINT}/main/pfc-by-date/?date=${selectedDate}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -91,7 +93,7 @@ const PFCByDate = ({ selectedDate,onUpdate}) => {
 
             const data = await response.json();
             setPfcData(data);
-            // console.log('pfc',data)
+            console.log('Success fetchPFC!')
         } catch (error) {
             console.error('Error fetching data.:', error);
         }

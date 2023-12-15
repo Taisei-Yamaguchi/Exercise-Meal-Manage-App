@@ -3,6 +3,7 @@ import getCookie from '../hooks/getCookie';
 import { Bar } from 'react-chartjs-2';
 import UserInfoNavigation from '../components/user_info/user_info-nav/UserInfoNavigation';
 // import { authToken } from '../helpers/getAuthToken';
+import useAuthCheck from '../hooks/useAuthCheck';
 import { BACKEND_ENDPOINT } from '../settings';
 
 const CalsGraph = () => {
@@ -12,9 +13,7 @@ const CalsGraph = () => {
     const [graphWidth, setGraphWidth] = useState(null);
     const chartRef = useRef(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-        
+    const fetchData = async () => {    
         try {
             const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/graph/cals-graph/`, {
@@ -33,7 +32,7 @@ const CalsGraph = () => {
             const data = await response.json();
             setIntakeCals(data.intake_cals);
             setConsumingCals(data.consuming_cals);
-            // console.log(data.consuming_cals.length)
+            console.log('Success fetch Cals Data!')
 
             const xAxisLabelMinWidth = 24; // データ当たりの幅を設定
             const width = data.consuming_cals.length * xAxisLabelMinWidth;
@@ -42,12 +41,9 @@ const CalsGraph = () => {
         } catch (error) {
             setError('An error occurred while fetching data.');
         }
-        };
-
-        fetchData();
-    }, []); 
+    };
     
-
+    useAuthCheck(fetchData)
 
     // グラフの横幅を計算
     const data = {

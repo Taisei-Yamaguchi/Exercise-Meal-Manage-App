@@ -1,7 +1,8 @@
+// src/components/meal/Calendar.jsx
 import React, { useState, useEffect } from 'react';
-import MainCalendar from '../../calendar/MainCalendar';
+import MainCalendar from '../calendar/MainCalendar';
 
-const Calendar = ({ selectedDate}) => {
+const NavCalendar = ({ selectedDate,btnColorClass }) => {
     const [calendarDates, setCalendarDates] = useState([]);
 
     useEffect(() => {
@@ -38,7 +39,7 @@ const Calendar = ({ selectedDate}) => {
             <div className=" join ">
                 {calendarDates.map((date) => (
                     <a key={date} href={`./${date}`} 
-                        className={`pagination join-item max-sm:btn-xs btn ${date === selectedDate ? ' btn-accent' : 'btn-outline btn-accent'}`}
+                        className={`pagination join-item max-sm:btn-xs btn ${date === selectedDate ? `${btnColorClass}` : `btn-outline ${btnColorClass}`}`}
                     >
                         {date.split('-').slice(1).join('/')}
                     </a>
@@ -48,4 +49,4 @@ const Calendar = ({ selectedDate}) => {
     );
 };
 
-export default Calendar;
+export default NavCalendar;

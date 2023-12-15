@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import useAuthCheck from '../../hooks/useAuthCheck';
+// import useAuthCheck from '../../hooks/useAuthCheck';
 import getCookie from '../../hooks/getCookie';
 import { useFetchFoodContext } from '../../hooks/fetchFoodContext';
 // import { authToken } from '../../helpers/getAuthToken';
@@ -39,15 +39,12 @@ function MealCreateForm({meal_type,meal_date,onUpdate}) {
         })
         .then(FoodData => {
             setFoods(FoodData.foods);
-            // console.log(FoodData)
+            console.log('success fetchFoods (Custom)!')
         })
         .catch(error => {
             console.error('Error:', error);
         });
     };
-
-    useAuthCheck(fetchFoods);
-
 
 
 // post meal
@@ -56,7 +53,7 @@ function MealCreateForm({meal_type,meal_date,onUpdate}) {
         
     try {
         const authToken = localStorage.getItem('authToken')
-        const response = await fetch('http://127.0.0.1:8000/meal/meal/create/', {
+        const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/create/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import useAuthCheck from '../../hooks/useAuthCheck';
+import React, { useEffect, useState } from 'react';
+// import useAuthCheck from '../../hooks/useAuthCheck';
 import getCookie from '../../hooks/getCookie';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
@@ -11,7 +11,10 @@ function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
     const [selectedFood, setSelectedFood] = useState('');
     const [serving, setServing] = useState(1);
     
-
+    useEffect(()=>{
+        fetchFoods()
+    },[])
+    
     // API経由でログインユーザーのfood historyを取得
     const fetchFoods = async() => {
         try {
@@ -27,15 +30,11 @@ function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
 
             const data = await response.json();
             setFoods(data.foods);
-            // console.log(data)
+            console.log('succcess fetchFoods (History)!')
         } catch (error) {
             console.error('Error fetching searched food history.:', error);
         }
     };
-
-    useAuthCheck(fetchFoods);
-
-
 
 // post meal
     const handleCreateMeal = async (e) => {
@@ -43,7 +42,7 @@ function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
         
         try {
         const authToken = localStorage.getItem('authToken')
-        const response = await fetch('http://127.0.0.1:8000/meal/meal/create/', {
+        const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/create/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -24,11 +24,12 @@ const UserInfo = () => {
     // Fetch the latest user info when the component mounts
     const fetchLatestInfo = async () => {
         try {
+            const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/user_info/get-latest/`,{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
+                    'Authorization': `Token ${authToken}`,
                     'X-CSRFToken': getCookie('csrftoken'),
                 }
             });
@@ -78,7 +79,7 @@ const UserInfo = () => {
 
         try {
         const authToken = localStorage.getItem('authToken')
-        const response = await fetch('http://127.0.0.1:8000/user_info/create-update/', {
+        const response = await fetch(`${BACKEND_ENDPOINT}/user_info/create-update/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

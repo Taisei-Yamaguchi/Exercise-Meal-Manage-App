@@ -2,9 +2,9 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import Calendar from './Calendar';
+import NavCalendar from '../../sub/navCalendar';
 import PFCByDate from './PFCByDate';
-import CalsByDate from './CalsByDate';
+import CalsByDate from '../../sub/CalsByDate';
 import FoodCreate from '../FoodCreate';
 import Navigation from '../../Navigation';
 
@@ -84,7 +84,7 @@ const MealNavigation = (onUpdate) => {
             </div>
             
             {/* カレンダー */}
-            <Calendar selectedDate={date}  />
+            <NavCalendar selectedDate={date}  btnColorClass={'btn-primary'}/>
 
             {/* Select 　Show*/}
             <div role="tablist" className="tabs tabs-lifted">

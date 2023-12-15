@@ -53,6 +53,7 @@ const Goal = () => {
                     weekly_goal_back: data.weekly_goal_back || null,
                     weekly_goal_abs: data.weekly_goal_abs || null,
                 });
+                console.log('Success fetchGoal!')
             }
             
         } catch (error) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import useAuthCheck from '../../hooks/useAuthCheck';
+// import useAuthCheck from '../../hooks/useAuthCheck';
 import getCookie from '../../hooks/getCookie';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
@@ -47,6 +47,10 @@ const MainCalendar = ({month}) => {
     },[selectedMonth])
 
 
+    useEffect(()=>{
+        fetchData()
+    },[])
+
     const fetchData = async () => {
         try {
         const authToken = localStorage.getItem('authToken')
@@ -61,13 +65,11 @@ const MainCalendar = ({month}) => {
 
         const data = await response.json();
         setData(data);
-        // console.log(data);
+        console.log('Success fetchRegistrationStatus!');
         } catch (error) {
         console.error('Error fetching data:', error);
         }
     };
-
-    useAuthCheck(fetchData);
 
     useEffect(() => {
         setDate(selectedMonth ? new Date(`${selectedMonth}-01T00:00:00`) : new Date());

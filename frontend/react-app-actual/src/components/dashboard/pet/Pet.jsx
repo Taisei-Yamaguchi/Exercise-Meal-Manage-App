@@ -1,7 +1,7 @@
 // Pet.jsx
 import React, { useEffect, useState } from 'react';
 import getCookie from '../../../hooks/getCookie';
-import useAuthCheck from '../../../hooks/useAuthCheck';
+// import useAuthCheck from '../../../hooks/useAuthCheck';
 // import { authToken } from '../../../helpers/getAuthToken';
 import formattedCurrentDate from '../../../helpers/getToday';
 import { BACKEND_ENDPOINT } from '../../../settings';
@@ -9,6 +9,9 @@ import { BACKEND_ENDPOINT } from '../../../settings';
 const Pet = () => {
     const [petData, setPetData] = useState(null);
 
+    useEffect(()=>{
+        fetchPetData()
+    },[])
     const fetchPetData = async () => {
         try {
             const authToken = localStorage.getItem('authToken')
@@ -26,7 +29,7 @@ const Pet = () => {
             }
 
             const data = await response.json();
-            // console.log(data)
+            console.log('Success fetchPet!')
             setPetData(data);
         } catch (error) {
             console.error('Error fetching pet data:', error);
@@ -57,8 +60,6 @@ const Pet = () => {
         }
         return '/pets/Egg.png';
     };
-
-    useAuthCheck(fetchPetData)
 
     return (
         <div >

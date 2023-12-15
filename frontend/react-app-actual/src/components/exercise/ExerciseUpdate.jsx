@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
-import useAuthCheck from '../../hooks/useAuthCheck';
+// import useAuthCheck from '../../hooks/useAuthCheck';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
 
@@ -17,7 +17,7 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData,onUpdate}) => {
         memos: exerciseData.memos
     });
     
-    useAuthCheck()
+    // useAuthCheck()
     
     const handleInputChange = (e) => {
         const { name, value } = e.target;

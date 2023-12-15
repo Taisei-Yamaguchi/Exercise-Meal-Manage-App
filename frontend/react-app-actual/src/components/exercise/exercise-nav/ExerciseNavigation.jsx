@@ -2,8 +2,8 @@
 import React  from 'react';
 import { useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import Calendar from './Calendar';
-import CalsByDate from './CalsByDate';
+import NavCalendar from '../../sub/navCalendar';
+import CalsByDate from '../../sub/CalsByDate';
 import Navigation from '../../Navigation';
 
 
@@ -87,7 +87,7 @@ const ExerciseNavigation = (onUpdate) => {
 
 
             {/* カレンダー */}
-            <Calendar selectedDate={date}  />
+            <NavCalendar selectedDate={date}  btnColorClass={'btn-accent'}/>
             {/* メッセージ */}
             <p className='text-xs'>*Metsはカロリー計算の指標です。mins,sets,repsおよびUser Infoの最新の体重データ、性別から計算しています。</p>
 

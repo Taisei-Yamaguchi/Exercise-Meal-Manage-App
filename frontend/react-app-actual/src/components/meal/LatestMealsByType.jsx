@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import getCookie from '../../hooks/getCookie';
-import useAuthCheck from '../../hooks/useAuthCheck';
+// import useAuthCheck from '../../hooks/useAuthCheck';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
 
@@ -32,14 +32,12 @@ const LatestMealByType = ({meal_date,meal_type,fetchTrigger,onUpdate }) => {
         })
         .then(latestMeals => {
             setLatestMeals(latestMeals.meals);
-            // console.log('最新',latestMeals)
+            console.log('success fetchLatestMeals!')
         })
         .catch(error => {
             console.error('Error:', error);
         });
     };
-
-    useAuthCheck(fetchLatestMeals);
 
 
     const handleCreateMeal = async (e) => {

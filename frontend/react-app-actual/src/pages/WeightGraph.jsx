@@ -3,6 +3,7 @@ import getCookie from '../hooks/getCookie';
 import { Line } from 'react-chartjs-2';
 import UserInfoNavigation from '../components/user_info/user_info-nav/UserInfoNavigation';
 import { BACKEND_ENDPOINT } from '../settings';
+import useAuthCheck from '../hooks/useAuthCheck';
 
 const WeightGraph = () => {
     const [weightData, setWeightData] = useState([]);
@@ -11,8 +12,8 @@ const WeightGraph = () => {
     const chartRef = useRef(null); // チャートの参照
     const [graphWidth, setGraphWidth] = useState(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
+    
+    const fetchData = async () => {
         console.log(BACKEND_ENDPOINT);
         try {
             const authToken = localStorage.getItem('authToken');
@@ -47,10 +48,9 @@ const WeightGraph = () => {
         } catch (error) {
             setError('An error occurred while fetching data.');
         }
-        };
+    };
 
-        fetchData();
-    }, []); // 依存する変数はありません
+    useAuthCheck(fetchData)
 
     // ラベルとデータを用意
     const labels = weightData.map(entry => entry.date);

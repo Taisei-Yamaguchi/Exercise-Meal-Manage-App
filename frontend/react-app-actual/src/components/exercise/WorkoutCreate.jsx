@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
-import useAuthCheck from '../../hooks/useAuthCheck';
+// import useAuthCheck from '../../hooks/useAuthCheck';
 // import { authToken } from '../../helpers/getAuthToken';
 import { useFetchWorkoutContext } from '../../hooks/fetchWorkoutContext';
 import { BACKEND_ENDPOINT } from '../../settings';
 
 const WorkoutCreate = ({workoutType}) => {
     const [workoutName, setWorkoutName] = useState('');    
-
-    useAuthCheck();
 
     const { toggleWorkoutCreateTrigger } = useFetchWorkoutContext();
 

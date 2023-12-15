@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import getCookie from '../../hooks/getCookie';
-import useAuthCheck from '../../hooks/useAuthCheck';
+// import useAuthCheck from '../../hooks/useAuthCheck';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
 
@@ -33,20 +33,18 @@ const LatestExerciseByType = ({exercise_date,workout_type, fetchTrigger,onUpdate
         })
         .then(data => {
             setLatestExercises(data.exercises);
-            // console.log('最新',latestExercises)
+            console.log('success fetchLatestExercise!')
         })
         .catch(error => {
             console.error('Error:', error);
         });
     };
 
-    useAuthCheck(fetchLatestExercises);
-
 
     const handleCreateExercise = async (e) => {
         try {
         const authToken = localStorage.getItem('authToken')
-        const response = await fetch('http://127.0.0.1:8000/exercise/create-latest-exercise/', {
+        const response = await fetch(`${BACKEND_ENDPOINT}/exercise/create-latest-exercise/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

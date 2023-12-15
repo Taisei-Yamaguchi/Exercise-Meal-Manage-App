@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
-import useAuthCheck from '../../hooks/useAuthCheck';
+// import useAuthCheck from '../../hooks/useAuthCheck';
 import { useFetchWorkoutContext } from '../../hooks/fetchWorkoutContext';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
@@ -46,13 +46,14 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
             const data = await response.json();
             setWorkouts(data.workout);
             setDefaultWorkouts(data.default_workout)
+            console.log('Success fetchWorkouts!');
             
         } catch (error) {
             console.error('Error fetching workouts:', error);
         }
     };
 
-    useAuthCheck(fetchWorkouts)
+    // useAuthCheck(fetchWorkouts)
 
     // post exercise
     const handleCreateExercise = async (e) => {
@@ -64,7 +65,7 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
         
         try {
             const authToken = localStorage.getItem('authToken')
-            const response = await fetch('http://127.0.0.1:8000/exercise/post-exercise/', {
+            const response = await fetch(`${BACKEND_ENDPOINT}/exercise/post-exercise/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

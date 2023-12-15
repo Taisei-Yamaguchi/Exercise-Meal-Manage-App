@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import getCookie from '../../hooks/getCookie';
-import useAuthCheck from '../../hooks/useAuthCheck';
+// import useAuthCheck from '../../hooks/useAuthCheck';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
 
@@ -14,8 +14,6 @@ const FoodSearch = ({meal_type,date,onUpdate}) => {
         'meal_type':meal_type,
     }
     const [mes,setMes] = useState('')
-
-    useAuthCheck()
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -34,7 +32,7 @@ const FoodSearch = ({meal_type,date,onUpdate}) => {
 
             if (response.ok) {
                 const data = await response.json();
-                // console.log('Food Search successfully:', data);
+                console.log('Food Search successfully!');
                 setSearchResults(data);
                 setSearchExpression('');
 

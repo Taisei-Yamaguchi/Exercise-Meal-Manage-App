@@ -12,10 +12,7 @@ const ExerciseTotalWeightGraph = () => {
     const [error, setError] = useState(null);
     // const chartRef = useRef(null); // チャートの参照
 
-    useAuthCheck()
-
-    useEffect(() => {
-        const fetchData = async () => {
+    const fetchData = async () => {
         console.log('start fetch');
         try {
             const authToken = localStorage.getItem('authToken');
@@ -35,14 +32,14 @@ const ExerciseTotalWeightGraph = () => {
             const data = await response.json();
             setTotalWeightData(data.result_list);
             setGrandWeight(data.grand_total);
+            console.log('Success fetch Total Weight Data!')
         
         } catch (error) {
             setError('An error occurred while fetching data.');
         }
-        };
+    };
 
-        fetchData();
-    }, []); // 依存する変数はありません
+    useAuthCheck(fetchData)
 
     // Extracting labels and total weights from the data
     const labels = totalWeightData.map(entry => entry.workout__workout_type);

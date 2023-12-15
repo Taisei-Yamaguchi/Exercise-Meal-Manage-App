@@ -47,7 +47,7 @@ const MealsByDate = () => {
         })
         .then(mealData => {
             setMeals(mealData.meals);
-            // console.log(mealData.meals)
+            console.log('Success fetchMealsData!')
             setFetchTrigger((prev) => !prev);
         })
         .catch(error => {

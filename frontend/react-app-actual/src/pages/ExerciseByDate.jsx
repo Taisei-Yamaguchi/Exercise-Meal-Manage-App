@@ -31,8 +31,8 @@ const ExerciseByDate = () => {
     
     
     const fetchExerciseData = async () => {
-        const authToken = localStorage.getItem('authToken')
         try {
+            const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/exercise/get-exercise-date/?date=${date}`, {
                 method: 'GET',
                 headers: {
@@ -47,10 +47,9 @@ const ExerciseByDate = () => {
             }
 
             const data = await response.json();
-            
             setExerciseData(data.exercise);
             setFetchTrigger((prev) => !prev);
-            
+            console.log('Success fetchExerciseData')
 
         } catch (error) {
             console.error('Error fetching exercise data:', error);
