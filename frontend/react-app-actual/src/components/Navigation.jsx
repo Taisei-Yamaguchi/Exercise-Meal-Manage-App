@@ -55,8 +55,9 @@ const Navigation = () => {
     );
 };
 
-const mapStateToProps = (state) => ({
-    isAuthenticated: state.auth.isAuthenticated,
-});
+// const mapStateToProps = (state) => ({
+//     isAuthenticated: state.auth.isAuthenticated,
+// });
 
-export default connect(mapStateToProps)(Navigation);
+// export default connect(mapStateToProps)(Navigation);
+export default Navigation

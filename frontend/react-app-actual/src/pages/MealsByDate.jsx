@@ -14,6 +14,10 @@ import MealDelete from '../components/meal/MealDelete';
 import FoodSearch from '../components/meal/FoodSearch';
 import LatestMealByType from '../components/meal/LatestMealsByType';
 
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setToastMes } from '../redux/store/ToastSlice';
+
 
 const MealsByDate = () => {
     const { date } = useParams();
@@ -23,6 +27,15 @@ const MealsByDate = () => {
 
     // latestMealのトリガーにする変化をuseEffectで見る
     const [fetchTrigger,setFetchTrigger] =useState(false);
+
+    const toastMes = useSelector((state) => state.toast.toastMes);
+    const toastClass = useSelector((state) => state.toast.toastClass);
+    const dispatch = useDispatch()
+
+    // clear toastMes
+    const clearToastMes = ()=>{
+        dispatch(setToastMes(''))
+    }
 
     // API経由でログインユーザーのmealを取得
     const fetchMealsByDate = async() => {
@@ -115,7 +128,16 @@ const MealsByDate = () => {
                                         <div className="modal-box">
                                             <FoodSearch meal_type={type} date={date} onUpdate={handleUpdate}/>
                                         </div>
-                                        <form method="dialog" className="modal-backdrop">
+                                        
+                                        {/* toast mes */}
+                                        {toastMes && toastMes !=='' &&(
+                                                <div className="toast">
+                                                    <div className={`alert ${toastClass}`}>
+                                                        <span>{toastMes}</span>
+                                                    </div>
+                                            </div>)}
+
+                                        <form method="dialog" className="modal-backdrop" onClick={clearToastMes}>
                                             <button >✕</button>
                                         </form>
                                     </dialog>
@@ -167,6 +189,8 @@ const MealsByDate = () => {
                 ))}
                 </div>
             </div>
+
+            
             </div>
         );
         

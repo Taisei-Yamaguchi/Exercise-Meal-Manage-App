@@ -5,14 +5,21 @@ import getCookie from '../../hooks/getCookie';
 import { useFetchWorkoutContext } from '../../hooks/fetchWorkoutContext';
 import { BACKEND_ENDPOINT } from '../../settings';
 
+import { useDispatch } from 'react-redux';
+import { setToastMes } from '../../redux/store/ToastSlice';
+import { setToastClass } from '../../redux/store/ToastSlice';
+
 const WorkoutCreate = ({workoutType}) => {
     const [workoutName, setWorkoutName] = useState('');    
 
     const { toggleWorkoutCreateTrigger } = useFetchWorkoutContext();
+    const dispatch =useDispatch()
+
 
     const handleCreateWorkout = async (e) => {
         e.preventDefault()
         try {
+        dispatch(setToastMes(''))
         const authToken = localStorage.getItem('authToken')
         const response = await fetch(`${BACKEND_ENDPOINT}/exercise/post-workout/`, {
             method: 'POST',
@@ -28,8 +35,20 @@ const WorkoutCreate = ({workoutType}) => {
         console.log('Workout created successfully:', data);
         setWorkoutName('')
         toggleWorkoutCreateTrigger()
+
+        if(response.ok){
+            dispatch(setToastMes('Created Workout Successfully!'))
+            dispatch(setToastClass('alert-info'))
+        }else{
+            console.error('Error creating workout:', error);
+            dispatch(setToastMes('Error!'))
+            dispatch(setToastClass('alert-error'))
+        }
+        
         } catch (error) {
         console.error('Error creating workout:', error);
+        dispatch(setToastMes('Error!'))
+        dispatch(setToastClass('alert-error'))
         }
     };
 

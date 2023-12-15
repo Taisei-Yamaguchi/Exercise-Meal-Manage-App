@@ -16,7 +16,9 @@ import LatestExerciseByType from '../components/exercise/LatestExerciseByType';
 import ExerciseLivingCreate from '../components/exercise/ExerciseLivingCreate';
 import ExerciseLivingUpdate from '../components/exercise/ExerciseLivingUpdate';
 
-
+import { useDispatch } from 'react-redux';
+import { setToastMes } from '../redux/store/ToastSlice';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 const ExerciseByDate = () => {
     
@@ -28,6 +30,15 @@ const ExerciseByDate = () => {
 
     // latestExerciseのトリガーにする変化をuseEffectで見る
     const [fetchTrigger,setFetchTrigger] =useState(false);
+
+    const dispatch =useDispatch()
+    const toastMes = useSelector((state) => state.toast.toastMes);
+    const toastClass = useSelector((state) => state.toast.toastClass);
+    // clear toastMes
+    const clearToastMes = ()=>{
+        dispatch(setToastMes(''))
+    }
+
     
     
     const fetchExerciseData = async () => {
@@ -144,9 +155,18 @@ const ExerciseByDate = () => {
                                     <div className="modal-box">
                                         <WorkoutCreate workoutType={workoutType} />
                                     </div>
-                                    <form method="dialog" className="modal-backdrop">
+                                    <form method="dialog" className="modal-backdrop" onClick={clearToastMes}>
                                         <button >✕</button>
                                     </form>
+
+                                    {/* toast mes */}
+                                    {toastMes && toastMes !=='' &&(
+                                    <div className="toast">
+                                        <div className={`alert ${toastClass}`}>
+                                                <span>{toastMes}</span>
+                                        </div>
+                                    </div>)}
+
                                 </dialog>
                             <LatestExerciseByType className="z-50" exercise_date={date} workout_type={workoutType} onUpdate={handleUpdate} />
                             </div>    

@@ -5,6 +5,9 @@ import { useFetchFoodContext } from '../../hooks/fetchFoodContext';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
 
+import { useDispatch } from 'react-redux';
+import { setToastMes } from '../../redux/store/ToastSlice';
+import { setToastClass } from '../../redux/store/ToastSlice';
 
 const FoodCreate = ({ onUpdate }) => {
     
@@ -14,9 +17,10 @@ const FoodCreate = ({ onUpdate }) => {
     const [carbohydrate,setCarbohydrate] =useState('');
     const [fat,setFat] =useState('');
     const [protein,setProtein] =useState('');
-
     const { toggleFoodCreateTrigger } = useFetchFoodContext();
-    
+    const dispatch =useDispatch()
+
+
     const handlePostFood = async (e) => {
         e.preventDefault()
         if(carbohydrate===''){
@@ -39,6 +43,7 @@ const FoodCreate = ({ onUpdate }) => {
         }
 
         try {
+            dispatch(setToastMes(''))
             const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/meal/food/post/`,{
                 method: 'POST',
@@ -55,14 +60,20 @@ const FoodCreate = ({ onUpdate }) => {
                 console.log('Food posted successfully:', response.data);
                 // onUpdate() 
                 toggleFoodCreateTrigger()
-                
+
+                dispatch(setToastMes('Created Food SUccessfully!'))
+                dispatch(setToastClass('alert-info'))
             } else {
                 // ログイン失敗時の処理
-                console.log(response.json());
+                // console.log(response.json());
+                dispatch(setToastMes('Error'))
+                dispatch(setToastClass('alert-error'))
             }
 
         } catch (error) {
             console.error('Failed to post food:', error);
+            dispatch(setToastMes('Error'))
+            dispatch(setToastClass('alert-error'))
         }
     };
 

@@ -3,6 +3,11 @@ import getCookie from '../../hooks/getCookie';
 // import useAuthCheck from '../../hooks/useAuthCheck';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
+import { useDispatch } from 'react-redux';
+
+import { setToastMes } from '../../redux/store/ToastSlice';
+import { setToastClass } from '../../redux/store/ToastSlice';
+
 
 const FoodSearch = ({meal_type,date,onUpdate}) => {
     // const {meal_type,date}=useParams();
@@ -14,6 +19,8 @@ const FoodSearch = ({meal_type,date,onUpdate}) => {
         'meal_type':meal_type,
     }
     const [mes,setMes] = useState('')
+    const dispatch = useDispatch();
+
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -38,6 +45,7 @@ const FoodSearch = ({meal_type,date,onUpdate}) => {
 
                 if(data.length===0){
                     setMes("No food is found. Please search with different word.")
+                    
                 }else{
                     setMes('')
                 }
@@ -51,6 +59,7 @@ const FoodSearch = ({meal_type,date,onUpdate}) => {
 
     const handleFoodClick = async (foodData) => {
         try {
+            dispatch(setToastMes(''))
             // バックエンドに対して選択された食品データを送信
             const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/create-with-fatsecret/`, {
@@ -67,12 +76,22 @@ const FoodSearch = ({meal_type,date,onUpdate}) => {
                 const data = await response.json();
                 console.log('Meal created successfully:', data);
                 onUpdate();
-                
+
+                // set toast
+                dispatch(setToastMes('Register Meal Successfully!'))
+                dispatch(setToastClass('alert-info'))
             } else {
                 console.error('Failed to create Meal:', response.statusText);
+                
+                // set toast
+                dispatch(setToastMes('Error!'))
+                dispatch(setToastClass('alert-error'))
             }
         } catch (error) {
             console.error('Error creating Meal:', error.message);
+            // set toast
+            dispatch(setToastMes('Error!'))
+            dispatch(setToastClass('alert-error'))
         }
     };
 

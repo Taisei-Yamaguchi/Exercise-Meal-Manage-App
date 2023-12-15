@@ -8,9 +8,21 @@ import CalsByDate from '../../sub/CalsByDate';
 import FoodCreate from '../FoodCreate';
 import Navigation from '../../Navigation';
 
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { useDispatch } from 'react-redux';
+import { setToastMes } from '../../../redux/store/ToastSlice';
+
 const MealNavigation = (onUpdate) => {
     const { date } = useParams();
-    
+
+    const dispatch= useDispatch()
+    const toastMes = useSelector((state) => state.toast.toastMes);
+    const toastClass = useSelector((state) => state.toast.toastClass);
+    // clear toastMes
+    const clearToastMes = ()=>{
+        dispatch(setToastMes(''))
+    }
+
     return (
         <div className='sub-nav bg-gradient-to-r from-lime-400 to-green-300 text-neutral-100 '>
             {/* head & nav ハンバ-ガー */}
@@ -104,9 +116,17 @@ const MealNavigation = (onUpdate) => {
                             <div className="modal-box">
                                 <FoodCreate/>
                             </div>
-                            <form method="dialog" className="modal-backdrop">
+                            <form method="dialog" className="modal-backdrop" onClick={clearToastMes}>
                                     <button >✕</button>
                                 </form>
+
+                                {/* toast mes */}
+                                {toastMes && toastMes !=='' &&(
+                                    <div className="toast">
+                                        <div className={`alert ${toastClass}`}>
+                                                <span>{toastMes}</span>
+                                        </div>
+                                    </div>)}
                         </dialog>
             </div>
         </div>
