@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import getCookie from '../hooks/getCookie';
 import { Line } from 'react-chartjs-2';
-import Chart from 'chart.js/auto';
-import Navigation from '../components/Navigation';
 import UserInfoNavigation from '../components/user_info/user_info-nav/UserInfoNavigation';
+import { BACKEND_ENDPOINT } from '../settings';
 
 const BodyFatPercentageGraph = () => {
     const [bodyFatData, setBodyFatData] = useState([]);
@@ -14,10 +13,10 @@ const BodyFatPercentageGraph = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-        console.log('start fetch');
+        
         try {
             const authToken = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:8000/graph/body_fat_percentage-graph/', {
+            const response = await fetch(`${BACKEND_ENDPOINT}/graph/body_fat_percentage-graph/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -33,8 +32,8 @@ const BodyFatPercentageGraph = () => {
             const data = await response.json();
             setBodyFatData(data.body_fat_data);
             setLatestTargetBodyFat(data.latest_body_fat_target);
-            console.log(data.body_fat_data);
-            console.log(data.latest_body_fat_target);
+            // console.log(data.body_fat_data);
+            // console.log(data.latest_body_fat_target);
 
             const xAxisLabelMinWidth = 20; // データ当たりの幅を設定
             const width = data.body_fat_data.length * xAxisLabelMinWidth;
@@ -45,12 +44,6 @@ const BodyFatPercentageGraph = () => {
             chartRef.current.destroy();
             }
 
-            // Chartを再描画
-            // const newChart = new Chart(chartRef.current, {
-            // type: 'line',
-            // data: data,
-            // options: options,
-            // });
         } catch (error) {
             setError('An error occurred while fetching data.');
             
@@ -58,7 +51,7 @@ const BodyFatPercentageGraph = () => {
         };
 
         fetchData();
-    }, []); // 依存する変数はありません
+    }, []); 
 
     // ラベルとデータを用意
     const labels = bodyFatData.map(entry => entry.date);

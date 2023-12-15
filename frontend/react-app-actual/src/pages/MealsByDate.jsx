@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
-import Navigation from '../components/Navigation';
 import useAuthCheck from '../hooks/useAuthCheck';
 import getCookie from '../hooks/getCookie';
+// import { authToken } from '../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../settings';
 
 import MealNavigation from '../components/meal/meal-nav/MealNavigation';
 
@@ -26,14 +26,13 @@ const MealsByDate = () => {
 
     // API経由でログインユーザーのmealを取得
     const fetchMealsByDate = async() => {
-        // const user_id = localStorage.getItem'user_id'); // ユーザーIDをlocalStorageから取得
-        const yourAuthToken = localStorage.getItem('authToken'); // localStorage や state からトークンを取得する
-        const url = `http://127.0.0.1:8000/meal/meals/date/?meal_date=${date}`;
+        const authToken = localStorage.getItem('authToken')
+        const url = `${BACKEND_ENDPOINT}/meal/meals/date/?meal_date=${date}`;
 
         fetch(url, {
             method: 'GET',
             headers: {
-                'Authorization': `Token ${yourAuthToken}`, // トークンを設定
+                'Authorization': `Token ${authToken}`, // トークンを設定
                 'X-CSRFToken': getCookie('csrftoken') ,
                 // 'X-UserId': user_id,
             },
@@ -48,7 +47,7 @@ const MealsByDate = () => {
         })
         .then(mealData => {
             setMeals(mealData.meals);
-            console.log(mealData.meals)
+            // console.log(mealData.meals)
             setFetchTrigger((prev) => !prev);
         })
         .catch(error => {

@@ -1,9 +1,9 @@
-import React, {  createContext, useContext,useState } from 'react';
-import Navigation from '../Navigation';
+import React, { useState } from 'react';
 import getCookie from '../../hooks/getCookie';
 import useAuthCheck from '../../hooks/useAuthCheck';
-import MealNavigation from './meal-nav/MealNavigation';
 import { useFetchFoodContext } from '../../hooks/fetchFoodContext';
+// import { authToken } from '../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 
 const FoodCreate = ({ onUpdate }) => {
@@ -15,9 +15,7 @@ const FoodCreate = ({ onUpdate }) => {
     const [fat,setFat] =useState('');
     const [protein,setProtein] =useState('');
 
-
     const { toggleFoodCreateTrigger } = useFetchFoodContext();
-
     
     
     useAuthCheck()
@@ -34,7 +32,6 @@ const FoodCreate = ({ onUpdate }) => {
             setProtein(null)
         }
 
-        const yourAuthToken = localStorage.getItem('authToken'); 
         const FoodCredentias ={
             name:name,
             cal:cal,
@@ -45,11 +42,12 @@ const FoodCreate = ({ onUpdate }) => {
         }
 
         try {
-            const response = await fetch('http://127.0.0.1:8000//meal/food/post/',{
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/meal/food/post/`,{
                 method: 'POST',
                 headers: {
                     'Content-Type':'application/json',
-                    'Authorization': `Token ${yourAuthToken}`, // トークンを設定
+                    'Authorization': `Token ${authToken}`, // トークンを設定
                     'X-CSRFToken': getCookie('csrftoken') ,
                 },
                 body: JSON.stringify(FoodCredentias)

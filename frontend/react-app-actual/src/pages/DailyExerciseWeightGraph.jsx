@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import getCookie from '../hooks/getCookie';
 import { Bar } from 'react-chartjs-2';
-import Chart from 'chart.js/auto';
-import Navigation from '../components/Navigation';
 import { useParams } from 'react-router-dom';
 import ExerciseNavigation from '../components/exercise/exercise-nav/ExerciseNavigation';
 import useAuthCheck from '../hooks/useAuthCheck';
+
+// import { authToken } from '../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../settings';
 
 const DailyExerciseWeightGraph = () => {
     const [dailyExerciseWeightData, setDailyExerciseWeightData] = useState([]);
@@ -21,9 +22,9 @@ const DailyExerciseWeightGraph = () => {
         const fetchData = async () => {
         console.log('start fetch');
         try {
-            const authToken = localStorage.getItem('authToken');
+            const authToken = localStorage.getItem('authToken')
             const response = await fetch
-            (`http://127.0.0.1:8000/graph/daily-total-weight-graph/?workout_type=${workout_type}`, 
+            (`${BACKEND_ENDPOINT}/graph/daily-total-weight-graph/?workout_type=${workout_type}`, 
             
             {
             method: 'GET',
@@ -40,7 +41,8 @@ const DailyExerciseWeightGraph = () => {
 
             const data = await response.json();
             setDailyExerciseWeightData(data);
-            console.log(data)
+            // console.log(data)
+            console.log('success fetch')
 
             const xAxisLabelMinWidth = 24; // データ当たりの幅を設定
             const width = data.length * xAxisLabelMinWidth;
@@ -53,14 +55,8 @@ const DailyExerciseWeightGraph = () => {
         };
 
         fetchData();
-    }, []); // 依存する変数はありません
+    }, []); 
 
-    // Check if data is not yet fetched
-    if (!dailyExerciseWeightData.length) {
-        return <p>Loading...</p>;
-    }
-
-    // // ラベルとデータを用意
     // Extracting labels and total weights from the data
     const labels = dailyExerciseWeightData.map(entry => entry.exercise_date);
     const weights = dailyExerciseWeightData.map(entry => entry.total_weight);

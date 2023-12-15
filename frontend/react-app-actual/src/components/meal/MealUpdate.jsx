@@ -1,5 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
+// import { authToken } from '../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 function MealUpdate({ meal,onUpdate }) {
     const [serving, setServing] = useState(meal.serving);
@@ -13,11 +15,12 @@ function MealUpdate({ meal,onUpdate }) {
             return
         }
         try {
-            const response = await fetch(`http://127.0.0.1:8000/meal/meal/update/${meal.id}/`, {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/update/${meal.id}/`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
+                    'Authorization': `Token ${authToken}`,
                     'X-CSRFToken': getCookie('csrftoken'),
                 },
                 body: JSON.stringify({

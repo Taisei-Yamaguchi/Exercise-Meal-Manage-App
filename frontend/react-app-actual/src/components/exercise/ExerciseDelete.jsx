@@ -1,11 +1,13 @@
 import React from 'react';
 import getCookie from '../../hooks/getCookie';
+// import { authToken } from '../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const ExerciseDelete = ({ exerciseId, onUpdate }) => {
     const handleDelete = async () => {
         try {
-        const authToken = localStorage.getItem('authToken');
-        const response = await fetch(`http://127.0.0.1:8000/exercise/exercise/delete/${exerciseId}/`, {
+        const authToken = localStorage.getItem('authToken')
+        const response = await fetch(`${BACKEND_ENDPOINT}/exercise/exercise/delete/${exerciseId}/`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

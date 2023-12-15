@@ -278,7 +278,6 @@ class GetLatestMealsByType(APIView):
         
         meal_type = request.query_params.get('meal_type', None)
         
-        # 最新のmeal_dateを持つMealオブジェクトのmeal_dateを取得
         # 最新のmeal_dateを取得
         latest_meal_date = (
             Meal.objects.filter(meal_type=meal_type, account=user.id)

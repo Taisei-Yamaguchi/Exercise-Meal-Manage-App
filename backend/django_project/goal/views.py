@@ -4,8 +4,6 @@ from rest_framework import status
 from .models import Goal
 from .serializers import GoalSerializer
 from rest_framework.permissions import IsAuthenticated
-from datetime import datetime
-# from .helpers.calculate_metabolism import calculate_metabolism
 
 
 
@@ -15,8 +13,7 @@ class GoalCreateOrUpdateView(APIView):
     
     def post(self, request):
         user = self.request.user
-        
-        
+                
         # Get the latest user info, if available.
         try:
             goal = Goal.objects.filter(account=user).first()

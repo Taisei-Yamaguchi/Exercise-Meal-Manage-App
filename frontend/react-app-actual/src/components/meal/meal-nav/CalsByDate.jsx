@@ -3,6 +3,8 @@ import getCookie from '../../../hooks/getCookie';
 import { Bar } from 'react-chartjs-2';
 import 'chartjs-plugin-annotation';
 import { Chart, registerables } from 'chart.js';  // chart.jsのバージョンによっては必要
+// import { authToken } from '../../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../../settings';
 
 // 必要なプラグインを登録
 Chart.register(...registerables);
@@ -12,7 +14,7 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
     
     const [calsData, setCalsData] = useState([]);
     const [totalConsumedCals,setTotalConsume] =useState(0);
-    const [totalCals,setTotalCal]= useState(0);
+    // const [totalCals,setTotalCal]= useState(0);
     const [aspectRatio, setAspectRatio] = useState(3);
 
     const [goalIntake,setGoalIntake] = useState(0)
@@ -20,8 +22,8 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
 
 
     useEffect(()=>(
-        setTotalConsume(calsData.bm_cals + calsData.exercise_cals + calsData.food_cals),
-        setTotalCal(Math.max(totalConsumedCals, calsData.intake_cals))
+        setTotalConsume(calsData.bm_cals + calsData.exercise_cals + calsData.food_cals)
+        // setTotalCal(Math.max(totalConsumedCals, calsData.intake_cals))
     ),[calsData])
     
     useEffect(() => {
@@ -39,17 +41,17 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
 
     useEffect(()=>{
         fetchGoal()
-        
-    })
+    },[])
 
     // goal をfetch
     const fetchGoal =async()=>{
         try {
-            const response = await fetch('http://127.0.0.1:8000/goal/get/',{
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/goal/get/`,{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
+                    'Authorization': `Token ${authToken}`,
                     'X-CSRFToken': getCookie('csrftoken'),
                 }
             });
@@ -57,7 +59,7 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
             const data = await response.json();
 
             if ('message' in data) {
-                console.log(data.message)
+                // console.log(data.message)
             }else{
                 setGoalIntake(data.goal_intake_cals)
                 setGoalConsuming(data.goal_consuming_cals)
@@ -71,8 +73,8 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
     // API経由でログインユーザーのpfcを取得
     const fetchData = async() => {
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch(`http://127.0.0.1:8000/main/cals-by-date/?date=${selectedDate}`, {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/main/cals-by-date/?date=${selectedDate}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -83,7 +85,7 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
 
             const data = await response.json();
             setCalsData(data);
-            console.log('cals',data)
+            // console.log('cals',data)
         } catch (error) {
             console.error('Error fetching data.:', error);
         }
@@ -92,9 +94,7 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
     
 
     const handleWindowResize = () => {
-        // Windowのサイズに基づいてaspectRatioを計算する
-
-        
+        // Windowのサイズに基づいてaspectRatioを計算する        
         const width = window.innerWidth;
         if(width<=400){
             setAspectRatio(2)
@@ -108,18 +108,11 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
         } else {
             setAspectRatio(6)
         }
-        
-        console.log('New Aspect Ratio:', );
-
-        
     };
 
 
     const chartData = {
         labels: [''],
-        // data:{
-        //     labels:['intake','consu'],
-        // },
         datasets: [
             
             {

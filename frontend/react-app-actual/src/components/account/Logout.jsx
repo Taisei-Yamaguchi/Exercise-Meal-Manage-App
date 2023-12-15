@@ -1,20 +1,20 @@
-// src/components/account/LogoutButton.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import getCookie from '../../hooks/getCookie';
+// import { authToken } from '../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const LogoutButton = () => {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
         try {
-            const yourAuthToken = localStorage.getItem('authToken');
-
+            const authToken = localStorage.getItem('authToken')
             // バックエンドのログアウトAPIにPOSTリクエストを送信
-            await fetch('http://127.0.0.1:8000/accounts/logout/', {
+            await fetch(`${BACKEND_ENDPOINT}/accounts/logout/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${yourAuthToken}`,
+                    'Authorization': `Token ${authToken}`,
                     'X-CSRFToken': getCookie('csrftoken'),
                 },
                 credentials: 'include',

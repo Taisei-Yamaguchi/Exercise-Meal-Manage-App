@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import Navigation from '../Navigation';
+import { Link } from 'react-router-dom';
 import useAuthCheck from '../../hooks/useAuthCheck';
 import getCookie from '../../hooks/getCookie';
+// import { authToken } from '../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const MainCalendar = ({month}) => {
     
@@ -48,8 +49,8 @@ const MainCalendar = ({month}) => {
 
     const fetchData = async () => {
         try {
-        const authToken = localStorage.getItem('authToken');
-        const response = await fetch('http://127.0.0.1:8000/main/registration-status-check/', {
+        const authToken = localStorage.getItem('authToken')
+        const response = await fetch(`${BACKEND_ENDPOINT}/main/registration-status-check/`, {
             method: 'GET',
             headers: {
             'Content-Type': 'application/json',
@@ -60,7 +61,7 @@ const MainCalendar = ({month}) => {
 
         const data = await response.json();
         setData(data);
-        console.log(data);
+        // console.log(data);
         } catch (error) {
         console.error('Error fetching data:', error);
         }
@@ -96,8 +97,8 @@ const MainCalendar = ({month}) => {
 
 const renderDay = (day) => {
     const isCurrentMonth = day.getMonth() === date.getMonth();
-    const isSunday = day.getDay() === 0; // Sunday
-    const isSaturday = day.getDay() === 6; // Saturday
+    // const isSunday = day.getDay() === 0; // Sunday
+    // const isSaturday = day.getDay() === 6; // Saturday
     const classNames = isCurrentMonth ? 'day' : 'day other-month';
     const  formattedDate= `${day.getFullYear()}-${(day.getMonth() + 1)
         .toString()
@@ -117,12 +118,12 @@ const renderDay = (day) => {
 
                 
                 <Link to={`/meal/${formattedDate}`} className='flex flex-row justify-between'>
-                    <img src='../icons/meal-icon.svg' className='w-4 h-4'></img>
+                    <img src='/icons/meal-icon.svg' className='w-4 h-4'></img>
                     <div className=''>{dayData && dayData.meal ? '✔️' : '◻︎'}</div>
                 </Link>
                 
                 <Link to={`/exercise/${formattedDate}`} className='flex flex-row justify-between'>
-                    <img src='../icons/exercise-icon.svg' className=' w-4 h-4'></img>
+                    <img src='/icons/exercise-icon.svg' className=' w-4 h-4'></img>
                     <div className=''>{dayData && dayData.exercise ? '✔️' : '◻︎'}</div>
                 </Link>
                 

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Navigation from '../components/Navigation';
 import getCookie from '../hooks/getCookie';
-import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import useAuthCheck from '../hooks/useAuthCheck';
+// import { authToken } from '../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../settings';
 
 const SettingsAccount = () => {
     const [name, setName] = useState('');
@@ -16,8 +16,8 @@ const SettingsAccount = () => {
 
     const fetchAccount = async () => {
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:8000/accounts/get/', {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/accounts/get/`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,8 +45,8 @@ const SettingsAccount = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:8000/accounts/update/', {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/accounts/update/`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

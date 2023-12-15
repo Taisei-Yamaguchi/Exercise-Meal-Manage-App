@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import useAuthCheck from '../../hooks/useAuthCheck';
 import getCookie from '../../hooks/getCookie';
 import { useFetchFoodContext } from '../../hooks/fetchFoodContext';
+// import { authToken } from '../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 
 function MealCreateForm({meal_type,meal_date,onUpdate}) {
@@ -10,7 +12,6 @@ function MealCreateForm({meal_type,meal_date,onUpdate}) {
     const [foods, setFoods] = useState([]);
     const [selectedFood, setSelectedFood] = useState('');
     const [serving, setServing] = useState(1);
-    // const [foodCreateTrigger, setFoodCreateTrigger] = useState(false);
 
     const { foodCreateTrigger, toggleFoodCreateTrigger } = useFetchFoodContext();
 
@@ -18,19 +19,13 @@ function MealCreateForm({meal_type,meal_date,onUpdate}) {
         fetchFoods()
     }, [foodCreateTrigger]);
 
-    const handleFoodUpdate = () => {
-        // 何らかのアクションが発生した時にupdateTriggerをトグル
-        setFoodCreateTrigger((prev) => !prev);
-    };
-
     // API経由でログインユーザーのfoodを取得
     const fetchFoods = async() => {
-        
-        const yourAuthToken = localStorage.getItem('authToken'); 
-        fetch('http://127.0.0.1:8000/meal/food/list/', {
+        const authToken = localStorage.getItem('authToken')
+        fetch(`${BACKEND_ENDPOINT}/meal/food/list/`, {
             method: 'GET',
             headers: {
-                'Authorization': `Token ${yourAuthToken}`, // トークンを設定
+                'Authorization': `Token ${authToken}`, // トークンを設定
                 'X-CSRFToken': getCookie('csrftoken') ,
                 // 'X-UserId': user_id,
             },
@@ -44,7 +39,7 @@ function MealCreateForm({meal_type,meal_date,onUpdate}) {
         })
         .then(FoodData => {
             setFoods(FoodData.foods);
-            console.log(FoodData)
+            // console.log(FoodData)
         })
         .catch(error => {
             console.error('Error:', error);
@@ -59,13 +54,13 @@ function MealCreateForm({meal_type,meal_date,onUpdate}) {
     const handleCreateMeal = async (e) => {
         e.preventDefault();
         
-        const yourAuthToken = localStorage.getItem('authToken');
-        try {
+    try {
+        const authToken = localStorage.getItem('authToken')
         const response = await fetch('http://127.0.0.1:8000/meal/meal/create/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${yourAuthToken}`, // トークンを設定
+                'Authorization': `Token ${authToken}`, // トークンを設定
                 'X-CSRFToken': getCookie('csrftoken') ,
             },
             body: JSON.stringify({

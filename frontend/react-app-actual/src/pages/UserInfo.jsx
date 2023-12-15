@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../hooks/getCookie';
-import { useNavigate } from 'react-router-dom';
-import Navigation from '../components/Navigation';
 import useAuthCheck from '../hooks/useAuthCheck';
 import UserInfoNavigation from '../components/user_info/user_info-nav/UserInfoNavigation';
-
+import formattedCurrentDate from '../helpers/getToday';
+import { BACKEND_ENDPOINT } from '../settings';
 
 const UserInfo = () => {
-    const currentDate = new Date();
-    const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-    .toString()
-    .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
 
     const [formData, setFormData] = useState({
-        date: formattedDate, // set the current date as default
+        date: formattedCurrentDate, // set the current date as default
         weight: null,
         height: null,
         body_fat_percentage: null,
@@ -29,7 +24,7 @@ const UserInfo = () => {
     // Fetch the latest user info when the component mounts
     const fetchLatestInfo = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/user_info/get-latest/',{
+            const response = await fetch(`${BACKEND_ENDPOINT}/user_info/get-latest/`,{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -82,11 +77,12 @@ const UserInfo = () => {
         e.preventDefault();
 
         try {
+        const authToken = localStorage.getItem('authToken')
         const response = await fetch('http://127.0.0.1:8000/user_info/create-update/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('authToken')}`,
+                'Authorization': `Token ${authToken}`,
                 'X-CSRFToken': getCookie('csrftoken'),
             // Include any necessary authentication headers
             },

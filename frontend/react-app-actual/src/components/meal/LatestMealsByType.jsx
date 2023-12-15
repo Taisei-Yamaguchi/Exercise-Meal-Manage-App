@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Navigation from '../Navigation';
 import getCookie from '../../hooks/getCookie';
 import useAuthCheck from '../../hooks/useAuthCheck';
-import MealNavigation from './meal-nav/MealNavigation';
+// import { authToken } from '../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const LatestMealByType = ({meal_date,meal_type,fetchTrigger,onUpdate }) => {
     
@@ -14,11 +14,11 @@ const LatestMealByType = ({meal_date,meal_type,fetchTrigger,onUpdate }) => {
 
     // 最新meal
     const fetchLatestMeals = async() => {
-        const yourAuthToken = localStorage.getItem('authToken'); 
-        fetch(`http://127.0.0.1:8000/meal/meal/latest-meals/?meal_type=${meal_type}`, {
+        const authToken = localStorage.getItem('authToken')
+        fetch(`${BACKEND_ENDPOINT}/meal/meal/latest-meals/?meal_type=${meal_type}`, {
             method: 'GET',
             headers: {
-                'Authorization': `Token ${yourAuthToken}`, // トークンを設定
+                'Authorization': `Token ${authToken}`, // トークンを設定
                 'X-CSRFToken': getCookie('csrftoken') ,
                 // 'X-UserId': user_id,
             },
@@ -32,7 +32,7 @@ const LatestMealByType = ({meal_date,meal_type,fetchTrigger,onUpdate }) => {
         })
         .then(latestMeals => {
             setLatestMeals(latestMeals.meals);
-            console.log('最新',latestMeals)
+            // console.log('最新',latestMeals)
         })
         .catch(error => {
             console.error('Error:', error);
@@ -43,13 +43,13 @@ const LatestMealByType = ({meal_date,meal_type,fetchTrigger,onUpdate }) => {
 
 
     const handleCreateMeal = async (e) => {
-        const yourAuthToken = localStorage.getItem('authToken');
         try {
-        const response = await fetch('http://127.0.0.1:8000/meal/meal/create-latest/', {
+        const authToken = localStorage.getItem('authToken')
+        const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/create-latest/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${yourAuthToken}`, // トークンを設定
+                'Authorization': `Token ${authToken}`, // トークンを設定
                 'X-CSRFToken': getCookie('csrftoken') ,
             },
             body: JSON.stringify({

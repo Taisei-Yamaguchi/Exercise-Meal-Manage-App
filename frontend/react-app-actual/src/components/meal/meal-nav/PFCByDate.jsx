@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../../hooks/getCookie';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import 'chartjs-plugin-datalabels';
-
+// import { authToken } from '../../../helpers/getAuthToken';
 
 
 const PFCByDate = ({ selectedDate,onUpdate}) => {
@@ -25,7 +25,7 @@ const PFCByDate = ({ selectedDate,onUpdate}) => {
                 ratio: Math.round((item.amount / totalAmount) * 100),
             }));
             setRatioPFC(newRatioPFC);
-            console.log('ratio',newRatioPFC)
+            // console.log('ratio',newRatioPFC)
         }
     },[pfcData,totalAmount])
 
@@ -62,10 +62,10 @@ const PFCByDate = ({ selectedDate,onUpdate}) => {
                 message = 'Well-balanced!';
                 messageClass = 'btn-success';
             }else{
-                message='other'
+                message=''
             }
 
-            console.log('mes',message)
+            // console.log('mes',message)
 
             setMes(message);
             setMesClass(messageClass);
@@ -79,7 +79,7 @@ const PFCByDate = ({ selectedDate,onUpdate}) => {
     // API経由でログインユーザーのpfcを取得
     const fetchData = async() => {
         try {
-            const authToken = localStorage.getItem('authToken');
+            const authToken = localStorage.getItem('authToken')
             const response = await fetch(`http://127.0.0.1:8000/main/pfc-by-date/?date=${selectedDate}`, {
             method: 'GET',
             headers: {
@@ -91,21 +91,12 @@ const PFCByDate = ({ selectedDate,onUpdate}) => {
 
             const data = await response.json();
             setPfcData(data);
-            console.log('pfc',data)
+            // console.log('pfc',data)
         } catch (error) {
             console.error('Error fetching data.:', error);
         }
     };
 
-    
-    // const pieChartData = {
-    //     labels: false,
-    //     datasets: [{
-    //         data: pfcData.map((item) => Math.round(item.amount)),
-    //         backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'], // You can customize the colors
-    //         hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-    //     },],
-    // };
 
 
     const getColor = (index) => {

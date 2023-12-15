@@ -5,6 +5,8 @@ import Chart from 'chart.js/auto';
 import Navigation from '../Navigation';
 import MealNavigation from './meal-nav/MealNavigation';
 import { useParams } from 'react-router-dom';
+// import { authToken } from '../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const DailyNutrientsGraph = () => {
     const [nutrientstData, setNutrientsData] = useState([]);
@@ -16,8 +18,8 @@ const DailyNutrientsGraph = () => {
         const fetchData = async () => {
         console.log('start fetch');
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch(`http://127.0.0.1:8000/graph/daily-nutrients-graph/?date=${date}`, {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/graph/daily-nutrients-graph/?date=${date}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

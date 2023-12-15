@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
 import useAuthCheck from '../../hooks/useAuthCheck';
+// import { authToken } from '../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData,onUpdate}) => {
     const [updateData, setUpdateData] = useState({
@@ -32,8 +34,8 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData,onUpdate}) => {
         }
 
         try {
-        const authToken = localStorage.getItem('authToken');
-        const response = await fetch(`http://127.0.0.1:8000/exercise/exercise/update/${exerciseId}/`, {
+        const authToken = localStorage.getItem('authToken')
+        const response = await fetch(`${BACKEND_ENDPOINT}/exercise/exercise/update/${exerciseId}/`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

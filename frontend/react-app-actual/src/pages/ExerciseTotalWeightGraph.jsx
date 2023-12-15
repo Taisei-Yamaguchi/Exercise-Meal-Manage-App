@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import getCookie from '../hooks/getCookie';
 import { Bar } from 'react-chartjs-2';
-import Chart from 'chart.js/auto';
-import Navigation from '../components/Navigation';
 import useAuthCheck from '../hooks/useAuthCheck';
 import ExerciseNavigation from '../components/exercise/exercise-nav/ExerciseNavigation';
+// import { authToken } from '../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../settings';
 
 const ExerciseTotalWeightGraph = () => {
     const [totalWeightData, setTotalWeightData] = useState([]);
@@ -19,7 +19,7 @@ const ExerciseTotalWeightGraph = () => {
         console.log('start fetch');
         try {
             const authToken = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:8000/graph/total-weight-graph/', {
+            const response = await fetch(`${BACKEND_ENDPOINT}/graph/total-weight-graph/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,7 +35,6 @@ const ExerciseTotalWeightGraph = () => {
             const data = await response.json();
             setTotalWeightData(data.result_list);
             setGrandWeight(data.grand_total);
-
         
         } catch (error) {
             setError('An error occurred while fetching data.');
@@ -45,12 +44,6 @@ const ExerciseTotalWeightGraph = () => {
         fetchData();
     }, []); // 依存する変数はありません
 
-    // Check if data is not yet fetched
-    // if (!totalWeightData.length) {
-    //     return <p>Loading...</p>;
-    // }
-
-    // // ラベルとデータを用意
     // Extracting labels and total weights from the data
     const labels = totalWeightData.map(entry => entry.workout__workout_type);
     const weights = totalWeightData.map(entry => entry.total_weight);

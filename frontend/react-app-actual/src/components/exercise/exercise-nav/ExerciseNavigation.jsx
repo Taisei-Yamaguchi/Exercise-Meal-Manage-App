@@ -1,5 +1,5 @@
 // src/components/meal/MealNavigation.jsx
-import React, { useState, useEffect } from 'react';
+import React  from 'react';
 import { useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import Calendar from './Calendar';
@@ -9,11 +9,6 @@ import Navigation from '../../Navigation';
 
 const ExerciseNavigation = (onUpdate) => {
     const { date } = useParams();
-    const currentDate = new Date();
-    const  formattedCurrentDate= `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
-    
     
     return (
         <div className='sub-nav bg-gradient-to-r from-orange-600 to-red-700 text-neutral-100'>

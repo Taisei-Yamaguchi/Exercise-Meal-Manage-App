@@ -1,12 +1,8 @@
-// src/components/meal/Calendar.jsx
 import React, { useState, useEffect } from 'react';
-import { Link,useNavigate } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
 import MainCalendar from '../../calendar/MainCalendar';
 
-const Calendar = ({ selectedDate, onDateChange }) => {
+const Calendar = ({ selectedDate}) => {
     const [calendarDates, setCalendarDates] = useState([]);
-    const navigate=useNavigate()
 
     useEffect(() => {
         // 今回は前後2日間分を表示する例ですが、必要に応じて変更してください

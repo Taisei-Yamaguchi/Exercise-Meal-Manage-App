@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
-import Navigation from '../Navigation';
 import useAuthCheck from '../../hooks/useAuthCheck';
-import { useNavigate } from 'react-router-dom';
+// import { authToken } from '../../helpers/getAuthToken';
 import { useFetchWorkoutContext } from '../../hooks/fetchWorkoutContext';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const WorkoutCreate = ({workoutType}) => {
     const [workoutName, setWorkoutName] = useState('');    
@@ -15,8 +15,8 @@ const WorkoutCreate = ({workoutType}) => {
     const handleCreateWorkout = async (e) => {
         e.preventDefault()
         try {
-        const authToken = localStorage.getItem('authToken');
-        const response = await fetch('http://127.0.0.1:8000/exercise/post-workout/', {
+        const authToken = localStorage.getItem('authToken')
+        const response = await fetch(`${BACKEND_ENDPOINT}/exercise/post-workout/`, {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
@@ -54,8 +54,5 @@ const WorkoutCreate = ({workoutType}) => {
         </form>
     );
     };
-
-    
-    
 
 export default WorkoutCreate;

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-
+import React, { useState } from 'react';
 import useAuthCheck from '../../hooks/useAuthCheck';
 import getCookie from '../../hooks/getCookie';
+// import { authToken } from '../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 
 function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
@@ -14,8 +15,8 @@ function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
     // API経由でログインユーザーのfood historyを取得
     const fetchFoods = async() => {
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:8000/meal/food/get-searched-food-history/', {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/meal/food/get-searched-food-history/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -26,7 +27,7 @@ function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
 
             const data = await response.json();
             setFoods(data.foods);
-            console.log(data)
+            // console.log(data)
         } catch (error) {
             console.error('Error fetching searched food history.:', error);
         }
@@ -40,13 +41,13 @@ function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
     const handleCreateMeal = async (e) => {
         e.preventDefault();
         
-        const yourAuthToken = localStorage.getItem('authToken');
         try {
+        const authToken = localStorage.getItem('authToken')
         const response = await fetch('http://127.0.0.1:8000/meal/meal/create/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${yourAuthToken}`, // トークンを設定
+                'Authorization': `Token ${authToken}`, // トークンを設定
                 'X-CSRFToken': getCookie('csrftoken') ,
             },
             body: JSON.stringify({
@@ -69,6 +70,8 @@ function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
         console.error('Error creating meal:', error.message);
         }
     };
+
+
 
     return (
         <form className='w-full' onSubmit={handleCreateMeal}>

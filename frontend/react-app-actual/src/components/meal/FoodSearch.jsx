@@ -1,7 +1,8 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
 import getCookie from '../../hooks/getCookie';
-import { useParams } from 'react-router-dom';
 import useAuthCheck from '../../hooks/useAuthCheck';
+// import { authToken } from '../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const FoodSearch = ({meal_type,date,onUpdate}) => {
     // const {meal_type,date}=useParams();
@@ -13,13 +14,6 @@ const FoodSearch = ({meal_type,date,onUpdate}) => {
         'meal_type':meal_type,
     }
     const [mes,setMes] = useState('')
-    // const [updateTrigger, setUpdateTrigger] = useState(false);
-
-
-    // const handleUpdate = () => {
-    //     // 何らかのアクションが発生した時にupdateTriggerをトグル
-    //     setUpdateTrigger((prev) => !prev);
-    // };
 
     useAuthCheck()
 
@@ -28,18 +22,19 @@ const FoodSearch = ({meal_type,date,onUpdate}) => {
         const escapedSearchExpression = searchExpression.replace(/&/g, '%26').replace(/\|/g, '%7C');
         
         try {
-            const response = await fetch(`http://127.0.0.1:8000/meal/meal/food-search/?search_expression=${escapedSearchExpression}/`, {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/food-search/?search_expression=${escapedSearchExpression}/`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
+                    'Authorization': `Token ${authToken}`,
                     'X-CSRFToken': getCookie('csrftoken'),
                 },
             });
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Food Search successfully:', data);
+                // console.log('Food Search successfully:', data);
                 setSearchResults(data);
                 setSearchExpression('');
 
@@ -59,11 +54,12 @@ const FoodSearch = ({meal_type,date,onUpdate}) => {
     const handleFoodClick = async (foodData) => {
         try {
             // バックエンドに対して選択された食品データを送信
-            const response = await fetch('http://127.0.0.1:8000/meal/meal/create-with-fatsecret/', {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/create-with-fatsecret/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
+                    'Authorization': `Token ${authToken}`,
                     'X-CSRFToken': getCookie('csrftoken'),
                 },
                 body: JSON.stringify({ 'food_data': foodData ,'meal_data': mealData}),

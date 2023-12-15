@@ -2,19 +2,17 @@
 import React, { useEffect, useState } from 'react';
 import getCookie from '../../../hooks/getCookie';
 import useAuthCheck from '../../../hooks/useAuthCheck';
+// import { authToken } from '../../../helpers/getAuthToken';
+import formattedCurrentDate from '../../../helpers/getToday';
+import { BACKEND_ENDPOINT } from '../../../settings';
 
 const Pet = () => {
     const [petData, setPetData] = useState(null);
-    const currentDate = new Date();
-    const petDate= `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
-
 
     const fetchPetData = async () => {
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch(`http://127.0.0.1:8000/pet/get-pet/?pet_date=${petDate}`,{
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/pet/get-pet/?pet_date=${formattedCurrentDate}`,{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -28,7 +26,7 @@ const Pet = () => {
             }
 
             const data = await response.json();
-            console.log(data)
+            // console.log(data)
             setPetData(data);
         } catch (error) {
             console.error('Error fetching pet data:', error);
@@ -64,16 +62,6 @@ const Pet = () => {
 
     return (
         <div >
-        {/* {petData ? (
-            <div className='flex flex-row justify-between'>
-                <p>{petData.grow}</p>
-                <p>{petData.body_status}</p>
-            </div>
-        ) : (
-            <p>Loading pet data...</p>
-        )} */}
-        
-
             <div className=" shadow-xl image-full" style={{ backgroundImage: 'url(/pets-bg/brown-grass.jpeg)' }}>
             <div className="card-body">
                 <img src={getPetImage()} width={200} alt="Pet" />

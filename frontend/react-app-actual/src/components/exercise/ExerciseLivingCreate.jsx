@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
 import getCookie from '../../hooks/getCookie';
-import useAuthCheck from '../../hooks/useAuthCheck';
-
-
+// import { authToken } from '../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const ExerciseLivingCreate = ({exercise_date,onUpdate}) => {
     
@@ -17,16 +14,13 @@ const ExerciseLivingCreate = ({exercise_date,onUpdate}) => {
         
     });
 
-    // // fetch workouts and use in form.
-    // useAuthCheck()
-
     // post exercise
     const handleCreateExercise = async (e) => {
         e.preventDefault()
         
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:8000/exercise/post-exercise/', {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/exercise/post-exercise/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

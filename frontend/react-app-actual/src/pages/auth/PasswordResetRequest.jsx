@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Navigation from '../../components/Navigation';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const PasswordResetRequestPage = () => {
     const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ const PasswordResetRequestPage = () => {
     const handlePasswordResetRequest = async () => {
         try {
         // バックエンドにメール送信の要求を送信
-        const response = await axios.post('http://127.0.0.1:8000/accounts/reset-password-request/', {
+        const response = await axios.post( `${BACKEND_ENDPOINT}/accounts/reset-password-request/`, {
             email,
         });
         setRequestSent(true)

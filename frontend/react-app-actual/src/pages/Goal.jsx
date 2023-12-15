@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../hooks/getCookie';
-import { useNavigate } from 'react-router-dom';
-import Navigation from '../components/Navigation';
 import useAuthCheck from '../hooks/useAuthCheck';
 import GoalNavigation from '../components/goal/GoalNavigation';
+import { BACKEND_ENDPOINT } from '../settings';
+// import { authToken } from '../helpers/getAuthToken';
 
 const Goal = () => {
     
@@ -21,16 +21,15 @@ const Goal = () => {
         weekly_goal_abs: null,
     });
 
-
-
     // Fetch the goal when the component mounts
     const fetchGoal = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/goal/get/',{
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/goal/get/`,{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
+                    'Authorization': `Token ${authToken}`,
                     'X-CSRFToken': getCookie('csrftoken'),
                 }
             });
@@ -78,11 +77,12 @@ const Goal = () => {
         e.preventDefault();
 
         try {
-        const response = await fetch('http://127.0.0.1:8000/goal/create-update/', {
+        const authToken = localStorage.getItem('authToken')
+        const response = await fetch(`${BACKEND_ENDPOINT}/goal/create-update/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('authToken')}`,
+                'Authorization': `Token ${authToken}`,
                 'X-CSRFToken': getCookie('csrftoken'),
             // Include any necessary authentication headers
             },
@@ -90,7 +90,7 @@ const Goal = () => {
         });
 
         const data = await response.json();
-        console.log('User info saved successfully:', data);
+        console.log('User Goal saved successfully:', data);
         fetchGoal()
         } catch (error) {
         console.error('Error saving user info:', error);

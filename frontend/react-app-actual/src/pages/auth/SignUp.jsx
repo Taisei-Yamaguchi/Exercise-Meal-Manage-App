@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Navigation from '../../components/Navigation';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const SignUp = () => {
     const [userData, setUserData] = useState({
@@ -36,7 +37,7 @@ const SignUp = () => {
                 username: userData.email // emailをusernameに自動割り当て
             };
 
-            const response = await fetch('http://127.0.0.1:8000/accounts/signup/', {
+            const response = await fetch(`${BACKEND_ENDPOINT}/accounts/signup/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,14 +47,14 @@ const SignUp = () => {
 
             if (response.ok) {
                 // リクエストが成功した場合
-                const data = await response.json();
-                console.log(data);
+                // const data = await response.json();
+                // console.log(data);
                 setErrorMes('')
                 setSuccessMes('We sent the link to your email. Please check and activate your account. Your account is not available yet.');
             }else{
                 // リクエストが失敗した場合
-                const data = await response.json();
-                console.log(data);
+                // const data = await response.json();
+                // console.log(data);
                 setErrorMes(' email is already registered.')
             }
 
@@ -161,7 +162,6 @@ const SignUp = () => {
                             onChange={handleChange} 
                         />             
                         </div>
-
 
                         <div className="signup-sex">
                             <label>

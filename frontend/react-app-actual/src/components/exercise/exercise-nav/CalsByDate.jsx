@@ -1,43 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../../hooks/getCookie';
 import { Bar } from 'react-chartjs-2';
-
-
+// import { authToken } from '../../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../../settings';
 
 const CalsByDate = ({ selectedDate,onUpdate}) => {
     
     const [calsData, setCalsData] = useState([]);
     const [totalConsumedCals,setTotalConsume] =useState(0);
-    const [totalCals,setTotalCal]= useState(0);
+    // const [totalCals,setTotalCal]= useState(0);
     const [aspectRatio, setAspectRatio] = useState(3);
 
-
     useEffect(()=>(
-        setTotalConsume(calsData.bm_cals + calsData.exercise_cals + calsData.food_cals),
-        setTotalCal(Math.max(totalConsumedCals, calsData.intake_cals))
+        setTotalConsume(calsData.bm_cals + calsData.exercise_cals + calsData.food_cals)
+        // setTotalCal(Math.max(totalConsumedCals, calsData.intake_cals))
     ),[calsData])
     
     useEffect(() => {
-        
         fetchData()
     }, [selectedDate,onUpdate]);
 
-useEffect(()=>{
-    handleWindowResize(); // 初回描画時にも実行
-    window.addEventListener('resize', handleWindowResize);
+    useEffect(()=>{
+        handleWindowResize(); // 初回描画時にも実行
+        window.addEventListener('resize', handleWindowResize);
 
-    return () => {
-        window.removeEventListener('resize', handleWindowResize);
-    };
-})
-
+        return () => {
+            window.removeEventListener('resize', handleWindowResize);
+        };
+    })
     
 
     // API経由でログインユーザーのpfcを取得
     const fetchData = async() => {
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch(`http://127.0.0.1:8000/main/cals-by-date/?date=${selectedDate}`, {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/main/cals-by-date/?date=${selectedDate}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -48,7 +45,7 @@ useEffect(()=>{
 
             const data = await response.json();
             setCalsData(data);
-            console.log('cals',data)
+            // console.log('cals',data)
         } catch (error) {
             console.error('Error fetching data.:', error);
         }
@@ -73,10 +70,6 @@ useEffect(()=>{
         } else {
             setAspectRatio(6)
         }
-        
-        console.log('New Aspect Ratio:', );
-
-        
     };
 
 

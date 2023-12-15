@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import getCookie from '../../hooks/getCookie';
+// import { authToken } from '../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 function MealDelete({ mealId,onUpdate }){
     const handleDelete = async () => {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/meal/meal/delete/${mealId}/`, {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/delete/${mealId}/`, {
                 method: 'DELETE',
                 headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('authToken')}`,
+                'Authorization': `Token ${authToken}`,
                 'X-CSRFToken': getCookie('csrftoken'),
                 },
             });

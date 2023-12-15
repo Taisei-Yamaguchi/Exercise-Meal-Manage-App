@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
 import useAuthCheck from '../../hooks/useAuthCheck';
+// import { authToken } from '../../helpers/getAuthToken';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const ExerciseLivingUpdate = ({ exerciseId, exerciseData,onUpdate}) => {
     const [updateData, setUpdateData] = useState({
@@ -8,21 +10,18 @@ const ExerciseLivingUpdate = ({ exerciseId, exerciseData,onUpdate}) => {
         mets: exerciseData.mets,
     });
     
-    useAuthCheck()
-    
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         const sanitizedValue = value === '' ? null : value;
         setUpdateData((prevData) => ({ ...prevData, [name]: sanitizedValue }));
     };
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-        const authToken = localStorage.getItem('authToken');
-        const response = await fetch(`http://127.0.0.1:8000/exercise/exercise/update/${exerciseId}/`, {
+        const authToken = localStorage.getItem('authToken')
+        const response = await fetch(`${BACKEND_ENDPOINT}/exercise/exercise/update/${exerciseId}/`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

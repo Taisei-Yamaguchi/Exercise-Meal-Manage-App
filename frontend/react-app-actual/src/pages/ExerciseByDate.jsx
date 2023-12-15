@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../hooks/getCookie';
-import { useNavigate, useParams } from 'react-router-dom';
-import Navigation from '../components/Navigation';
+import { useParams } from 'react-router-dom';
+
+import { BACKEND_ENDPOINT } from '../settings';
+// import { authToken } from '../helpers/getAuthToken';
+
 import useAuthCheck from '../hooks/useAuthCheck';
 import ExerciseCreate from '../components/exercise/ExerciseCreate';
 import ExerciseDelete from '../components/exercise/ExerciseDelete';
@@ -13,13 +16,13 @@ import LatestExerciseByType from '../components/exercise/LatestExerciseByType';
 import ExerciseLivingCreate from '../components/exercise/ExerciseLivingCreate';
 import ExerciseLivingUpdate from '../components/exercise/ExerciseLivingUpdate';
 
+
+
 const ExerciseByDate = () => {
     
     const { date } = useParams();
     const [exerciseData, setExerciseData] = useState([]);
-    // const [defaultExerciseData, setDefaultExerciseData] = useState([]);
     const workoutTypes = ['Chest', 'Back', 'Shoulder', 'Arm','Leg','Abs','Aerobic','Other'];
-    
     const [loading, setLoading] = useState(true);
     const [updateTrigger, setUpdateTrigger] = useState(false);
 
@@ -28,9 +31,9 @@ const ExerciseByDate = () => {
     
     
     const fetchExerciseData = async () => {
+        const authToken = localStorage.getItem('authToken')
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch(`http://127.0.0.1:8000/exercise/get-exercise-date/?date=${date}`, {
+            const response = await fetch(`${BACKEND_ENDPOINT}/exercise/get-exercise-date/?date=${date}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
