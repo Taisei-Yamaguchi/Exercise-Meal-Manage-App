@@ -6,14 +6,24 @@ import getCookie from '../../../hooks/getCookie';
 import formattedCurrentDate from '../../../helpers/getToday';
 import { BACKEND_ENDPOINT } from '../../../settings';
 
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { setLoading } from '../../../redux/store/LoadingSlice';
+
+
 const Pet = () => {
     const [petData, setPetData] = useState(null);
+    const dispatch = useDispatch()
+    const loading = useSelector((state) => state.loading.loading);
+
 
     useEffect(()=>{
         fetchPetData()
     },[])
+
     const fetchPetData = async () => {
         try {
+            dispatch(setLoading(true))
             const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/pet/get-pet/?pet_date=${formattedCurrentDate}`,{
                 method: 'GET',
@@ -33,8 +43,11 @@ const Pet = () => {
             setPetData(data);
         } catch (error) {
             console.error('Error fetching pet data:', error);
+        } finally{
+            dispatch(setLoading(false))
         }
     }
+
 
     const getPetImage = () => {
         if (petData && petData.grow) {
@@ -61,13 +74,18 @@ const Pet = () => {
         return '/pets/Egg.png';
     };
 
+    
     return (
-        <div >
-            <div className=" shadow-xl image-full" style={{ backgroundImage: 'url(/pets-bg/brown-grass.jpeg)' }}>
+        <div>
+        {loading ? (
+            <span className="loading loading-bars loading-lg"></span>
+        ) : (
+            <div className="shadow-xl image-full" style={{ backgroundImage: 'url(/pets-bg/brown-grass.jpeg)' }}>
             <div className="card-body">
                 <img src={getPetImage()} width={200} alt="Pet" />
             </div>
             </div>
+        )}
         </div>
     );
 };

@@ -38,7 +38,6 @@ const ExerciseByDate = () => {
     const clearToastMes = ()=>{
         dispatch(setToastMes(''))
     }
-
     
     
     const fetchExerciseData = async () => {

@@ -8,10 +8,12 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import ToastSlice from './store/ToastSlice';
+import LoadingSlice from './store/LoadingSlice';
 
 const store = configureStore({
     reducer: {
         toast: ToastSlice,
+        loading: LoadingSlice,
     },
 });
 
