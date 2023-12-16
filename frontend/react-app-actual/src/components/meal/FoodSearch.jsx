@@ -8,6 +8,9 @@ import { useDispatch } from 'react-redux';
 import { setToastMes } from '../../redux/store/ToastSlice';
 import { setToastClass } from '../../redux/store/ToastSlice';
 
+import { setModalLoading } from '../../redux/store/LoadingSlice';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+
 
 const FoodSearch = ({meal_type,date,onUpdate}) => {
     // const {meal_type,date}=useParams();
@@ -20,6 +23,7 @@ const FoodSearch = ({meal_type,date,onUpdate}) => {
     }
     const [mes,setMes] = useState('')
     const dispatch = useDispatch();
+    const modalLoading =useSelector((state)=>state.loading.modalLoading)
 
 
     const handleSearch = async (e) => {
@@ -27,6 +31,7 @@ const FoodSearch = ({meal_type,date,onUpdate}) => {
         const escapedSearchExpression = searchExpression.replace(/&/g, '%26').replace(/\|/g, '%7C');
         
         try {
+            dispatch(setModalLoading(true))
             const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/food-search/?search_expression=${escapedSearchExpression}/`, {
                 method: 'GET',
@@ -54,12 +59,15 @@ const FoodSearch = ({meal_type,date,onUpdate}) => {
             }
         } catch (error) {
             console.error('Error food search:', error.message);
+        } finally{
+            dispatch(setModalLoading(false))
         }
     };
 
     const handleFoodClick = async (foodData) => {
         try {
             dispatch(setToastMes(''))
+            dispatch(setModalLoading(true))
             // バックエンドに対して選択された食品データを送信
             const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/create-with-fatsecret/`, {
@@ -92,6 +100,8 @@ const FoodSearch = ({meal_type,date,onUpdate}) => {
             // set toast
             dispatch(setToastMes('Error!'))
             dispatch(setToastClass('alert-error'))
+        } finally{
+            dispatch(setModalLoading(false))
         }
     };
 
@@ -119,7 +129,10 @@ const FoodSearch = ({meal_type,date,onUpdate}) => {
             </div>
             </form>
 
-            {mes ==='' ?(
+            { modalLoading ? (
+                <span className="loading loading-dots loading-lg"></span>
+            ):(
+            mes ==='' ?(
                     <div className="overflow-x-auto">
                     <table className="table table-zebra">
                         {/* head */}
@@ -155,7 +168,8 @@ const FoodSearch = ({meal_type,date,onUpdate}) => {
                         <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                         <span>{mes}</span>
                     </div>
-                )}
+            )
+            )}
         </div>
     );
 };

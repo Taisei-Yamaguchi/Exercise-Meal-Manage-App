@@ -2,11 +2,16 @@ import React, { useState,useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
+import { useDispatch } from 'react-redux';
+import { setUpdateContentLoading } from '../../redux/store/LoadingSlice';
+import { setUpdateContentId } from '../../redux/store/LoadingSlice';
 
 function MealUpdate({ meal,onUpdate }) {
     const [serving, setServing] = useState(meal.serving);
     const [grams,setGrams] =useState(meal.grams);
     const [isServingSelected, setIsServingSelected] = useState(!(meal.serving === null || meal.serving === 0));
+
+    const dispatch =useDispatch()
 
     const handleUpdateMeal = async (e) => {
         e.preventDefault()
@@ -15,6 +20,9 @@ function MealUpdate({ meal,onUpdate }) {
             return
         }
         try {
+            dispatch(setUpdateContentLoading(true))
+            dispatch(setUpdateContentId(meal.id))
+
             const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/update/${meal.id}/`, {
                 method: 'PUT',
@@ -38,6 +46,9 @@ function MealUpdate({ meal,onUpdate }) {
             }
         } catch (error) {
             console.error('Error updating meal:', error.message);
+        } finally{
+            dispatch(setUpdateContentLoading(false))
+            dispatch(setUpdateContentId(meal.id))
         }
     };
 

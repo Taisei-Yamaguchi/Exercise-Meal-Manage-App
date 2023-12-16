@@ -30,6 +30,9 @@ const MealsByDate = () => {
 
     const toastMes = useSelector((state) => state.toast.toastMes);
     const toastClass = useSelector((state) => state.toast.toastClass);
+    const updateContentLoading = useSelector((state)=> state.loading.updateContentLoading)
+    const updateContentId = useSelector((state)=> state.loading.updateContentId)
+
     const dispatch = useDispatch()
 
     // clear toastMes
@@ -42,6 +45,7 @@ const MealsByDate = () => {
         const authToken = localStorage.getItem('authToken')
         const url = `${BACKEND_ENDPOINT}/meal/meals/date/?meal_date=${date}`;
 
+        
         fetch(url, {
             method: 'GET',
             headers: {
@@ -164,21 +168,27 @@ const MealsByDate = () => {
                                     {meals
                                     .filter((meal) => meal.meal_type === type)
                                     .map((meal, index) => (
-                                        <tr key={meal.id}>
-                                        <td>{meal.food.name}</td>
-                                        <td>
-                                            {meal.serving !== null && meal.serving !== 0 ? (
-                                            <p>{Math.round(meal.food.cal * meal.serving)}</p>
-                                            ) : (
-                                            <div>
-                                                <p>{Math.round(meal.food.cal * (meal.grams / meal.food.amount_per_serving))} </p>
-                                            </div>
-                                            )}
-                                        </td>
-                                        <td><MealUpdate meal={meal} onUpdate={handleUpdate} /></td>
-                                        <td><MealDelete mealId={meal.id} onUpdate={handleUpdate} /></td>
-                                        <th></th>
-                                        </tr>
+
+                                        updateContentLoading && updateContentId === meal.id ? (
+                                            <tr key={`loading-${meal.id}`} className="loading loading-bars loading-lg">
+                                            </tr>
+                                        ):(
+                                            <tr key={meal.id}>
+                                            <td>{meal.food.name}</td>
+                                            <td>
+                                                {meal.serving !== null && meal.serving !== 0 ? (
+                                                <p>{Math.round(meal.food.cal * meal.serving)}</p>
+                                                ) : (
+                                                <div>
+                                                    <p>{Math.round(meal.food.cal * (meal.grams / meal.food.amount_per_serving))} </p>
+                                                </div>
+                                                )}
+                                            </td>
+                                            <td><MealUpdate meal={meal} onUpdate={handleUpdate} /></td>
+                                            <td><MealDelete mealId={meal.id} onUpdate={handleUpdate} /></td>
+                                            <th></th>
+                                            </tr>
+                                        )
                                     ))}
                                 </tbody>
                             </table>

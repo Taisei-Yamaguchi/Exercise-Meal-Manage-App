@@ -3,9 +3,18 @@ import getCookie from '../../hooks/getCookie';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
 
+import { useDispatch } from 'react-redux';
+import { setUpdateContentLoading } from '../../redux/store/LoadingSlice';
+import { setUpdateContentId } from '../../redux/store/LoadingSlice';
+
 function MealDelete({ mealId,onUpdate }){
+    const dispatch = useDispatch()
+
     const handleDelete = async () => {
         try {
+            dispatch(setUpdateContentLoading(true))
+            dispatch(setUpdateContentId(mealId))
+
             const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/delete/${mealId}/`, {
                 method: 'DELETE',
@@ -23,9 +32,12 @@ function MealDelete({ mealId,onUpdate }){
             } else {
                 console.error('Failed to delete meal:', response.statusText);
             }
-            } catch (error) {
+        } catch (error) {
             console.error('Error deleting meal:', error.message);
-            }
+        } finally {
+            dispatch(setUpdateContentLoading(false))
+            dispatch(setUpdateContentId(mealId))
+        }
     };
 
 

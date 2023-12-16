@@ -20,12 +20,13 @@ import { useDispatch } from 'react-redux';
 import { setToastMes } from '../redux/store/ToastSlice';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
+
+
 const ExerciseByDate = () => {
     
     const { date } = useParams();
     const [exerciseData, setExerciseData] = useState([]);
     const workoutTypes = ['Chest', 'Back', 'Shoulder', 'Arm','Leg','Abs','Aerobic','Other'];
-    const [loading, setLoading] = useState(true);
     const [updateTrigger, setUpdateTrigger] = useState(false);
 
     // latestExerciseのトリガーにする変化をuseEffectで見る
@@ -34,11 +35,11 @@ const ExerciseByDate = () => {
     const dispatch =useDispatch()
     const toastMes = useSelector((state) => state.toast.toastMes);
     const toastClass = useSelector((state) => state.toast.toastClass);
+    
     // clear toastMes
     const clearToastMes = ()=>{
         dispatch(setToastMes(''))
     }
-    
     
     const fetchExerciseData = async () => {
         try {
@@ -65,7 +66,7 @@ const ExerciseByDate = () => {
             console.error('Error fetching exercise data:', error);
         } finally {
             // fetchが完了したらloadingをfalseに設定
-            setLoading(false);
+            // setLoading(false);
         }
     };
 

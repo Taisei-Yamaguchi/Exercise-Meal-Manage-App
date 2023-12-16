@@ -9,6 +9,9 @@ import { useDispatch } from 'react-redux';
 import { setToastMes } from '../../redux/store/ToastSlice';
 import { setToastClass } from '../../redux/store/ToastSlice';
 
+import { setModalLoading } from '../../redux/store/LoadingSlice';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+
 const FoodCreate = ({ onUpdate }) => {
     
     const [name, setName] = useState('');
@@ -20,6 +23,16 @@ const FoodCreate = ({ onUpdate }) => {
     const { toggleFoodCreateTrigger } = useFetchFoodContext();
     const dispatch =useDispatch()
 
+    const modalLoading =useSelector((state)=> state.loading.modalLoading);
+
+    const clearForm =()=>{
+        setName('')
+        setCal('')
+        setAmount_per_servnig('')
+        setCarbohydrate('')
+        setFat('')
+        setProtein('')
+    }
 
     const handlePostFood = async (e) => {
         e.preventDefault()
@@ -43,6 +56,7 @@ const FoodCreate = ({ onUpdate }) => {
         }
 
         try {
+            dispatch(setModalLoading(false))
             dispatch(setToastMes(''))
             const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/meal/food/post/`,{
@@ -63,6 +77,7 @@ const FoodCreate = ({ onUpdate }) => {
 
                 dispatch(setToastMes('Created Food SUccessfully!'))
                 dispatch(setToastClass('alert-info'))
+                clearForm()
             } else {
                 // ログイン失敗時の処理
                 // console.log(response.json());
@@ -74,6 +89,8 @@ const FoodCreate = ({ onUpdate }) => {
             console.error('Failed to post food:', error);
             dispatch(setToastMes('Error'))
             dispatch(setToastClass('alert-error'))
+        } finally{
+            dispatch(setModalLoading(false))
         }
     };
 
@@ -82,8 +99,12 @@ const FoodCreate = ({ onUpdate }) => {
     return (
 
         <div className="card shrink-0 w-full max-w-sm shadow-2xl text-slate-400" onSubmit={handlePostFood}>
+        
+        {modalLoading ?(
+                <span className="loading loading-dots loading-lg"></span>
+            ):(
         <form className="card-body">
-
+            
             <div className="form-control">
                 <label className="label">
                     <span className="label-text">Name (必須)</span>
@@ -172,10 +193,8 @@ const FoodCreate = ({ onUpdate }) => {
             <button className="btn btn-primary" type='submit'>Create Food</button>
             </div>
         </form>
+        )}
     </div>
-
-
-            
     );
 };
 

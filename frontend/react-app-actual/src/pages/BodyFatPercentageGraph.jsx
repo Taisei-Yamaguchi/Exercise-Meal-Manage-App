@@ -49,7 +49,7 @@ const BodyFatPercentageGraph = () => {
         }
     };
 
-    useAuthCheck(fetch)
+    useAuthCheck(fetchData)
 
     // ラベルとデータを用意
     const labels = bodyFatData.map(entry => entry.date);

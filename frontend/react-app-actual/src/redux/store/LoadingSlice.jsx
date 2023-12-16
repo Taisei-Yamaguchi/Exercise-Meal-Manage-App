@@ -2,20 +2,40 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    loading: false,
+    mainLoading: false,
+    modalLoading: false,
+    updateContentLoading: false,
+    updateContentId: '',
 };
 
 const LoadingSlice = createSlice({
     name: 'loading',
     initialState,
     reducers: {
-        setLoading: (state, action) => {
-        state.loading = action.payload;
-        }
+        setMainLoading: (state, action) => {
+        state.mainLoading = action.payload;
+        },
+
+        setModalLoading: (state, action) =>{
+            state.modalLoading = action.payload;
+        },
+
+        setUpdateContentLoading: (state,action) =>{
+            state.updateContentLoading =action.payload;
+        },
+
+        setUpdateContentId: (state,action) =>{
+            state.updateContentId =action.payload;
+        },
     },
 });
 
 
-export const { setLoading } = LoadingSlice.actions;
+export const { 
+    setMainLoading, 
+    setModalLoading, 
+    setUpdateContentLoading,
+    setUpdateContentId,
+} = LoadingSlice.actions;
 
 export default LoadingSlice.reducer;

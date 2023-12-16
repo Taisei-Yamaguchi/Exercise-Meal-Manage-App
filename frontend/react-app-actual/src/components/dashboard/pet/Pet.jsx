@@ -8,13 +8,13 @@ import { BACKEND_ENDPOINT } from '../../../settings';
 
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
-import { setLoading } from '../../../redux/store/LoadingSlice';
+import { setMainLoading } from '../../../redux/store/LoadingSlice';
 
 
 const Pet = () => {
     const [petData, setPetData] = useState(null);
     const dispatch = useDispatch()
-    const loading = useSelector((state) => state.loading.loading);
+    const mainLoading = useSelector((state) => state.loading.mainLoading);
 
 
     useEffect(()=>{
@@ -23,7 +23,7 @@ const Pet = () => {
 
     const fetchPetData = async () => {
         try {
-            dispatch(setLoading(true))
+            dispatch(setMainLoading(true))
             const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/pet/get-pet/?pet_date=${formattedCurrentDate}`,{
                 method: 'GET',
@@ -44,7 +44,7 @@ const Pet = () => {
         } catch (error) {
             console.error('Error fetching pet data:', error);
         } finally{
-            dispatch(setLoading(false))
+            dispatch(setMainLoading(false))
         }
     }
 
@@ -77,7 +77,7 @@ const Pet = () => {
     
     return (
         <div>
-        {loading ? (
+        {mainLoading ? (
             <span className="loading loading-bars loading-lg"></span>
         ) : (
             <div className="shadow-xl image-full" style={{ backgroundImage: 'url(/pets-bg/brown-grass.jpeg)' }}>

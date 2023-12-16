@@ -11,10 +11,47 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
     
     const [calsData, setCalsData] = useState([]);
     const [aspectRatio, setAspectRatio] = useState(3);
+
+    const [goalIntake,setGoalIntake] = useState(0)
+    const [goalConsuming,setGoalConsuming] =useState(0)
+
     
     useEffect(() => {
         fetchData()
     }, [selectedDate,onUpdate]);
+
+    useEffect(()=>{
+        fetchGoal()
+    },[])
+
+
+    // goal をfetch
+    const fetchGoal =async()=>{
+        try {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/goal/get/`,{
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${authToken}`,
+                    'X-CSRFToken': getCookie('csrftoken'),
+                }
+            });
+
+            const data = await response.json();
+
+            if ('message' in data) {
+                console.log('Success fetch Goal!')
+            }else{
+                setGoalIntake(data.goal_intake_cals)
+                setGoalConsuming(data.goal_consuming_cals)
+            }
+            
+        } catch (error) {
+            console.error('Error fetching latest user info:', error);
+        }
+    }
+
 
     useEffect(()=>{
         handleWindowResize(); // 初回描画時にも実行
@@ -72,14 +109,13 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
         datasets: [
             
             {
-                label: '目標最低摂取',
+                label: '目標摂取cal',
                 type: 'line',
                 borderColor: 'blue',
                 pointBackgroundColor: 'blue', // ドットの内側の色を設定
                 pointRadius: 5, // ドットのサイズを設定
                 data: [
-                    calsData.bm_cals
-                    
+                    goalIntake
                 ],
                 fill: false,
             },
@@ -90,7 +126,7 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
                 pointBackgroundColor: 'red', // ドットの内側の色を設定
                 pointRadius: 5, // ドットのサイズを設定
                 data: [
-                    calsData.food_cals+250
+                    goalConsuming
                 ],
                 fill: false,
             },
@@ -134,13 +170,13 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
         indexAxis: 'y',
         scales: {
             x: {
-                stacked:true,
+                // stacked:true,
                 max: calsData.bm_cals + 2000,
                 beginAtZero: true,
                 
             },
             y: {
-                stacked: true,
+                // stacked: true,
             },
         },
         
