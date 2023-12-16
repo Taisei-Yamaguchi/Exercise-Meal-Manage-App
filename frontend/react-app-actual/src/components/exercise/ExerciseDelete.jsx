@@ -2,10 +2,15 @@ import React from 'react';
 import getCookie from '../../hooks/getCookie';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
+import { useDispatch } from 'react-redux';
+import { setExerciseLoading } from '../../redux/store/LoadingSlice';
 
-const ExerciseDelete = ({ exerciseId, onUpdate }) => {
+const ExerciseDelete = ({ exerciseId}) => {
+    const dispatch = useDispatch()
+
     const handleDelete = async () => {
         try {
+        dispatch(setExerciseLoading(true))
         const authToken = localStorage.getItem('authToken')
         const response = await fetch(`${BACKEND_ENDPOINT}/exercise/exercise/delete/${exerciseId}/`, {
             method: 'DELETE',
@@ -19,12 +24,13 @@ const ExerciseDelete = ({ exerciseId, onUpdate }) => {
         if (response.ok) {
              // 親コンポーネントでリストを更新するなどの処理を実行
             console.log('Delete success')
-            onUpdate()
         } else {
             console.error('Failed to delete exercise');
         }
         } catch (error) {
-        console.error('Failed to delete exercise', error);
+            console.error('Failed to delete exercise', error);
+        } finally{
+            dispatch(setExerciseLoading(false))
         }
     };
 

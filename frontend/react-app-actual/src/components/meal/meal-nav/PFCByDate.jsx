@@ -4,15 +4,19 @@ import getCookie from '../../../hooks/getCookie';
 import 'chartjs-plugin-datalabels';
 // import { authToken } from '../../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../../settings';
+// import { useDispatch } from 'react-redux';
+// import { setMealLoading } from '../../../redux/store/LoadingSlice';
+import { useSelector } from 'react-redux';
 
-
-const PFCByDate = ({ selectedDate,onUpdate}) => {
-    
+const PFCByDate = ({ selectedDate}) => {
+    // const dispatch =useDispatch()    
     const [pfcData, setPfcData] = useState([]);
     const [totalAmount,setTotalAmount] =useState(0);
     const [ratioPFC,setRatioPFC] = useState([]);
     const [mes,setMes] = useState('');
     const [mesClass,setMesClass] =useState('');
+    const mealLoading = useSelector((state) => state.loading.mealLoading)
+
 
     useEffect(()=>{
         setTotalAmount(pfcData.reduce((total, item) => total + item.amount, 0));
@@ -76,7 +80,7 @@ const PFCByDate = ({ selectedDate,onUpdate}) => {
 
     useEffect(() => {
         fetchData()
-    }, [selectedDate,onUpdate]);
+    }, [mealLoading]);
 
     // API経由でログインユーザーのpfcを取得
     const fetchData = async() => {
@@ -96,7 +100,7 @@ const PFCByDate = ({ selectedDate,onUpdate}) => {
             console.log('Success fetchPFC!')
         } catch (error) {
             console.error('Error fetching data.:', error);
-        }
+        } 
     };
 
 

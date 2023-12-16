@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
 // import useAuthCheck from '../../hooks/useAuthCheck';
-import { useFetchWorkoutContext } from '../../hooks/fetchWorkoutContext';
+// import { useFetchWorkoutContext } from '../../hooks/fetchWorkoutContext';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { useDispatch } from 'react-redux';
+import { setExerciseLoading } from '../../redux/store/LoadingSlice';
 
-const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
-    
+const ExerciseCreate = ({workoutType,exercise_date}) => {
+    const dispatch =useDispatch()
+    const workoutLoading = useSelector((state)=> state.loading.workoutLoading)
+
     const [workouts,setWorkouts]= useState([])
     const [default_workouts,setDefaultWorkouts]= useState([])
     const [formData, setFormData] = useState({
@@ -24,11 +29,10 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
         memos: null
     });
 
-    const { workoutCreateTrigger, toggleWorkoutCreateTrigger } = useFetchWorkoutContext();
-
+    
     useEffect(() => {
         fetchWorkouts();
-    }, [workoutCreateTrigger]);
+    }, [workoutLoading]);
 
     // fetch workouts and use in form.
     const fetchWorkouts = async () => {
@@ -64,6 +68,7 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
         }
         
         try {
+            dispatch(setExerciseLoading(true))
             const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/exercise/post-exercise/`, {
                 method: 'POST',
@@ -76,15 +81,19 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
         });
 
         const data = await response.json();
-
-        console.log('Exercise created successfully:', data);
+        if(response.ok){
+            console.log('Exercise created successfully:', data);
         // 成功時の処理を追加
-        onUpdate()
-
+        }else{
+            console.log('Error!')
+        }
+        
         } catch (error) {
             console.error('Error creating exercise:', error);
         ;
-        } 
+        }finally{
+            dispatch(setExerciseLoading(false))
+        }
     };
 
 
@@ -137,9 +146,6 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
             }
         }
     };
-
-
-
 
     
     return (

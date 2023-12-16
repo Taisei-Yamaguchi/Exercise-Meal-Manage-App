@@ -5,7 +5,17 @@ import useAuthCheck from '../hooks/useAuthCheck';
 // import { authToken } from '../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../settings';
 
+import { useDispatch } from 'react-redux';
+import { setToastMes } from '../redux/store/ToastSlice';
+import { setToastClass } from '../redux/store/ToastSlice';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+
+
 const SettingsAccount = () => {
+    const toastMes = useSelector((state)=>state.toast.toastMes)
+    const toastClass = useSelector((state)=>state.toast.toastClass)
+    const dispatch =useDispatch()
+
     const [name, setName] = useState('');
     const [picture, setPicture] = useState(null);
     const [sex, setSex] = useState(false);
@@ -16,6 +26,7 @@ const SettingsAccount = () => {
 
     const fetchAccount = async () => {
         try {
+            dispatch(setToastMes(''))
             const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/accounts/get/`, {
                 method: 'GET',
@@ -55,13 +66,25 @@ const SettingsAccount = () => {
                 },
                 body: JSON.stringify({ name, picture, sex, birthday }),
             });
+
             const data = await response.json();
+            if(response.ok){
+                console.log('User Account saved successfully:', data);
+                fetchAccount()
+
+                dispatch(setToastMes('Update Success!'))
+                dispatch(setToastClass('alert-info'))
+            }else{
+                dispatch(setToastMes('Error!'))
+                dispatch(setToastClass('alert-error'))
+            }
             console.log(data); // サーバーからのレスポンスをログ出力
             
             setMes('Update Success')
         } catch (error) {
             console.error('Error:', error);
-            // エラーハンドリング
+            dispatch(setToastMes('Error!'))
+            dispatch(setToastClass('alert-error'))
         }
     };
 
@@ -177,30 +200,16 @@ const SettingsAccount = () => {
                             </label>
                         </div>
 
-                        <label className="label">
-                            {/* <NavLink className="label-text-alt link link-hover" to="/password-reset/request">Forgot password?</NavLink> */}
-                        </label>
+                        {toastMes && toastMes !==''&&(
+                            <div role="alert" className={`alert ${toastClass}`} >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <span>{toastMes}</span>
+                            </div>
+                        )}
                         
                         <div className="form-control mt-6">
                             <button type='submit'className="btn btn-primary">Account Update</button>
                         </div>
-                        {/* {errorMes ==='' ?(
-                            <></>
-                        ):(
-                            <div role="alert" className="alert alert-error">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                <span>{errorMes}</span>
-                            </div>
-                        )}
-
-                        {successMes ==='' ?(
-                            <></>
-                        ):(
-                            <div role="alert" className="alert alert-success">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                <span>{successMes}</span>
-                            </div>
-                        )} */}
                     </form>
                     </div>
                 </div>

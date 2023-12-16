@@ -3,15 +3,20 @@ import getCookie from '../../hooks/getCookie';
 // import useAuthCheck from '../../hooks/useAuthCheck';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
+import { useDispatch } from 'react-redux';
+import { setExerciseLoading } from '../../redux/store/LoadingSlice';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 
-const LatestExerciseByType = ({exercise_date,workout_type, fetchTrigger,onUpdate }) => {
-    
+const LatestExerciseByType = ({exercise_date,workout_type}) => {
+    const dispatch = useDispatch()
+    const exerciseLoading =useSelector((state) => state.loading.exerciseLoading)
+
     const [latestExercises,setLatestExercises] =useState([])
 
     useEffect(()=>{
         fetchLatestExercises()
-    },[fetchTrigger])
+    },[exerciseLoading])
 
     // 最新meal
     const fetchLatestExercises = async() => {
@@ -43,6 +48,7 @@ const LatestExerciseByType = ({exercise_date,workout_type, fetchTrigger,onUpdate
 
     const handleCreateExercise = async (e) => {
         try {
+        dispatch(setExerciseLoading(true))
         const authToken = localStorage.getItem('authToken')
         const response = await fetch(`${BACKEND_ENDPOINT}/exercise/create-latest-exercise/`, {
             method: 'POST',
@@ -61,12 +67,14 @@ const LatestExerciseByType = ({exercise_date,workout_type, fetchTrigger,onUpdate
             const data = await response.json();
             console.log('Exercise created successfully:', data);
             fetchLatestExercises()
-            onUpdate()
+            
         } else {
             console.error('Failed to create exercise:', response.statusText);
         }
         } catch (error) {
-        console.error('Error creating exercise:', error.message);
+            console.error('Error creating exercise:', error.message);
+        } finally{
+            dispatch(setExerciseLoading(false))
         }
     };
 

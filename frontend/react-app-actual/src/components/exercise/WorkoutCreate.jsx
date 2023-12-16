@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
 // import useAuthCheck from '../../hooks/useAuthCheck';
-// import { authToken } from '../../helpers/getAuthToken';
-import { useFetchWorkoutContext } from '../../hooks/fetchWorkoutContext';
+
 import { BACKEND_ENDPOINT } from '../../settings';
 
 import { useDispatch } from 'react-redux';
@@ -10,12 +9,12 @@ import { setToastMes } from '../../redux/store/ToastSlice';
 import { setToastClass } from '../../redux/store/ToastSlice';
 import { setModalLoading } from '../../redux/store/LoadingSlice';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { setWorkoutLoading } from '../../redux/store/LoadingSlice';
 
 
 const WorkoutCreate = ({workoutType}) => {
     const [workoutName, setWorkoutName] = useState('');    
 
-    const { toggleWorkoutCreateTrigger } = useFetchWorkoutContext();
     const dispatch =useDispatch()
     const modalLoading = useSelector((state) => state.loading.modalLoading)
 
@@ -24,6 +23,7 @@ const WorkoutCreate = ({workoutType}) => {
         try {
         dispatch(setToastMes(''))
         dispatch(setModalLoading(true))
+        dispatch(setWorkoutLoading(true))
 
         const authToken = localStorage.getItem('authToken')
         const response = await fetch(`${BACKEND_ENDPOINT}/exercise/post-workout/`, {
@@ -39,7 +39,6 @@ const WorkoutCreate = ({workoutType}) => {
         const data = await response.json();
         console.log('Workout created successfully:', data);
         setWorkoutName('')
-        toggleWorkoutCreateTrigger()
 
         if(response.ok){
             dispatch(setToastMes('Created Workout Successfully!'))
@@ -56,6 +55,7 @@ const WorkoutCreate = ({workoutType}) => {
             dispatch(setToastClass('alert-error'))
         } finally {
             dispatch(setModalLoading(false))
+            dispatch(setWorkoutLoading(false))
         }
     };
 

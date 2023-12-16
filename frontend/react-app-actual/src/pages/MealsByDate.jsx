@@ -23,17 +23,17 @@ const MealsByDate = () => {
     const { date } = useParams();
     const [meals, setMeals] = useState([]);
     const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack'];
-    const [updateTrigger, setUpdateTrigger] = useState(false);
-
-    // latestMealのトリガーにする変化をuseEffectで見る
-    const [fetchTrigger,setFetchTrigger] =useState(false);
-
+    
     const toastMes = useSelector((state) => state.toast.toastMes);
     const toastClass = useSelector((state) => state.toast.toastClass);
     const updateContentLoading = useSelector((state)=> state.loading.updateContentLoading)
     const updateContentId = useSelector((state)=> state.loading.updateContentId)
 
+    const mealLoading = useSelector((state) => state.loading.mealLoading)
+
     const dispatch = useDispatch()
+
+    useAuthCheck();
 
     // clear toastMes
     const clearToastMes = ()=>{
@@ -65,24 +65,16 @@ const MealsByDate = () => {
         .then(mealData => {
             setMeals(mealData.meals);
             console.log('Success fetchMealsData!')
-            setFetchTrigger((prev) => !prev);
         })
         .catch(error => {
             console.error('Error:', error);
         });
     };
 
-    //ログインチェック、パスすればeftchMealsByDateを実行
-    useAuthCheck(fetchMealsByDate);
 
     useEffect(()=>{
         fetchMealsByDate()
-    },[updateTrigger])
-
-    const handleUpdate = () => {
-        // 何らかのアクションが発生した時にupdateTriggerをトグル
-        setUpdateTrigger((prev) => !prev);
-    };
+    },[mealLoading])
     
 
     useEffect(() => {
@@ -100,7 +92,7 @@ const MealsByDate = () => {
     return (
             <div className='container'>
             <div className='sub-container'>
-                <MealNavigation onUpdate={handleUpdate} />
+                <MealNavigation />
                 <div className='sm:mt-14 pt-80 max-sm:pt-96'>
                 {mealTypes.map((type) => (
                     <div key={type} className='border-b'>
@@ -130,7 +122,7 @@ const MealsByDate = () => {
                                 ></img>
                                     <dialog id={`my_modal_3_${type}`} className="modal">
                                         <div className="modal-box">
-                                            <FoodSearch meal_type={type} date={date} onUpdate={handleUpdate}/>
+                                            <FoodSearch meal_type={type} date={date}/>
                                         </div>
                                         
                                         {/* toast mes */}
@@ -148,10 +140,10 @@ const MealsByDate = () => {
                                     
                                 <div className='flex flex-row'>
                                     <div className='flex flex-row max-sm:flex-col'>
-                                        <MealCreateForm meal_type={type} meal_date={date} onUpdate={handleUpdate} />
-                                        <MealCreateFormWithHistory meal_type={type} meal_date={date} onUpdate={handleUpdate} />    
+                                        <MealCreateForm meal_type={type} meal_date={date} />
+                                        <MealCreateFormWithHistory meal_type={type} meal_date={date}  />    
                                     </div>
-                                    <LatestMealByType meal_type={type} meal_date={date} fetchTrigger={fetchTrigger} onUpdate={handleUpdate}/>
+                                    <LatestMealByType meal_type={type} meal_date={date}/>
                                 </div>
                             </div>
 
@@ -184,12 +176,17 @@ const MealsByDate = () => {
                                                 </div>
                                                 )}
                                             </td>
-                                            <td><MealUpdate meal={meal} onUpdate={handleUpdate} /></td>
-                                            <td><MealDelete mealId={meal.id} onUpdate={handleUpdate} /></td>
+                                            <td><MealUpdate meal={meal} /></td>
+                                            <td><MealDelete mealId={meal.id} /></td>
                                             <th></th>
                                             </tr>
                                         )
                                     ))}
+
+                                    {mealLoading &&(
+                                        <tr key={`meal-loading-${type}`} className="loading loading-bars loading-lg">
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                             </div>

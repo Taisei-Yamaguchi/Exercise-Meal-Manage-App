@@ -3,10 +3,12 @@ import React, { useEffect, useState } from 'react';
 import getCookie from '../../hooks/getCookie';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
+import { useDispatch } from 'react-redux';
+import { setMealLoading } from '../../redux/store/LoadingSlice';
 
+function MealCreateFormWithHistory({meal_type,meal_date}) {
 
-function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
-    
+    const dispatch =useDispatch()
     const [foods, setFoods] = useState([]);
     const [selectedFood, setSelectedFood] = useState('');
     const [serving, setServing] = useState(1);
@@ -41,6 +43,7 @@ function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
         e.preventDefault();
         
         try {
+        dispatch(setMealLoading(true))
         const authToken = localStorage.getItem('authToken')
         const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/create/`, {
             method: 'POST',
@@ -61,12 +64,13 @@ function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
         if (response.ok) {
             const data = await response.json();
             console.log('Meal created successfully:', data);
-            onUpdate()
         } else {
             console.error('Failed to create meal:', response.statusText);
         }
         } catch (error) {
         console.error('Error creating meal:', error.message);
+        } finally{
+            dispatch(setMealLoading(false))
         }
     };
 

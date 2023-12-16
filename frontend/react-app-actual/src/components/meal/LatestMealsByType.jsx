@@ -4,16 +4,23 @@ import getCookie from '../../hooks/getCookie';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
 
-const LatestMealByType = ({meal_date,meal_type,fetchTrigger,onUpdate }) => {
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { setMealLoading } from '../../redux/store/LoadingSlice';
+
+const LatestMealByType = ({meal_date,meal_type}) => {
     
+    const mealLoading = useSelector((state) => state.loading.mealLoading)
     const [latestMeals,setLatestMeals] =useState([])
+    const dispatch =useDispatch()
 
     useEffect(()=>{
         fetchLatestMeals()
-    },[fetchTrigger])
+    },[mealLoading])
 
     // 最新meal
     const fetchLatestMeals = async() => {
+        
         const authToken = localStorage.getItem('authToken')
         fetch(`${BACKEND_ENDPOINT}/meal/meal/latest-meals/?meal_type=${meal_type}`, {
             method: 'GET',
@@ -42,6 +49,7 @@ const LatestMealByType = ({meal_date,meal_type,fetchTrigger,onUpdate }) => {
 
     const handleCreateMeal = async (e) => {
         try {
+        dispatch(setMealLoading(true))
         const authToken = localStorage.getItem('authToken')
         const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/create-latest/`, {
             method: 'POST',
@@ -60,12 +68,14 @@ const LatestMealByType = ({meal_date,meal_type,fetchTrigger,onUpdate }) => {
             const data = await response.json();
             console.log('Meal created successfully:', data);
             fetchLatestMeals()
-            onUpdate()
+            
         } else {
             console.error('Failed to create meal:', response.statusText);
         }
         } catch (error) {
-        console.error('Error creating meal:', error.message);
+            console.error('Error creating meal:', error.message);
+        }finally{
+            dispatch(setMealLoading(false))
         }
     };
 

@@ -7,7 +7,7 @@ import CalsByDate from '../../sub/CalsByDate';
 import Navigation from '../../Navigation';
 
 
-const ExerciseNavigation = (onUpdate) => {
+const ExerciseNavigation = () => {
     const { date } = useParams();
     
     return (
@@ -96,7 +96,7 @@ const ExerciseNavigation = (onUpdate) => {
 
                 <input type="radio" name="my_tabs_2" role="tab" className="tab w-10" aria-label="Cal" defaultChecked/>
                 <div className="bg-base-100 border-base-300 rounded-box w-screen p-6 tab-content p-10  text-zinc-900">
-                    <CalsByDate selectedDate={date} onUpdate={onUpdate}/>
+                    <CalsByDate selectedDate={date} />
                 </div>
                 
                 <input type="radio" name="my_tabs_2" role="tab" className="tab w-10" aria-label="Graph" defaultChecked/>

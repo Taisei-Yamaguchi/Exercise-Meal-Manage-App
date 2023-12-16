@@ -4,10 +4,11 @@ import { Bar } from 'react-chartjs-2';
 // import { authToken } from '../../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
 import { Chart, registerables } from 'chart.js';
+import { useSelector } from 'react-redux';
 
 Chart.register(...registerables);
 
-const CalsByDate = ({ selectedDate,onUpdate}) => {
+const CalsByDate = ({ selectedDate}) => {
     
     const [calsData, setCalsData] = useState([]);
     const [aspectRatio, setAspectRatio] = useState(3);
@@ -15,10 +16,12 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
     const [goalIntake,setGoalIntake] = useState(0)
     const [goalConsuming,setGoalConsuming] =useState(0)
 
+    const mealLoading = useSelector((state)=> state.loading.mealLoading)
+    const exerciseLoading = useSelector((state)=> state.loading.exerciseLoading)
     
     useEffect(() => {
         fetchData()
-    }, [selectedDate,onUpdate]);
+    }, [mealLoading,exerciseLoading]);
 
     useEffect(()=>{
         fetchGoal()

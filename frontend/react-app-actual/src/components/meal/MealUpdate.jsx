@@ -5,8 +5,9 @@ import { BACKEND_ENDPOINT } from '../../settings';
 import { useDispatch } from 'react-redux';
 import { setUpdateContentLoading } from '../../redux/store/LoadingSlice';
 import { setUpdateContentId } from '../../redux/store/LoadingSlice';
+import { setMealLoading } from '../../redux/store/LoadingSlice';
 
-function MealUpdate({ meal,onUpdate }) {
+function MealUpdate({ meal }) {
     const [serving, setServing] = useState(meal.serving);
     const [grams,setGrams] =useState(meal.grams);
     const [isServingSelected, setIsServingSelected] = useState(!(meal.serving === null || meal.serving === 0));
@@ -22,6 +23,7 @@ function MealUpdate({ meal,onUpdate }) {
         try {
             dispatch(setUpdateContentLoading(true))
             dispatch(setUpdateContentId(meal.id))
+            dispatch(setMealLoading(true))
 
             const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/update/${meal.id}/`, {
@@ -40,7 +42,6 @@ function MealUpdate({ meal,onUpdate }) {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Meal updated successfully:', data);
-                onUpdate()
             } else {
                 console.error('Failed to update meal:', response.statusText);
             }
@@ -49,6 +50,7 @@ function MealUpdate({ meal,onUpdate }) {
         } finally{
             dispatch(setUpdateContentLoading(false))
             dispatch(setUpdateContentId(meal.id))
+            dispatch(setMealLoading(false))
         }
     };
 

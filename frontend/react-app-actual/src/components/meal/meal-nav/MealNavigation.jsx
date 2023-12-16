@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { useDispatch } from 'react-redux';
 import { setToastMes } from '../../../redux/store/ToastSlice';
 
-const MealNavigation = (onUpdate) => {
+const MealNavigation = () => {
     const { date } = useParams();
 
     const dispatch= useDispatch()
@@ -102,12 +102,12 @@ const MealNavigation = (onUpdate) => {
             <div role="tablist" className="tabs tabs-lifted">
                 <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="PFC" />
                 <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box w-screen p-6 tab-content p-10  text-zinc-900">
-                    <PFCByDate selectedDate={date} onUpdate={onUpdate}/>
+                    <PFCByDate selectedDate={date} />
                 </div>
 
                 <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Cal" defaultChecked/>
                 <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box w-screen p-6 tab-content p-10  text-zinc-900">
-                    <CalsByDate selectedDate={date} onUpdate={onUpdate}/>
+                    <CalsByDate selectedDate={date} />
                 </div>
 
                 {/* <NavLink to={`/meal/food-create/${date}`}>Create Your Food</NavLink> */}

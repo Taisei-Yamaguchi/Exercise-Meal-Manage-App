@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import getCookie from '../../hooks/getCookie';
 // import useAuthCheck from '../../hooks/useAuthCheck';
-import { useFetchFoodContext } from '../../hooks/fetchFoodContext';
+// import { useFetchFoodContext } from '../../hooks/fetchFoodContext';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
 
 import { useDispatch } from 'react-redux';
 import { setToastMes } from '../../redux/store/ToastSlice';
 import { setToastClass } from '../../redux/store/ToastSlice';
-
+import { setFoodLoading } from '../../redux/store/LoadingSlice';
 import { setModalLoading } from '../../redux/store/LoadingSlice';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
-const FoodCreate = ({ onUpdate }) => {
+const FoodCreate = () => {
     
     const [name, setName] = useState('');
     const [cal, setCal] = useState('');
@@ -20,7 +20,7 @@ const FoodCreate = ({ onUpdate }) => {
     const [carbohydrate,setCarbohydrate] =useState('');
     const [fat,setFat] =useState('');
     const [protein,setProtein] =useState('');
-    const { toggleFoodCreateTrigger } = useFetchFoodContext();
+    // const { toggleFoodCreateTrigger } = useFetchFoodContext();
     const dispatch =useDispatch()
 
     const modalLoading =useSelector((state)=> state.loading.modalLoading);
@@ -58,6 +58,8 @@ const FoodCreate = ({ onUpdate }) => {
         try {
             dispatch(setModalLoading(false))
             dispatch(setToastMes(''))
+            dispatch(setFoodLoading(true))
+
             const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/meal/food/post/`,{
                 method: 'POST',
@@ -73,9 +75,9 @@ const FoodCreate = ({ onUpdate }) => {
                 // ログイン成功時の処理
                 console.log('Food posted successfully:', response.data);
                 // onUpdate() 
-                toggleFoodCreateTrigger()
+                // toggleFoodCreateTrigger()
 
-                dispatch(setToastMes('Created Food SUccessfully!'))
+                dispatch(setToastMes('Created Food Successfully!'))
                 dispatch(setToastClass('alert-info'))
                 clearForm()
             } else {
@@ -91,6 +93,7 @@ const FoodCreate = ({ onUpdate }) => {
             dispatch(setToastClass('alert-error'))
         } finally{
             dispatch(setModalLoading(false))
+            dispatch(setFoodLoading(false))
         }
     };
 

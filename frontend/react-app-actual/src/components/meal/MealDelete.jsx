@@ -7,13 +7,17 @@ import { useDispatch } from 'react-redux';
 import { setUpdateContentLoading } from '../../redux/store/LoadingSlice';
 import { setUpdateContentId } from '../../redux/store/LoadingSlice';
 
-function MealDelete({ mealId,onUpdate }){
+import { setMealLoading } from '../../redux/store/LoadingSlice';
+
+
+function MealDelete({ mealId }){
     const dispatch = useDispatch()
 
     const handleDelete = async () => {
         try {
             dispatch(setUpdateContentLoading(true))
             dispatch(setUpdateContentId(mealId))
+            dispatch(setMealLoading(true))
 
             const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/delete/${mealId}/`, {
@@ -27,8 +31,6 @@ function MealDelete({ mealId,onUpdate }){
         
             if (response.ok) {
                 console.log('Meal deleted successfully');
-                // 削除後のリフレッシュなどが必要ならば、その処理を追加
-                onUpdate()
             } else {
                 console.error('Failed to delete meal:', response.statusText);
             }
@@ -37,6 +39,7 @@ function MealDelete({ mealId,onUpdate }){
         } finally {
             dispatch(setUpdateContentLoading(false))
             dispatch(setUpdateContentId(mealId))
+            dispatch(setMealLoading(false))
         }
     };
 

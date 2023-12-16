@@ -2,8 +2,12 @@ import React, { useState, useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
+import { useDispatch } from 'react-redux';
+import { setExerciseLoading} from '../../redux/store/LoadingSlice';
 
-const ExerciseLivingCreate = ({exercise_date,onUpdate}) => {
+
+const ExerciseLivingCreate = ({exercise_date}) => {
+    const dispatch =useDispatch()
     
     const [formData, setFormData] = useState({
         workout_id: 'living',
@@ -19,6 +23,7 @@ const ExerciseLivingCreate = ({exercise_date,onUpdate}) => {
         e.preventDefault()
         
         try {
+            dispatch(setExerciseLoading(true))
             const authToken = localStorage.getItem('authToken')
             const response = await fetch(`${BACKEND_ENDPOINT}/exercise/post-exercise/`, {
                 method: 'POST',
@@ -31,15 +36,16 @@ const ExerciseLivingCreate = ({exercise_date,onUpdate}) => {
         });
 
         const data = await response.json();
-
-        console.log('Exercise created successfully:', data);
-        // 成功時の処理を追加
-        onUpdate()
-
+        if(response.ok){
+            console.log('Exercise created successfully:', data);
+        }else{
+            console.log("Error!")
+        }
         } catch (error) {
             console.error('Error creating exercise:', error);
-        ;
-        } 
+        } finally{
+            dispatch(setExerciseLoading(false))
+        }
     };
 
 

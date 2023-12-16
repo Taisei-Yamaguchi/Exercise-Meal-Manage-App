@@ -2,22 +2,27 @@ import React, { useState, useEffect } from 'react';
 
 // import useAuthCheck from '../../hooks/useAuthCheck';
 import getCookie from '../../hooks/getCookie';
-import { useFetchFoodContext } from '../../hooks/fetchFoodContext';
+// import { useFetchFoodContext } from '../../hooks/fetchFoodContext';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
 
+import { useDispatch } from 'react-redux';
+import { setMealLoading } from '../../redux/store/LoadingSlice';
+import { useSelector } from 'react-redux';
 
-function MealCreateForm({meal_type,meal_date,onUpdate}) {
+function MealCreateForm({meal_type,meal_date}) {
+    const dispatch =useDispatch();
     
     const [foods, setFoods] = useState([]);
     const [selectedFood, setSelectedFood] = useState('');
     const [serving, setServing] = useState(1);
 
-    const { foodCreateTrigger, toggleFoodCreateTrigger } = useFetchFoodContext();
+    const foodLoading = useSelector((state)=> state.loading.foodLoading)
+    // const { foodCreateTrigger, toggleFoodCreateTrigger } = useFetchFoodContext();
 
     useEffect(() => {
         fetchFoods()
-    }, [foodCreateTrigger]);
+    }, [foodLoading]);
 
     // API経由でログインユーザーのfoodを取得
     const fetchFoods = async() => {
@@ -52,6 +57,9 @@ function MealCreateForm({meal_type,meal_date,onUpdate}) {
         e.preventDefault();
         
     try {
+
+        dispatch(setMealLoading(true))
+
         const authToken = localStorage.getItem('authToken')
         const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/create/`, {
             method: 'POST',
@@ -72,12 +80,13 @@ function MealCreateForm({meal_type,meal_date,onUpdate}) {
         if (response.ok) {
             const data = await response.json();
             console.log('Meal created successfully:', data);
-            onUpdate()
         } else {
             console.error('Failed to create meal:', response.statusText);
         }
         } catch (error) {
         console.error('Error creating meal:', error.message);
+        } finally{
+            dispatch(setMealLoading(false))
         }
     };
 

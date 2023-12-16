@@ -35,9 +35,14 @@ using Django &amp; React
 <del>・workout create, food create, food searchを実行後データを再フェッチ（context）<br></del>
 
 ・コード整理(back,front) <br>
-・ローディング<br>
-・トースト<br>
+<del>・ローディング<br></del>
+<del>・トースト<br></del>
+<del>・loading when add item.<br></del>
+<del>・onUpdate　redux<br></del>
+・frontend　コンポーネント<br>
+
 ・詳細設定 <br>
+・setting (back,front)<br>
 
 ・バックエンドテストケースの作成 <br>
 ・フロントエンドのテスト　<br>

@@ -3,8 +3,12 @@ import getCookie from '../../hooks/getCookie';
 // import useAuthCheck from '../../hooks/useAuthCheck';
 // import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
+import { useDispatch } from 'react-redux';
+import { setExerciseLoading } from '../../redux/store/LoadingSlice';
 
-const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData,onUpdate}) => {
+const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData}) => {
+
+    const dispatch = useDispatch()
     const [updateData, setUpdateData] = useState({
 
         sets: exerciseData.sets,
@@ -34,6 +38,7 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData,onUpdate}) => {
         }
 
         try {
+        dispatch(setExerciseLoading(true))
         const authToken = localStorage.getItem('authToken')
         const response = await fetch(`${BACKEND_ENDPOINT}/exercise/exercise/update/${exerciseId}/`, {
             method: 'PUT',
@@ -47,12 +52,13 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData,onUpdate}) => {
 
         if (response.ok) {
             console.log('send data to server.')
-            onUpdate()
         } else {
             console.error('Failed to update exercise');
         }
         } catch (error) {
         console.error('Failed to update exercise', error);
+        } finally{
+            dispatch(setExerciseLoading(false))
         }
     };
 
