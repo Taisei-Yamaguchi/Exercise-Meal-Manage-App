@@ -3,7 +3,6 @@ import getCookie from '../hooks/getCookie';
 import useAuthCheck from '../hooks/useAuthCheck';
 import GoalNavigation from '../components/goal/GoalNavigation';
 import { BACKEND_ENDPOINT } from '../settings';
-// import { authToken } from '../helpers/getAuthToken';
 
 import { useDispatch } from 'react-redux';
 import { setToastMes } from '../redux/store/ToastSlice';
@@ -15,7 +14,6 @@ const Goal = () => {
     const toastMes = useSelector((state)=>state.toast.toastMes)
     const toastClass = useSelector((state)=>state.toast.toastClass)
     const dispatch =useDispatch()
-    
     const [formData, setFormData] = useState({
         goal_intake_cals: null,
         goal_consuming_cals: null,
@@ -29,6 +27,13 @@ const Goal = () => {
         weekly_goal_back: null,
         weekly_goal_abs: null,
     });
+
+    useAuthCheck()
+
+    // fetch Goal first Render
+    useEffect(()=>{
+        fetchGoal()
+    },[])
 
     // Fetch the goal when the component mounts
     const fetchGoal = async () => {
@@ -70,23 +75,20 @@ const Goal = () => {
             console.error('Error fetching latest user info:', error);
         }
     };
-    useAuthCheck(fetchGoal)
+    
 
+    // detect input change
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-
         // If the value is an empty string, set it to null
         const sanitizedValue = value === '' ? null : value;
         setFormData((prevData) => ({ ...prevData, [name]: sanitizedValue }));
-        
-    
     };
 
 
-
+    // send data and save goal
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
         const authToken = localStorage.getItem('authToken')
         const response = await fetch(`${BACKEND_ENDPOINT}/goal/create-update/`, {
@@ -95,7 +97,6 @@ const Goal = () => {
                 'Content-Type': 'application/json',
                 'Authorization': `Token ${authToken}`,
                 'X-CSRFToken': getCookie('csrftoken'),
-            // Include any necessary authentication headers
             },
             body: JSON.stringify(formData),
         });
@@ -103,7 +104,6 @@ const Goal = () => {
         const data = await response.json();
         if(response.ok){
             console.log('User Goal saved successfully:', data);
-
             fetchGoal()
             dispatch(setToastMes('Update Success!'))
             dispatch(setToastClass('alert-info'))
@@ -112,8 +112,6 @@ const Goal = () => {
             dispatch(setToastClass('alert-error'))
             console.log("Error!")
         }
-
-        
         } catch (error) {
             dispatch(setToastMes('Error!'))
             dispatch(setToastClass('alert-error'))
@@ -122,6 +120,7 @@ const Goal = () => {
     };
 
 
+    // render
     return (
         <div className='container'>
             <div className='sub-container '>

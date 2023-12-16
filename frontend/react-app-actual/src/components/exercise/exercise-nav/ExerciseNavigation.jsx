@@ -1,4 +1,3 @@
-// src/components/meal/MealNavigation.jsx
 import React  from 'react';
 import { useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
@@ -10,6 +9,7 @@ import Navigation from '../../Navigation';
 const ExerciseNavigation = () => {
     const { date } = useParams();
     
+    // render
     return (
         <div className='sub-nav bg-gradient-to-r from-orange-600 to-red-700 text-neutral-100'>
             {/* head & nav ハンバ-ガー */}
@@ -103,18 +103,10 @@ const ExerciseNavigation = () => {
                 <div className="bg-base-100 border-base-300 rounded-box w-screen p-6 tab-content p-10 text-zinc-900">
                     <NavLink to={`/exercise/exercise-total-weight-graph/${date}`} className="tab">Total</NavLink>
                     <NavLink to={`/exercise/daily-exercise-weight-graph/${date}/All`} className="tab">Daily </NavLink>
-                    <NavLink to='/user_info' className="tab">Info Form</NavLink>
-                    <NavLink to='/user_info/weight-graph' className='tab'>Weight</NavLink>
-                    <NavLink to='/user_info/body-fat-percentage-graph' className='tab'>Body Fat</NavLink>
-                    <NavLink to='/user_info/muscle-mass-graph' className='tab'>Muscle Mass</NavLink>
-                    <NavLink to='/user_info/cals-graph' className='tab'>Cals</NavLink>
-                
                 </div>
             </div>
         </div>
     );
 };
-
-// 他のコンポーネントをimportして使う部分は後で実装
 
 export default ExerciseNavigation;

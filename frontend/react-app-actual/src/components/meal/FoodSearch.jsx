@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import getCookie from '../../hooks/getCookie';
-// import useAuthCheck from '../../hooks/useAuthCheck';
-// import { authToken } from '../../helpers/getAuthToken';
+
 import { BACKEND_ENDPOINT } from '../../settings';
 import { useDispatch } from 'react-redux';
 
@@ -14,7 +13,6 @@ import { setMealLoading } from '../../redux/store/LoadingSlice';
 
 
 const FoodSearch = ({meal_type,date}) => {
-    // const {meal_type,date}=useParams();
     const [searchExpression, setSearchExpression] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const mealData ={
@@ -27,6 +25,7 @@ const FoodSearch = ({meal_type,date}) => {
     const modalLoading =useSelector((state)=>state.loading.modalLoading)
 
 
+    // search food from Open API
     const handleSearch = async (e) => {
         e.preventDefault();
         const escapedSearchExpression = searchExpression.replace(/&/g, '%26').replace(/\|/g, '%7C');
@@ -66,6 +65,8 @@ const FoodSearch = ({meal_type,date}) => {
         }
     };
 
+
+    // create meal with searched food.
     const handleFoodClick = async (foodData) => {
         try {
             dispatch(setToastMes(''))
@@ -112,6 +113,7 @@ const FoodSearch = ({meal_type,date}) => {
     };
 
 
+    // render
     return (
         <div className='food-search'>
             <h2>You can use <strong>&</strong> , <strong>|</strong> search.</h2>

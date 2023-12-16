@@ -1,11 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-// import CalsByDate from './CalsByDate';
 import Navigation from '../../Navigation';
 import formattedCurrentDate from '../../../helpers/getToday';
 
 const UserInfoNavigation = () => {
     
+    // render
     return (
         <div className='sub-nav bg-gradient-to-r from-cyan-400 to-indigo-600 text-neutral-100'>
             {/* head & nav ハンバ-ガー */}

@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
-// import { authToken } from '../../helpers/getAuthToken';
+
 import { BACKEND_ENDPOINT } from '../../settings';
 import { useDispatch } from 'react-redux';
 import { setUpdateContentLoading } from '../../redux/store/LoadingSlice';
@@ -11,9 +11,10 @@ function MealUpdate({ meal }) {
     const [serving, setServing] = useState(meal.serving);
     const [grams,setGrams] =useState(meal.grams);
     const [isServingSelected, setIsServingSelected] = useState(!(meal.serving === null || meal.serving === 0));
-
     const dispatch =useDispatch()
 
+
+    // send data func
     const handleUpdateMeal = async (e) => {
         e.preventDefault()
         if((serving!==null&&grams!==null) || (serving===null&&grams===null)){
@@ -54,7 +55,8 @@ function MealUpdate({ meal }) {
         }
     };
 
-    
+
+    // toggle srving form & grams form.
     useEffect(() => {
         if (isServingSelected) {
             setGrams(null);
@@ -63,6 +65,8 @@ function MealUpdate({ meal }) {
         }
     }, [isServingSelected])
 
+
+    //render 
     return (
         <>
         <form className='meal-update' onSubmit={handleUpdateMeal}>

@@ -1,15 +1,15 @@
-// 例: components/Navigation.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import LogoutButton from './account/Logout';
 
 import formattedCurrentDate from '../helpers/getToday';
-// import { authToken } from '../helpers/getAuthToken';
+
 
 const Navigation = () => {
 
-    const authToken = localStorage.getItem('authToken')    
+    const authToken = localStorage.getItem('authToken') 
+    // render
     return (
         <nav className='flex flex-col items-center menu-nav z-50 bg-gradient-to-r from-stone-400 to-transparent text-slate-100'>
         <ul>

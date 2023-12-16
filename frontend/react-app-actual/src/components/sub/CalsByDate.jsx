@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
 import { Bar } from 'react-chartjs-2';
-// import { authToken } from '../../../helpers/getAuthToken';
+
 import { BACKEND_ENDPOINT } from '../../settings';
 import { Chart, registerables } from 'chart.js';
 import { useSelector } from 'react-redux';
@@ -9,26 +9,25 @@ import { useSelector } from 'react-redux';
 Chart.register(...registerables);
 
 const CalsByDate = ({ selectedDate}) => {
-    
     const [calsData, setCalsData] = useState([]);
     const [aspectRatio, setAspectRatio] = useState(3);
-
     const [goalIntake,setGoalIntake] = useState(0)
     const [goalConsuming,setGoalConsuming] =useState(0)
-
     const mealLoading = useSelector((state)=> state.loading.mealLoading)
     const exerciseLoading = useSelector((state)=> state.loading.exerciseLoading)
     
+    // fetch cals data when load.
     useEffect(() => {
         fetchData()
     }, [mealLoading,exerciseLoading]);
 
+    // fetch goal when first
     useEffect(()=>{
         fetchGoal()
     },[])
 
 
-    // goal をfetch
+    // fetch goal
     const fetchGoal =async()=>{
         try {
             const authToken = localStorage.getItem('authToken')
@@ -42,9 +41,8 @@ const CalsByDate = ({ selectedDate}) => {
             });
 
             const data = await response.json();
-
             if ('message' in data) {
-                console.log('Success fetch Goal!')
+                console.log(data.message)
             }else{
                 setGoalIntake(data.goal_intake_cals)
                 setGoalConsuming(data.goal_consuming_cals)
@@ -54,19 +52,9 @@ const CalsByDate = ({ selectedDate}) => {
             console.error('Error fetching latest user info:', error);
         }
     }
-
-
-    useEffect(()=>{
-        handleWindowResize(); // 初回描画時にも実行
-        window.addEventListener('resize', handleWindowResize);
-
-        return () => {
-            window.removeEventListener('resize', handleWindowResize);
-        };
-    })
     
 
-    // API経由でログインユーザーのpfcを取得
+    // fetch cals data
     const fetchData = async() => {
         try {
             const authToken = localStorage.getItem('authToken')
@@ -89,6 +77,17 @@ const CalsByDate = ({ selectedDate}) => {
 
     
 
+    // resize graph when window width changed.
+    useEffect(()=>{
+        handleWindowResize(); // 初回描画時にも実行
+        window.addEventListener('resize', handleWindowResize);
+
+        return () => {
+            window.removeEventListener('resize', handleWindowResize);
+        };
+    })
+
+    // detect window resize and set aspect.
     const handleWindowResize = () => {
         // Windowのサイズに基づいてaspectRatioを計算する        
         const width = window.innerWidth;
@@ -107,10 +106,10 @@ const CalsByDate = ({ selectedDate}) => {
     };
 
 
+    // chart data
     const chartData = {
         labels: [' '],
         datasets: [
-            
             {
                 label: '目標摂取cal',
                 type: 'line',
@@ -166,7 +165,7 @@ const CalsByDate = ({ selectedDate}) => {
     };
     
     
-    
+    // cart option
     const chartOptions = {
         aspectRatio: aspectRatio, // 適切なアスペクト比を調整
 
@@ -186,6 +185,7 @@ const CalsByDate = ({ selectedDate}) => {
     };
     
 
+    // render
     return (
         <div className='h-38 cals-box'>
             {/* <ul className='flex'>

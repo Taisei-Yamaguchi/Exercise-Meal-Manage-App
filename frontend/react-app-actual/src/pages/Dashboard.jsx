@@ -1,4 +1,3 @@
-// src/components/Home.jsx
 import React from 'react';
 
 import useAuthCheck from '../hooks/useAuthCheck';

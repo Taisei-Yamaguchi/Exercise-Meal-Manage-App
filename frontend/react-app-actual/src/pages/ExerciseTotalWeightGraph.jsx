@@ -3,7 +3,6 @@ import getCookie from '../hooks/getCookie';
 import { Bar } from 'react-chartjs-2';
 import useAuthCheck from '../hooks/useAuthCheck';
 import ExerciseNavigation from '../components/exercise/exercise-nav/ExerciseNavigation';
-// import { authToken } from '../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../settings';
 
 const ExerciseTotalWeightGraph = () => {
@@ -12,6 +11,14 @@ const ExerciseTotalWeightGraph = () => {
     const [error, setError] = useState(null);
     // const chartRef = useRef(null); // チャートの参照
 
+    useAuthCheck()
+
+    // fetch data first render
+    useEffect(()=>{
+        fetchData()
+    },[])
+
+    // fetch exercise total weight data.
     const fetchData = async () => {
         console.log('start fetch');
         try {
@@ -39,13 +46,13 @@ const ExerciseTotalWeightGraph = () => {
         }
     };
 
-    useAuthCheck(fetchData)
+
 
     // Extracting labels and total weights from the data
     const labels = totalWeightData.map(entry => entry.workout__workout_type);
     const weights = totalWeightData.map(entry => entry.total_weight);
 
-     // Chart.js data
+     // chart data
     const data = {
         labels: labels,
         datasets: [
@@ -61,6 +68,8 @@ const ExerciseTotalWeightGraph = () => {
         ],
     };
 
+
+    // cahrt options
     const option ={
         scales: {
             y: {
@@ -78,6 +87,8 @@ const ExerciseTotalWeightGraph = () => {
         },
     }
 
+
+    // render
     return (
         <div className='container'>
             <div className='sub-container'>

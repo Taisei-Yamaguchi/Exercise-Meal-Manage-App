@@ -1,6 +1,6 @@
 import React from 'react';
 import getCookie from '../../hooks/getCookie';
-// import { authToken } from '../../helpers/getAuthToken';
+
 import { BACKEND_ENDPOINT } from '../../settings';
 
 import { useDispatch } from 'react-redux';
@@ -13,6 +13,7 @@ import { setMealLoading } from '../../redux/store/LoadingSlice';
 function MealDelete({ mealId }){
     const dispatch = useDispatch()
 
+    // send data func
     const handleDelete = async () => {
         try {
             dispatch(setUpdateContentLoading(true))
@@ -44,7 +45,7 @@ function MealDelete({ mealId }){
     };
 
 
-
+    //render 
     return (
         <button className="badge badge-xs badge-error" onClick={handleDelete}>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>

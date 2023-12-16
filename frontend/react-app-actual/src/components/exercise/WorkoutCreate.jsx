@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
-// import useAuthCheck from '../../hooks/useAuthCheck';
 
 import { BACKEND_ENDPOINT } from '../../settings';
 
@@ -14,10 +13,10 @@ import { setWorkoutLoading } from '../../redux/store/LoadingSlice';
 
 const WorkoutCreate = ({workoutType}) => {
     const [workoutName, setWorkoutName] = useState('');    
-
     const dispatch =useDispatch()
     const modalLoading = useSelector((state) => state.loading.modalLoading)
 
+    // send data func
     const handleCreateWorkout = async (e) => {
         e.preventDefault()
         try {
@@ -59,6 +58,7 @@ const WorkoutCreate = ({workoutType}) => {
         }
     };
 
+    // render
     return (
         <form onSubmit={handleCreateWorkout}>
             { modalLoading ? (

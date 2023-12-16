@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import getCookie from '../../hooks/getCookie';
-// import useAuthCheck from '../../hooks/useAuthCheck';
-// import { useFetchFoodContext } from '../../hooks/fetchFoodContext';
-// import { authToken } from '../../helpers/getAuthToken';
+
 import { BACKEND_ENDPOINT } from '../../settings';
 
 import { useDispatch } from 'react-redux';
@@ -13,18 +11,14 @@ import { setModalLoading } from '../../redux/store/LoadingSlice';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 const FoodCreate = () => {
-    
     const [name, setName] = useState('');
     const [cal, setCal] = useState('');
     const [amount_per_serving,setAmount_per_servnig] =useState('');
     const [carbohydrate,setCarbohydrate] =useState('');
     const [fat,setFat] =useState('');
     const [protein,setProtein] =useState('');
-    // const { toggleFoodCreateTrigger } = useFetchFoodContext();
     const dispatch =useDispatch()
-
     const modalLoading =useSelector((state)=> state.loading.modalLoading);
-
     const clearForm =()=>{
         setName('')
         setCal('')
@@ -34,6 +28,8 @@ const FoodCreate = () => {
         setProtein('')
     }
 
+
+    // create food
     const handlePostFood = async (e) => {
         e.preventDefault()
         if(carbohydrate===''){
@@ -72,17 +68,11 @@ const FoodCreate = () => {
             });
 
             if (response.ok) {
-                // ログイン成功時の処理
-                console.log('Food posted successfully:', response.data);
-                // onUpdate() 
-                // toggleFoodCreateTrigger()
-
                 dispatch(setToastMes('Created Food Successfully!'))
                 dispatch(setToastClass('alert-info'))
                 clearForm()
             } else {
-                // ログイン失敗時の処理
-                // console.log(response.json());
+                console.log(response.json());
                 dispatch(setToastMes('Error'))
                 dispatch(setToastClass('alert-error'))
             }
@@ -99,8 +89,8 @@ const FoodCreate = () => {
 
 
 
+    // render
     return (
-
         <div className="card shrink-0 w-full max-w-sm shadow-2xl text-slate-400" onSubmit={handlePostFood}>
         
         {modalLoading ?(

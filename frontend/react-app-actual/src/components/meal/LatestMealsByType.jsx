@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import getCookie from '../../hooks/getCookie';
-// import useAuthCheck from '../../hooks/useAuthCheck';
-// import { authToken } from '../../helpers/getAuthToken';
+
 import { BACKEND_ENDPOINT } from '../../settings';
 
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { setMealLoading } from '../../redux/store/LoadingSlice';
 
-const LatestMealByType = ({meal_date,meal_type}) => {
-    
+
+const LatestMealByType = ({meal_date,meal_type}) => {    
     const mealLoading = useSelector((state) => state.loading.mealLoading)
     const [latestMeals,setLatestMeals] =useState([])
     const dispatch =useDispatch()
 
+    // fetch Latest Meal when load
     useEffect(()=>{
         fetchLatestMeals()
     },[mealLoading])
 
-    // 最新meal
+
+    // fetch latest meals.
     const fetchLatestMeals = async() => {
-        
         const authToken = localStorage.getItem('authToken')
         fetch(`${BACKEND_ENDPOINT}/meal/meal/latest-meals/?meal_type=${meal_type}`, {
             method: 'GET',
@@ -47,6 +47,7 @@ const LatestMealByType = ({meal_date,meal_type}) => {
     };
 
 
+    // create meal
     const handleCreateMeal = async (e) => {
         try {
         dispatch(setMealLoading(true))
@@ -80,7 +81,7 @@ const LatestMealByType = ({meal_date,meal_type}) => {
     };
 
 
-
+    // render
     return (
         <div className="dropdown dropdown-left dropdown-hover">
             <img 

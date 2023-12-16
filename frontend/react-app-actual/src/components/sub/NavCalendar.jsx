@@ -1,14 +1,12 @@
-// src/components/meal/Calendar.jsx
 import React, { useState, useEffect } from 'react';
 import MainCalendar from '../calendar/MainCalendar';
 
 const NavCalendar = ({ selectedDate,btnColorClass }) => {
     const [calendarDates, setCalendarDates] = useState([]);
 
+    // set display date depending on selectedDate.
     useEffect(() => {
-        // 今回は前後2日間分を表示する例ですが、必要に応じて変更してください
         const daysToShow = [-2, -1, 0, 1, 2];
-        
         const currentDate = new Date(selectedDate);
         const formattedDates = daysToShow.map((day) => {
         const date = new Date(currentDate);
@@ -20,6 +18,8 @@ const NavCalendar = ({ selectedDate,btnColorClass }) => {
         setCalendarDates(formattedDates);
     }, [selectedDate]);
 
+
+    // render
     return (
         <div className='calendar-container flex items-between  w-full pl-4 pr-4'>  
                 <img 

@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import useAuthCheck from '../hooks/useAuthCheck';
 import getCookie from '../hooks/getCookie';
-// import { authToken } from '../helpers/getAuthToken';
+
 import { BACKEND_ENDPOINT } from '../settings';
 
 import MealNavigation from '../components/meal/meal-nav/MealNavigation';
-
 import MealCreateForm from '../components/meal/MealCreateForm';
 import MealCreateFormWithHistory from '../components/meal/MealCreateFormWithHistory';
 import MealUpdate from '../components/meal/MealUpdate';
@@ -23,14 +22,11 @@ const MealsByDate = () => {
     const { date } = useParams();
     const [meals, setMeals] = useState([]);
     const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack'];
-    
     const toastMes = useSelector((state) => state.toast.toastMes);
     const toastClass = useSelector((state) => state.toast.toastClass);
     const updateContentLoading = useSelector((state)=> state.loading.updateContentLoading)
     const updateContentId = useSelector((state)=> state.loading.updateContentId)
-
     const mealLoading = useSelector((state) => state.loading.mealLoading)
-
     const dispatch = useDispatch()
 
     useAuthCheck();
@@ -40,12 +36,28 @@ const MealsByDate = () => {
         dispatch(setToastMes(''))
     }
 
+
+    // open collapse first render.
+    useEffect(() => {
+        document.querySelectorAll('.collapse').forEach((collapse) => {
+            const inputCheckbox = collapse.querySelector('.peer');
+            if (inputCheckbox) {
+                inputCheckbox.checked = true; // 初期状態で開いた状態にする
+            }
+        });
+    }, []);
+
+
+    // fetch Meals when load
+    useEffect(()=>{
+        fetchMealsByDate()
+    },[mealLoading])
+
+
     // API経由でログインユーザーのmealを取得
     const fetchMealsByDate = async() => {
         const authToken = localStorage.getItem('authToken')
         const url = `${BACKEND_ENDPOINT}/meal/meals/date/?meal_date=${date}`;
-
-        
         fetch(url, {
             method: 'GET',
             headers: {
@@ -72,23 +84,7 @@ const MealsByDate = () => {
     };
 
 
-    useEffect(()=>{
-        fetchMealsByDate()
-    },[mealLoading])
-    
-
-    useEffect(() => {
-        // 初回レンダリング時に実行
-        document.querySelectorAll('.collapse').forEach((collapse) => {
-            const inputCheckbox = collapse.querySelector('.peer');
-            if (inputCheckbox) {
-                inputCheckbox.checked = true; // 初期状態で開いた状態にする
-            }
-        });
-    }, []); // 空の依存リストを指定して初回のみ実行
-
-
-
+    // render
     return (
             <div className='container'>
             <div className='sub-container'>

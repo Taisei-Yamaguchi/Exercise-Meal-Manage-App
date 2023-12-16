@@ -39,7 +39,8 @@ using Django &amp; React
 <del>・トースト<br></del>
 <del>・loading when add item.<br></del>
 <del>・onUpdate　redux<br></del>
-・frontend　コンポーネント<br>
+<del>・frontend　コンポーネント<br></del>
+・edit graph part goal. <br>
 
 ・詳細設定 <br>
 ・setting (back,front)<br>

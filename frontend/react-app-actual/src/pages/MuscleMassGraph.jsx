@@ -12,7 +12,14 @@ const MuscleMassGraph = () => {
     const chartRef = useRef(null); // チャートの参照
     const [graphWidth, setGraphWidth] = useState(null);
 
+    useAuthCheck()
+    
+    // fetch data first render
+    useEffect(()=>{
+        fetchData()
+    },[])
 
+    // fetch data
     const fetchData = async () => {
         try {
             const authToken = localStorage.getItem('authToken');
@@ -50,7 +57,6 @@ const MuscleMassGraph = () => {
         }
     };
 
-    useAuthCheck(fetchData)
 
     // ラベルとデータを用意
     const labels = muscleMassData.map(entry => entry.date);
@@ -63,7 +69,8 @@ const MuscleMassGraph = () => {
         }
     }
 
-    // Chart.jsのデータ構造
+
+    // chart data
     const data = {
         labels: labels,
         datasets: [
@@ -101,6 +108,8 @@ const MuscleMassGraph = () => {
         ],
     };
 
+
+    // chart options
     const options = {
         scales: {
         x: {
@@ -139,6 +148,8 @@ const MuscleMassGraph = () => {
         responsive: false,
     };
 
+
+    // render
     return (
         <div className='container'>
             <div className='sub-container flex justify-center'>

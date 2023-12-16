@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import getCookie from '../hooks/getCookie';
 import { Bar } from 'react-chartjs-2';
 import UserInfoNavigation from '../components/user_info/user_info-nav/UserInfoNavigation';
-// import { authToken } from '../helpers/getAuthToken';
+
 import useAuthCheck from '../hooks/useAuthCheck';
 import { BACKEND_ENDPOINT } from '../settings';
 
@@ -13,6 +13,14 @@ const CalsGraph = () => {
     const [graphWidth, setGraphWidth] = useState(null);
     const chartRef = useRef(null);
 
+    useAuthCheck()
+
+    // fetch data first render
+    useEffect(() =>{
+        fetch()
+    },[])
+
+    // fetch data and save cals data
     const fetchData = async () => {    
         try {
             const authToken = localStorage.getItem('authToken')
@@ -43,9 +51,9 @@ const CalsGraph = () => {
         }
     };
     
-    useAuthCheck(fetchData)
+    
 
-    // グラフの横幅を計算
+    // chart data 
     const data = {
         labels: consumingCals.map(entry => entry.date),
         datasets: [
@@ -92,6 +100,7 @@ const CalsGraph = () => {
     };
 
 
+    // chart options
     const options = {
         maintainAspectRatio: false, // アスペクト比を無効にする
         scales: {
@@ -125,7 +134,7 @@ const CalsGraph = () => {
     };
 
 
-
+    // render
     return (
         <div className='container'>
             <div className='sub-container flex justify-center'>

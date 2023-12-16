@@ -3,7 +3,6 @@ import getCookie from '../hooks/getCookie';
 import { useParams } from 'react-router-dom';
 
 import { BACKEND_ENDPOINT } from '../settings';
-// import { authToken } from '../helpers/getAuthToken';
 
 import useAuthCheck from '../hooks/useAuthCheck';
 import ExerciseCreate from '../components/exercise/ExerciseCreate';
@@ -27,23 +26,35 @@ const ExerciseByDate = () => {
     const { date } = useParams();
     const [exerciseData, setExerciseData] = useState([]);
     const workoutTypes = ['Chest', 'Back', 'Shoulder', 'Arm','Leg','Abs','Aerobic','Other'];
-    const [updateTrigger, setUpdateTrigger] = useState(false);
-
-    // latestExerciseのトリガーにする変化をuseEffectで見る
-    const [fetchTrigger,setFetchTrigger] =useState(false);
 
     const dispatch =useDispatch()
     const toastMes = useSelector((state) => state.toast.toastMes);
     const toastClass = useSelector((state) => state.toast.toastClass);
     const exerciseLoading = useSelector((state => state.loading.exerciseLoading))
     
-    // clear toastMes
     useAuthCheck()
 
+    // clear toast Mess
     const clearToastMes = ()=>{
         dispatch(setToastMes(''))
     }
+
+    // fetch data when load.
+    useEffect(()=>{
+        fetchExerciseData()
+    },[exerciseLoading])
+
+    // open collapse whne first render.
+    useEffect(() => {
+        document.querySelectorAll('.collapse').forEach((collapse) => {
+            const inputCheckbox = collapse.querySelector('.peer');
+            if (inputCheckbox) {
+                inputCheckbox.checked = true; // 初期状態で開いた状態にする
+            }
+        });
+    }, []);
     
+    // fetch ExerciseData
     const fetchExerciseData = async () => {
         try {
             const authToken = localStorage.getItem('authToken')
@@ -62,42 +73,17 @@ const ExerciseByDate = () => {
 
             const data = await response.json();
             setExerciseData(data.exercise);
-            setFetchTrigger((prev) => !prev);
             console.log('Success fetchExerciseData')
 
         } catch (error) {
             console.error('Error fetching exercise data:', error);
-        } finally {
-            // fetchが完了したらloadingをfalseに設定
-            // setLoading(false);
-        }
+        } 
     };
 
-    // useEffect(()=>{
-    //     fetchExerciseData()
-    // },[updateTrigger])
-    useEffect(()=>{
-        fetchExerciseData()
-    },[exerciseLoading])
-
-    const handleUpdate = () => {
-        // 何らかのアクションが発生した時にupdateTriggerをトグル
-        setUpdateTrigger((prev) => !prev);
-        
-    };
-
-    useEffect(() => {
-        // 初回レンダリング時に実行
-        document.querySelectorAll('.collapse').forEach((collapse) => {
-            const inputCheckbox = collapse.querySelector('.peer');
-            if (inputCheckbox) {
-                inputCheckbox.checked = true; // 初期状態で開いた状態にする
-            }
-        });
-    }, []); // 空の依存リストを指定して初回のみ実行
 
 
 
+    // render
     return (
         <div className='container'>
             <div className='sub-container'>

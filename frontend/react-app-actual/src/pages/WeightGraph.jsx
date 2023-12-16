@@ -12,7 +12,14 @@ const WeightGraph = () => {
     const chartRef = useRef(null); // チャートの参照
     const [graphWidth, setGraphWidth] = useState(null);
 
-    
+    useAuthCheck()
+
+    //fetch Data first render.
+    useEffect(()=>{
+        fetchData()
+    },[])
+
+    // fetch Data
     const fetchData = async () => {
         console.log(BACKEND_ENDPOINT);
         try {
@@ -42,7 +49,7 @@ const WeightGraph = () => {
 
             // Chartを破棄
             if (chartRef.current) {
-            chartRef.current.destroy();
+                chartRef.current.destroy();
             }
 
         } catch (error) {
@@ -50,7 +57,7 @@ const WeightGraph = () => {
         }
     };
 
-    useAuthCheck(fetchData)
+    
 
     // ラベルとデータを用意
     const labels = weightData.map(entry => entry.date);
@@ -63,7 +70,7 @@ const WeightGraph = () => {
         }
     }
 
-    // Chart.jsのデータ構造
+    // chart data
     const data = {
         labels: labels,
         datasets: [
@@ -101,6 +108,7 @@ const WeightGraph = () => {
         ],
     };
 
+    // cart option
     const options = {
         scales: {
             x: {
@@ -138,6 +146,8 @@ const WeightGraph = () => {
         responsive: false,
     };
 
+
+    // render
     return (
         <div className='container'>
             <div className='sub-container flex justify-center'>

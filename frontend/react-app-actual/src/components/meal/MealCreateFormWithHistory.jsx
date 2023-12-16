@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react';
-// import useAuthCheck from '../../hooks/useAuthCheck';
 import getCookie from '../../hooks/getCookie';
-// import { authToken } from '../../helpers/getAuthToken';
+
 import { BACKEND_ENDPOINT } from '../../settings';
 import { useDispatch } from 'react-redux';
 import { setMealLoading } from '../../redux/store/LoadingSlice';
 
 function MealCreateFormWithHistory({meal_type,meal_date}) {
-
     const dispatch =useDispatch()
     const [foods, setFoods] = useState([]);
     const [selectedFood, setSelectedFood] = useState('');
     const [serving, setServing] = useState(1);
     
+    // fetch Food first
     useEffect(()=>{
         fetchFoods()
     },[])
     
-    // API経由でログインユーザーのfood historyを取得
+    // fetch food history
     const fetchFoods = async() => {
         try {
             const authToken = localStorage.getItem('authToken')
@@ -31,14 +30,20 @@ function MealCreateFormWithHistory({meal_type,meal_date}) {
             });
 
             const data = await response.json();
-            setFoods(data.foods);
-            console.log('succcess fetchFoods (History)!')
+
+            if(response.ok){
+                setFoods(data.foods);
+                console.log('succcess fetchFoods (History)!')
+            }else{
+                console.log('Error!')
+            }
         } catch (error) {
             console.error('Error fetching searched food history.:', error);
         }
     };
 
-// post meal
+
+    // post meal
     const handleCreateMeal = async (e) => {
         e.preventDefault();
         
@@ -68,14 +73,14 @@ function MealCreateFormWithHistory({meal_type,meal_date}) {
             console.error('Failed to create meal:', response.statusText);
         }
         } catch (error) {
-        console.error('Error creating meal:', error.message);
+            console.error('Error creating meal:', error.message);
         } finally{
             dispatch(setMealLoading(false))
         }
     };
 
 
-
+    // render
     return (
         <form className='w-full' onSubmit={handleCreateMeal}>
             <div className="join">

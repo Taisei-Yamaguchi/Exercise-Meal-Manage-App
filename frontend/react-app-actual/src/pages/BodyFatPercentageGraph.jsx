@@ -12,7 +12,14 @@ const BodyFatPercentageGraph = () => {
     const chartRef = useRef(null); // チャートの参照
     const [graphWidth, setGraphWidth] = useState(null);
 
+    useAuthCheck()
+
+    //fetch data first render
+    useEffect(()=>{
+        fetchData()
+    },[])
     
+    // fetch body fat data
     const fetchData = async () => {    
         try {
             const authToken = localStorage.getItem('authToken');
@@ -49,7 +56,7 @@ const BodyFatPercentageGraph = () => {
         }
     };
 
-    useAuthCheck(fetchData)
+    
 
     // ラベルとデータを用意
     const labels = bodyFatData.map(entry => entry.date);
@@ -62,7 +69,7 @@ const BodyFatPercentageGraph = () => {
         }
     }
 
-    // Chart.jsのデータ構造
+    // chart data
     const data = {
         labels: labels,
         datasets: [
@@ -100,6 +107,8 @@ const BodyFatPercentageGraph = () => {
         ],
     };
 
+
+    // chart options
     const options = {
         scales: {
         x: {
@@ -138,6 +147,8 @@ const BodyFatPercentageGraph = () => {
         responsive: false,
     };
 
+
+    // render
     return (
         <div className='container'>
             <div className='sub-container flex justify-center'>

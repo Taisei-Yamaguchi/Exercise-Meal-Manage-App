@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
-// import useAuthCheck from '../../hooks/useAuthCheck';
-// import { authToken } from '../../helpers/getAuthToken';
+
 import { BACKEND_ENDPOINT } from '../../settings';
 import { useDispatch } from 'react-redux';
 import { setExerciseLoading } from '../../redux/store/LoadingSlice';
@@ -10,26 +9,24 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData}) => {
 
     const dispatch = useDispatch()
     const [updateData, setUpdateData] = useState({
-
         sets: exerciseData.sets,
         reps: exerciseData.reps,
         weight_kg: exerciseData.weight_kg,
-
         duration_minutes: exerciseData.duration_minutes,
         distance: exerciseData.distance,
         mets: exerciseData.mets,
         memos: exerciseData.memos
     });
     
-    // useAuthCheck()
     
+    // detect input change
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         const sanitizedValue = value === '' ? null : value;
         setUpdateData((prevData) => ({ ...prevData, [name]: sanitizedValue }));
     };
 
-
+    // submit data func
     const handleSubmit = async (e) => {
         e.preventDefault();
         if((updateData.sets === null || updateData.reps === null) && updateData.duration_minutes === null){
@@ -56,12 +53,14 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData}) => {
             console.error('Failed to update exercise');
         }
         } catch (error) {
-        console.error('Failed to update exercise', error);
+            console.error('Failed to update exercise', error);
         } finally{
             dispatch(setExerciseLoading(false))
         }
     };
 
+
+    // render
     return (
         <form onSubmit={handleSubmit} className='border'>
                 <div className='flex max-sm:flex-col max-sm:items-center'>

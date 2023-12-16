@@ -15,8 +15,6 @@ const UserInfo = () => {
     const toastMes = useSelector((state)=>state.toast.toastMes)
     const toastClass = useSelector((state)=>state.toast.toastClass)
     const dispatch =useDispatch()
-    
-
     const [formData, setFormData] = useState({
         date: formattedCurrentDate, // set the current date as default
         weight: null,
@@ -29,6 +27,12 @@ const UserInfo = () => {
         target_muscle_mass: null,
     });
 
+    useAuthCheck()
+
+    // fetch data first render.
+    useEffect(()=>{
+        fetchLatestInfo()
+    },[])
 
 
     // Fetch the latest user info when the component mounts
@@ -44,14 +48,11 @@ const UserInfo = () => {
                     'X-CSRFToken': getCookie('csrftoken'),
                 }
             });
-
             const data = await response.json();
-
             if ('message' in data) {
                 console.log(data.message)
             }else{
                 // Set the form data with the latest info
-                // ここにデータが存在しない場合、つまり、これまでユーザーが一度もuser_infoを入力していない場合、formDataは更新したくない
                 setFormData({
                     ...formData,
                     weight: data.weight,
@@ -64,27 +65,24 @@ const UserInfo = () => {
                     target_muscle_mass: data.target_muscle_mass,
                 });
             }
-            
         } catch (error) {
             console.error('Error fetching latest user info:', error);
         }
     };
-    useAuthCheck(fetchLatestInfo)
+    
 
+    // detect input change
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-
         // If the value is an empty string, set it to null
         const sanitizedValue = value === '' ? null : value;
-
         if (name !== 'date') {
             setFormData((prevData) => ({ ...prevData, [name]: sanitizedValue }));
         }
-    
     };
 
 
-
+    // send data and save user info.
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -96,7 +94,6 @@ const UserInfo = () => {
                 'Content-Type': 'application/json',
                 'Authorization': `Token ${authToken}`,
                 'X-CSRFToken': getCookie('csrftoken'),
-            // Include any necessary authentication headers
             },
             body: JSON.stringify(formData),
         });
@@ -122,6 +119,7 @@ const UserInfo = () => {
     };
 
 
+    // render
     return (
         <div className='container'>
             <div className='sub-container '>

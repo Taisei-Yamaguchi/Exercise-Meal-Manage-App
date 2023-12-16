@@ -1,12 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import getCookie from '../../hooks/getCookie';
-// import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
 
 const LogoutButton = () => {
     const navigate = useNavigate();
 
+    // logout func
     const handleLogout = async () => {
         try {
             const authToken = localStorage.getItem('authToken')
@@ -30,6 +30,8 @@ const LogoutButton = () => {
         }
     };
 
+    
+    // render
     return (
         <button onClick={handleLogout}>Logout</button>
     );

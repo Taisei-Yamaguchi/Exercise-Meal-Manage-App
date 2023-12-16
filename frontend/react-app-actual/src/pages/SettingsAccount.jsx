@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navigation from '../components/Navigation';
 import getCookie from '../hooks/getCookie';
 import useAuthCheck from '../hooks/useAuthCheck';
-// import { authToken } from '../helpers/getAuthToken';
+
 import { BACKEND_ENDPOINT } from '../settings';
 
 import { useDispatch } from 'react-redux';
@@ -15,7 +15,6 @@ const SettingsAccount = () => {
     const toastMes = useSelector((state)=>state.toast.toastMes)
     const toastClass = useSelector((state)=>state.toast.toastClass)
     const dispatch =useDispatch()
-
     const [name, setName] = useState('');
     const [picture, setPicture] = useState(null);
     const [sex, setSex] = useState(false);
@@ -23,7 +22,14 @@ const SettingsAccount = () => {
     const [email, setEmail] = useState('');
     const [mes,setMes]=useState('')
     
+    useAuthCheck()
 
+    //fetch account first render.
+    useEffect(()=>{
+        fetchAccount()
+    },[])
+
+    // fetch Account except password
     const fetchAccount = async () => {
         try {
             dispatch(setToastMes(''))
@@ -38,21 +44,23 @@ const SettingsAccount = () => {
             });
             const data = await response.json();
 
-            console.log(data); // サーバーからのレスポンスをログ出力
-            setName(data.name);
-            setPicture(data.picture);
-            setSex(data.sex);
-            setBirthday(data.birthday);
-            setEmail(data.email_address)
-            
+            if(response.ok){
+                console.log(data);
+                setName(data.name);
+                setPicture(data.picture);
+                setSex(data.sex);
+                setBirthday(data.birthday);
+                setEmail(data.email_address);
+            }else{
+                console.log("Error!")
+            }
         } catch (error) {
             console.error('Error:', error);
-            // エラーハンドリング
         }
     };
 
-    useAuthCheck(fetchAccount)
 
+    // send data and save account.
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -89,6 +97,7 @@ const SettingsAccount = () => {
     };
 
     
+    // detect input change
     const handleChange = (e) => {
         switch (e.target.name) {
             case 'name':
@@ -111,7 +120,7 @@ const SettingsAccount = () => {
     };
 
 
-
+    //render 
     return (
         <div className='container'>
             <div className='sub-container'>

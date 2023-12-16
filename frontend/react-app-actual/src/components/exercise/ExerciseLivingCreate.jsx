@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
-// import { authToken } from '../../helpers/getAuthToken';
+
 import { BACKEND_ENDPOINT } from '../../settings';
 import { useDispatch } from 'react-redux';
 import { setExerciseLoading} from '../../redux/store/LoadingSlice';
 
 
 const ExerciseLivingCreate = ({exercise_date}) => {
+
     const dispatch =useDispatch()
-    
     const [formData, setFormData] = useState({
         workout_id: 'living',
         exercise_date: exercise_date,
@@ -48,8 +48,6 @@ const ExerciseLivingCreate = ({exercise_date}) => {
         }
     };
 
-
-
     // detect change of form.
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -59,7 +57,9 @@ const ExerciseLivingCreate = ({exercise_date}) => {
             setFormData((prevData) => ({ ...prevData, [name]: sanitizedValue }));
         }
     };
-    
+
+
+    // render
     return (
         <div>
             <form className='border'onSubmit={handleCreateExercise}>

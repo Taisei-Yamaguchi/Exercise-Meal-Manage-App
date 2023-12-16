@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
-// import useAuthCheck from '../../hooks/useAuthCheck';
-// import { authToken } from '../../helpers/getAuthToken';
+
 import { BACKEND_ENDPOINT } from '../../settings';
 import { useDispatch } from 'react-redux';
 import { setExerciseLoading } from '../../redux/store/LoadingSlice';
+
 
 const ExerciseLivingUpdate = ({ exerciseId, exerciseData}) => {
     const dispatch = useDispatch()
@@ -13,12 +13,14 @@ const ExerciseLivingUpdate = ({ exerciseId, exerciseData}) => {
         mets: exerciseData.mets,
     });
     
+    // detect input change
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         const sanitizedValue = value === '' ? null : value;
         setUpdateData((prevData) => ({ ...prevData, [name]: sanitizedValue }));
     };
 
+    // submit data func
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -47,6 +49,8 @@ const ExerciseLivingUpdate = ({ exerciseId, exerciseData}) => {
         }
     };
 
+
+    // render
     return (
         <form onSubmit={handleSubmit} className=''>
             <div className='flex max-sm:items-center'>

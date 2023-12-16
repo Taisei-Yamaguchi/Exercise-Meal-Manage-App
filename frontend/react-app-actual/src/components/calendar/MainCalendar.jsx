@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-// import useAuthCheck from '../../hooks/useAuthCheck';
+
 import getCookie from '../../hooks/getCookie';
-// import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
 
 const MainCalendar = ({month}) => {
@@ -11,6 +10,8 @@ const MainCalendar = ({month}) => {
     const [date, setDate] = useState(selectedMonth ? new Date(`${selectedMonth}T00:00:00Z`) : new Date());
     const [data, setData] = useState([]);
 
+
+    // go Previous month.
     const handlePrevious = () => {
         const [year, month] = selectedMonth.split('-').map(Number);
         // Calculate the new month and year
@@ -26,7 +27,7 @@ const MainCalendar = ({month}) => {
         setSelectedMonth(newSelectedMonth);
     };
 
-
+    // go Next month.
     const handleNext =()=>{
         const [year, month] = selectedMonth.split('-').map(Number);
         // Calculate the new month and year
@@ -42,15 +43,17 @@ const MainCalendar = ({month}) => {
         setSelectedMonth(newSelectedMonth);
     }
 
+    // setDate when selectedMonth Change.
     useEffect(()=>{
         setDate(selectedMonth ? new Date(`${selectedMonth}T00:00:00Z`) : new Date())
     },[selectedMonth])
 
-
+    // fetch Register Sattus Data first render.
     useEffect(()=>{
         fetchData()
     },[])
 
+    // fetch RegisterStatus Data
     const fetchData = async () => {
         try {
         const authToken = localStorage.getItem('authToken')
@@ -64,24 +67,27 @@ const MainCalendar = ({month}) => {
         });
 
         const data = await response.json();
-        setData(data);
-        console.log('Success fetchRegistrationStatus!');
+        if(response.ok){
+            setData(data);
+            console.log('Success fetchRegistrationStatus!');
+        }else{
+            console.log('Error!');
+        }
         } catch (error) {
-        console.error('Error fetching data:', error);
+            console.error('Error fetching data:', error);
         }
     };
 
-    useEffect(() => {
-        setDate(selectedMonth ? new Date(`${selectedMonth}-01T00:00:00`) : new Date());
-    }, [selectedMonth]);
 
 
+    // Month Year String
     const getMonthYearString = () => {
         const options = { year: 'numeric', month: 'long' };
         return date.toLocaleDateString(undefined, options);
     };
 
 
+    // get Days in Month
     const getDaysInMonth = () => {
         const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
         const daysInMonth = [];
@@ -96,7 +102,7 @@ const MainCalendar = ({month}) => {
 
 
 
-
+// render day func
 const renderDay = (day) => {
     const isCurrentMonth = day.getMonth() === date.getMonth();
     // const isSunday = day.getDay() === 0; // Sunday
@@ -107,8 +113,7 @@ const renderDay = (day) => {
         .padStart(2, '0')}-${day.getDate().toString().padStart(2, '0')}`;
     const key = `${isCurrentMonth ? 'current' : 'other'}-${day.getDate()}-${day.getMonth()}-${day.getFullYear()}`;
     const dayData = data.find(item => item.date === day.toISOString().split('T')[0]);
-
-
+    // render date
     return (
         <div key={key} className={`${classNames} text-xs p-0`}>
             {isCurrentMonth && !day.isOtherMonth ? (
@@ -136,7 +141,7 @@ const renderDay = (day) => {
 };
 
 
-
+// render
 return (
     <div >
         <div className="calendar-header">

@@ -1,8 +1,6 @@
-// Pet.jsx
 import React, { useEffect, useState } from 'react';
 import getCookie from '../../../hooks/getCookie';
-// import useAuthCheck from '../../../hooks/useAuthCheck';
-// import { authToken } from '../../../helpers/getAuthToken';
+
 import formattedCurrentDate from '../../../helpers/getToday';
 import { BACKEND_ENDPOINT } from '../../../settings';
 
@@ -17,10 +15,13 @@ const Pet = () => {
     const mainLoading = useSelector((state) => state.loading.mainLoading);
 
 
+    // fetch Pet data first render.
     useEffect(()=>{
         fetchPetData()
     },[])
 
+
+    // fetch pet data.
     const fetchPetData = async () => {
         try {
             dispatch(setMainLoading(true))
@@ -49,6 +50,7 @@ const Pet = () => {
     }
 
 
+    // get Pet Image Function
     const getPetImage = () => {
         if (petData && petData.grow) {
             switch (petData.grow) {
@@ -75,6 +77,7 @@ const Pet = () => {
     };
 
     
+    // render
     return (
         <div>
         {mainLoading ? (

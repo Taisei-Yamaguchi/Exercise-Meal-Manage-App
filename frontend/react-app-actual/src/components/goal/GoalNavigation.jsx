@@ -1,4 +1,3 @@
-// src/components/meal/MealNavigation.jsx
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import Navigation from '../Navigation';
@@ -6,6 +5,7 @@ import formattedCurrentDate from '../../helpers/getToday';
 
 const GoalNavigation = () => {
     
+    // render
     return (
         <div className='sub-nav bg-gradient-to-r from-fuchsia-400 to-sky-500 text-neutral-100'>
             {/* head & nav ハンバ-ガー */}

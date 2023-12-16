@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../hooks/getCookie';
-// import useAuthCheck from '../../hooks/useAuthCheck';
-// import { useFetchWorkoutContext } from '../../hooks/fetchWorkoutContext';
-// import { authToken } from '../../helpers/getAuthToken';
+
 import { BACKEND_ENDPOINT } from '../../settings';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { useDispatch } from 'react-redux';
 import { setExerciseLoading } from '../../redux/store/LoadingSlice';
 
 const ExerciseCreate = ({workoutType,exercise_date}) => {
+
     const dispatch =useDispatch()
     const workoutLoading = useSelector((state)=> state.loading.workoutLoading)
-
     const [workouts,setWorkouts]= useState([])
     const [default_workouts,setDefaultWorkouts]= useState([])
     const [formData, setFormData] = useState({
@@ -29,7 +27,7 @@ const ExerciseCreate = ({workoutType,exercise_date}) => {
         memos: null
     });
 
-    
+    // fetch when load.
     useEffect(() => {
         fetchWorkouts();
     }, [workoutLoading]);
@@ -48,17 +46,20 @@ const ExerciseCreate = ({workoutType,exercise_date}) => {
             });
 
             const data = await response.json();
-            setWorkouts(data.workout);
-            setDefaultWorkouts(data.default_workout)
-            console.log('Success fetchWorkouts!');
-            
+
+            if(response.ok){
+                setWorkouts(data.workout);
+                setDefaultWorkouts(data.default_workout)
+                console.log('Success fetchWorkouts!');
+            }else{
+                console.log("Error!")
+            }
         } catch (error) {
             console.error('Error fetching workouts:', error);
         }
     };
 
-    // useAuthCheck(fetchWorkouts)
-
+    
     // post exercise
     const handleCreateExercise = async (e) => {
         e.preventDefault()
@@ -148,6 +149,8 @@ const ExerciseCreate = ({workoutType,exercise_date}) => {
     };
 
     
+
+    // render
     return (
         <div>
             <form className='border'onSubmit={handleCreateExercise}>

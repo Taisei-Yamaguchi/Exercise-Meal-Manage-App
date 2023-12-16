@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import getCookie from '../../../hooks/getCookie';
-// import { NavLink } from 'react-router-dom';
+
 import 'chartjs-plugin-datalabels';
-// import { authToken } from '../../../helpers/getAuthToken';
+
 import { BACKEND_ENDPOINT } from '../../../settings';
-// import { useDispatch } from 'react-redux';
-// import { setMealLoading } from '../../../redux/store/LoadingSlice';
 import { useSelector } from 'react-redux';
 
 const PFCByDate = ({ selectedDate}) => {
-    // const dispatch =useDispatch()    
     const [pfcData, setPfcData] = useState([]);
     const [totalAmount,setTotalAmount] =useState(0);
     const [ratioPFC,setRatioPFC] = useState([]);
@@ -18,9 +15,17 @@ const PFCByDate = ({ selectedDate}) => {
     const mealLoading = useSelector((state) => state.loading.mealLoading)
 
 
+    // fetch pfc data when load
+    useEffect(() => {
+        fetchData()
+    }, [mealLoading]);
+
+
+    // calculate total amount (pfc)
     useEffect(()=>{
         setTotalAmount(pfcData.reduce((total, item) => total + item.amount, 0));
     },[pfcData])
+    
     
     // set Ratio
     useEffect(()=>{
@@ -30,12 +35,11 @@ const PFCByDate = ({ selectedDate}) => {
                 ratio: Math.round((item.amount / totalAmount) * 100),
             }));
             setRatioPFC(newRatioPFC);
-            // console.log('ratio',newRatioPFC)
         }
     },[pfcData,totalAmount])
 
 
-    // メッセージ　depending on ratioPFC
+    // set message depending on ratioPFC
     useEffect(()=>{
         if (ratioPFC.length > 0) {
             const proteinRatio = ratioPFC.find(
@@ -69,20 +73,13 @@ const PFCByDate = ({ selectedDate}) => {
             }else{
                 message=''
             }
-
-            // console.log('mes',message)
-
             setMes(message);
             setMesClass(messageClass);
         }
     },[ratioPFC])
 
 
-    useEffect(() => {
-        fetchData()
-    }, [mealLoading]);
-
-    // API経由でログインユーザーのpfcを取得
+    // fetch pfc data.
     const fetchData = async() => {
         try {
             const authToken = localStorage.getItem('authToken')
@@ -96,8 +93,12 @@ const PFCByDate = ({ selectedDate}) => {
             });
 
             const data = await response.json();
-            setPfcData(data);
-            console.log('Success fetchPFC!')
+            if(response.ok){
+                setPfcData(data);
+                console.log('Success fetchPFC!')
+            }else{
+                console.log("Error!")
+            }
         } catch (error) {
             console.error('Error fetching data.:', error);
         } 
@@ -105,11 +106,13 @@ const PFCByDate = ({ selectedDate}) => {
 
 
 
+    // getColor
     const getColor = (index) => {
         const colors = ['#FF6384', '#36A2EB', '#FFCE56']; // ご希望の色を追加または変更
         return colors[index % colors.length];
     };
     
+    // render
     return (
         <div className='flex flex-col text-sm'>       
             <ul className='flex justify-between'>

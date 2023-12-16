@@ -1,4 +1,3 @@
-// src/components/meal/MealNavigation.jsx
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
@@ -14,15 +13,16 @@ import { setToastMes } from '../../../redux/store/ToastSlice';
 
 const MealNavigation = () => {
     const { date } = useParams();
-
     const dispatch= useDispatch()
     const toastMes = useSelector((state) => state.toast.toastMes);
     const toastClass = useSelector((state) => state.toast.toastClass);
+    
     // clear toastMes
     const clearToastMes = ()=>{
         dispatch(setToastMes(''))
     }
 
+    // render
     return (
         <div className='sub-nav bg-gradient-to-r from-lime-400 to-green-300 text-neutral-100 '>
             {/* head & nav ハンバ-ガー */}

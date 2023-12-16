@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import getCookie from '../../hooks/getCookie';
-// import useAuthCheck from '../../hooks/useAuthCheck';
-// import { authToken } from '../../helpers/getAuthToken';
+
 import { BACKEND_ENDPOINT } from '../../settings';
 import { useDispatch } from 'react-redux';
 import { setExerciseLoading } from '../../redux/store/LoadingSlice';
@@ -11,14 +10,14 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
 const LatestExerciseByType = ({exercise_date,workout_type}) => {
     const dispatch = useDispatch()
     const exerciseLoading =useSelector((state) => state.loading.exerciseLoading)
-
     const [latestExercises,setLatestExercises] =useState([])
 
+    // fetch latestExercise when load.
     useEffect(()=>{
         fetchLatestExercises()
     },[exerciseLoading])
 
-    // 最新meal
+    // fetch latest exercise.
     const fetchLatestExercises = async() => {
         const authToken = localStorage.getItem('authToken')
         fetch(`${BACKEND_ENDPOINT}/exercise/get-latest-exercise/?workout_type=${workout_type}`, {
@@ -46,6 +45,7 @@ const LatestExerciseByType = ({exercise_date,workout_type}) => {
     };
 
 
+    // send data func
     const handleCreateExercise = async (e) => {
         try {
         dispatch(setExerciseLoading(true))
@@ -80,6 +80,7 @@ const LatestExerciseByType = ({exercise_date,workout_type}) => {
 
 
 
+    // render
     return (
         <div className='relative'>
         <div className="dropdown dropdown-right dropdown-hover z-50">

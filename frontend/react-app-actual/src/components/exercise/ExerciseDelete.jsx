@@ -1,6 +1,5 @@
 import React from 'react';
 import getCookie from '../../hooks/getCookie';
-// import { authToken } from '../../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../../settings';
 import { useDispatch } from 'react-redux';
 import { setExerciseLoading } from '../../redux/store/LoadingSlice';
@@ -8,6 +7,7 @@ import { setExerciseLoading } from '../../redux/store/LoadingSlice';
 const ExerciseDelete = ({ exerciseId}) => {
     const dispatch = useDispatch()
 
+    // handleDelete
     const handleDelete = async () => {
         try {
         dispatch(setExerciseLoading(true))
@@ -22,7 +22,6 @@ const ExerciseDelete = ({ exerciseId}) => {
         });
 
         if (response.ok) {
-             // 親コンポーネントでリストを更新するなどの処理を実行
             console.log('Delete success')
         } else {
             console.error('Failed to delete exercise');
@@ -34,6 +33,7 @@ const ExerciseDelete = ({ exerciseId}) => {
         }
     };
 
+    // render
     return (
         <button className="badge badge-xs badge-error" onClick={handleDelete}>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>

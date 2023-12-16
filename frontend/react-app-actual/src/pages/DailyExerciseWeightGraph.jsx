@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import ExerciseNavigation from '../components/exercise/exercise-nav/ExerciseNavigation';
 import useAuthCheck from '../hooks/useAuthCheck';
 
-// import { authToken } from '../helpers/getAuthToken';
 import { BACKEND_ENDPOINT } from '../settings';
 
 const DailyExerciseWeightGraph = () => {
@@ -16,7 +15,15 @@ const DailyExerciseWeightGraph = () => {
     const [graphWidth, setGraphWidth] = useState(null);
     // const chartRef = useRef(null); // チャートの参照
 
+    useAuthCheck()
 
+    // fetch data first render
+    useEffect(()=>{
+        fetchData()
+    },[])
+
+
+    // fetch daily exercise weight data
     const fetchData = async () => {
         console.log('start fetch');
         try {
@@ -52,13 +59,13 @@ const DailyExerciseWeightGraph = () => {
         }
     };
 
-    useAuthCheck(fetchData)
+    
 
     // Extracting labels and total weights from the data
     const labels = dailyExerciseWeightData.map(entry => entry.exercise_date);
     const weights = dailyExerciseWeightData.map(entry => entry.total_weight);
 
-     // Chart.js data
+     // chart data
     const data = {
         labels: labels,
         datasets: [
@@ -75,6 +82,8 @@ const DailyExerciseWeightGraph = () => {
     };
 
 
+
+    // cahrt options
     const option ={
         scales: {
             y: {
@@ -102,6 +111,7 @@ const DailyExerciseWeightGraph = () => {
     }
 
 
+    // render
     return (
         <div className='container'>
             <div className='sub-container flex justify-center'>

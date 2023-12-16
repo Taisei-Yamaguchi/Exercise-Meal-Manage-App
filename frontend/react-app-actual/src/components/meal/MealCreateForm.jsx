@@ -1,30 +1,29 @@
 import React, { useState, useEffect } from 'react';
 
-// import useAuthCheck from '../../hooks/useAuthCheck';
 import getCookie from '../../hooks/getCookie';
-// import { useFetchFoodContext } from '../../hooks/fetchFoodContext';
-// import { authToken } from '../../helpers/getAuthToken';
+
 import { BACKEND_ENDPOINT } from '../../settings';
 
 import { useDispatch } from 'react-redux';
 import { setMealLoading } from '../../redux/store/LoadingSlice';
 import { useSelector } from 'react-redux';
 
+
 function MealCreateForm({meal_type,meal_date}) {
     const dispatch =useDispatch();
-    
     const [foods, setFoods] = useState([]);
     const [selectedFood, setSelectedFood] = useState('');
     const [serving, setServing] = useState(1);
-
     const foodLoading = useSelector((state)=> state.loading.foodLoading)
-    // const { foodCreateTrigger, toggleFoodCreateTrigger } = useFetchFoodContext();
+    
 
+    // fetch Food when load.
     useEffect(() => {
         fetchFoods()
     }, [foodLoading]);
 
-    // API経由でログインユーザーのfoodを取得
+
+    // fetch Food
     const fetchFoods = async() => {
         const authToken = localStorage.getItem('authToken')
         fetch(`${BACKEND_ENDPOINT}/meal/food/list/`, {
@@ -57,7 +56,6 @@ function MealCreateForm({meal_type,meal_date}) {
         e.preventDefault();
         
     try {
-
         dispatch(setMealLoading(true))
 
         const authToken = localStorage.getItem('authToken')
@@ -84,12 +82,14 @@ function MealCreateForm({meal_type,meal_date}) {
             console.error('Failed to create meal:', response.statusText);
         }
         } catch (error) {
-        console.error('Error creating meal:', error.message);
+            console.error('Error creating meal:', error.message);
         } finally{
             dispatch(setMealLoading(false))
         }
     };
 
+
+    // render
     return (
         <form className='w-full' onSubmit={handleCreateMeal}>
         <div className="join">
