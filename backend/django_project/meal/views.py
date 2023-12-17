@@ -219,7 +219,6 @@ class MealCreateWithFatSecretView(APIView):
                     serializer.save(account=user)
                     food = serializer.instance
                 else:
-                    
                     print(serializer.errors)
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -248,7 +247,7 @@ class GetSearchedFoodHistoryView(APIView):
     def get(self, request):
         user = self.request.user
         
-        # Mealで利用されたのが新しいにfood取得
+        # Mealで利用されたのが新しいfoodを優先して取得
         # Mealで利用されているFoodのIDリスト
         used_food_ids = Meal.objects.filter(account=user.id).values_list('food_id', flat=True)
         # Mealで利用されているFoodをmeal_dateの降順に取得

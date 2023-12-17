@@ -34,7 +34,7 @@ using Django &amp; React
 
 <del>・workout create, food create, food searchを実行後データを再フェッチ（context）<br></del>
 
-・コード整理(back,front) <br>
+<de>・コード整理(back,front) <br></del>
 <del>・ローディング<br></del>
 <del>・トースト<br></del>
 <del>・loading when add item.<br></del>
@@ -42,7 +42,7 @@ using Django &amp; React
 <del>・frontend　コンポーネント<br></del>
 <del>・edit graph part goal user_info form. <br></del>
 
-・詳細設定 <br>
+
 ・setting (back,front)<br>
 
 ・email送信は後で設定。<br>
@@ -51,9 +51,12 @@ using Django &amp; React
 ・authページデザイン<br>
 ・garden app <br>
 ・デプロイ用設定 <br>
+・詳細設定 <br>
 ・SSL<br>
+
 ・バックエンドテストケースの作成 <br>
 ・フロントエンドのテスト　<br>
+・ドキュメント
 
 ・デプロイ<br>
 ・
