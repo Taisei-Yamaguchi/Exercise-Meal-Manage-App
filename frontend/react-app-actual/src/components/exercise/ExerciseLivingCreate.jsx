@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import getCookie from '../../hooks/getCookie';
-import useAuthCheck from '../../hooks/useAuthCheck';
+import getCookie from '../../helpers/getCookie';
+
+import { BACKEND_ENDPOINT } from '../../settings';
+import { useDispatch } from 'react-redux';
+import { setExerciseLoading} from '../../redux/store/LoadingSlice';
 
 
+const ExerciseLivingCreate = ({exercise_date}) => {
 
-const ExerciseLivingCreate = ({exercise_date,onUpdate}) => {
-    
+    const dispatch =useDispatch()
     const [formData, setFormData] = useState({
         workout_id: 'living',
         exercise_date: exercise_date,
@@ -17,16 +18,14 @@ const ExerciseLivingCreate = ({exercise_date,onUpdate}) => {
         
     });
 
-    // // fetch workouts and use in form.
-    // useAuthCheck()
-
     // post exercise
     const handleCreateExercise = async (e) => {
         e.preventDefault()
         
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:8000/exercise/post-exercise/', {
+            dispatch(setExerciseLoading(true))
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/exercise/post-exercise/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -37,18 +36,17 @@ const ExerciseLivingCreate = ({exercise_date,onUpdate}) => {
         });
 
         const data = await response.json();
-
-        console.log('Exercise created successfully:', data);
-        // 成功時の処理を追加
-        onUpdate()
-
+        if(response.ok){
+            console.log('Exercise created successfully:', data);
+        }else{
+            console.log("Error!")
+        }
         } catch (error) {
             console.error('Error creating exercise:', error);
-        ;
-        } 
+        } finally{
+            dispatch(setExerciseLoading(false))
+        }
     };
-
-
 
     // detect change of form.
     const handleInputChange = (e) => {
@@ -59,7 +57,9 @@ const ExerciseLivingCreate = ({exercise_date,onUpdate}) => {
             setFormData((prevData) => ({ ...prevData, [name]: sanitizedValue }));
         }
     };
-    
+
+
+    // render
     return (
         <div>
             <form className='border'onSubmit={handleCreateExercise}>

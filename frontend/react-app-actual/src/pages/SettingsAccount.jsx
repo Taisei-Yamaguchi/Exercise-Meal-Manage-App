@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navigation from '../components/Navigation';
-import getCookie from '../hooks/getCookie';
-import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import useAuthCheck from '../hooks/useAuthCheck';
+import getCookie from '../helpers/getCookie';
+import useAuthCheck from '../helpers/useAuthCheck';
+
+import { BACKEND_ENDPOINT } from '../settings';
+
+import { useDispatch } from 'react-redux';
+import { setToastMes } from '../redux/store/ToastSlice';
+import { setToastClass } from '../redux/store/ToastSlice';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+
 
 const SettingsAccount = () => {
+    const toastMes = useSelector((state)=>state.toast.toastMes)
+    const toastClass = useSelector((state)=>state.toast.toastClass)
+    const dispatch =useDispatch()
     const [name, setName] = useState('');
     const [picture, setPicture] = useState(null);
     const [sex, setSex] = useState(false);
@@ -13,11 +22,19 @@ const SettingsAccount = () => {
     const [email, setEmail] = useState('');
     const [mes,setMes]=useState('')
     
+    useAuthCheck()
 
+    //fetch account first render.
+    useEffect(()=>{
+        fetchAccount()
+    },[])
+
+    // fetch Account except password
     const fetchAccount = async () => {
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:8000/accounts/get/', {
+            dispatch(setToastMes(''))
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/accounts/get/`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -27,26 +44,28 @@ const SettingsAccount = () => {
             });
             const data = await response.json();
 
-            console.log(data); // サーバーからのレスポンスをログ出力
-            setName(data.name);
-            setPicture(data.picture);
-            setSex(data.sex);
-            setBirthday(data.birthday);
-            setEmail(data.email_address)
-            
+            if(response.ok){
+                console.log(data);
+                setName(data.name);
+                setPicture(data.picture);
+                setSex(data.sex);
+                setBirthday(data.birthday);
+                setEmail(data.email_address);
+            }else{
+                console.log("Error!")
+            }
         } catch (error) {
             console.error('Error:', error);
-            // エラーハンドリング
         }
     };
 
-    useAuthCheck(fetchAccount)
 
+    // send data and save account.
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:8000/accounts/update/', {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/accounts/update/`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,17 +74,30 @@ const SettingsAccount = () => {
                 },
                 body: JSON.stringify({ name, picture, sex, birthday }),
             });
+
             const data = await response.json();
+            if(response.ok){
+                console.log('User Account saved successfully:', data);
+                fetchAccount()
+
+                dispatch(setToastMes('Update Success!'))
+                dispatch(setToastClass('alert-info'))
+            }else{
+                dispatch(setToastMes('Error!'))
+                dispatch(setToastClass('alert-error'))
+            }
             console.log(data); // サーバーからのレスポンスをログ出力
             
             setMes('Update Success')
         } catch (error) {
             console.error('Error:', error);
-            // エラーハンドリング
+            dispatch(setToastMes('Error!'))
+            dispatch(setToastClass('alert-error'))
         }
     };
 
-    
+
+    // detect input change
     const handleChange = (e) => {
         switch (e.target.name) {
             case 'name':
@@ -88,7 +120,7 @@ const SettingsAccount = () => {
     };
 
 
-
+    //render 
     return (
         <div className='container'>
             <div className='sub-container'>
@@ -100,7 +132,7 @@ const SettingsAccount = () => {
                         <h1 className="text-5xl font-bold">Setting</h1>
                             <input id="my-drawer" type="checkbox" className="drawer-toggle" />
                             <div className="drawer-content">
-                                <label htmlFor="my-drawer" className="btn btn-circle swap swap-rotate drawer-button">
+                                <label htmlFor="my-drawer" className="bg-gradient-to-r from-stone-400 to-transparentbtn btn btn-circle swap swap-rotate drawer-button">
                                     {/* this hidden checkbox controls the state */}
                                     <input type="checkbox" />
                                     <svg className="swap-off fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"/></svg>
@@ -177,30 +209,16 @@ const SettingsAccount = () => {
                             </label>
                         </div>
 
-                        <label className="label">
-                            {/* <NavLink className="label-text-alt link link-hover" to="/password-reset/request">Forgot password?</NavLink> */}
-                        </label>
+                        {toastMes && toastMes !==''&&(
+                            <div role="alert" className={`alert ${toastClass}`} >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <span>{toastMes}</span>
+                            </div>
+                        )}
                         
                         <div className="form-control mt-6">
                             <button type='submit'className="btn btn-primary">Account Update</button>
                         </div>
-                        {/* {errorMes ==='' ?(
-                            <></>
-                        ):(
-                            <div role="alert" className="alert alert-error">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                <span>{errorMes}</span>
-                            </div>
-                        )}
-
-                        {successMes ==='' ?(
-                            <></>
-                        ):(
-                            <div role="alert" className="alert alert-success">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                <span>{successMes}</span>
-                            </div>
-                        )} */}
                     </form>
                     </div>
                 </div>

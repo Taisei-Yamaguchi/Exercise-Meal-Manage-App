@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import getCookie from '../../hooks/getCookie';
-import useAuthCheck from '../../hooks/useAuthCheck';
+import getCookie from '../../helpers/getCookie';
+
+import { BACKEND_ENDPOINT } from '../../settings';
+import { useDispatch } from 'react-redux';
+import { setExerciseLoading } from '../../redux/store/LoadingSlice';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 
-const LatestExerciseByType = ({exercise_date,workout_type, fetchTrigger,onUpdate }) => {
-    
+const LatestExerciseByType = ({exercise_date,workout_type}) => {
+    const dispatch = useDispatch()
+    const exerciseLoading =useSelector((state) => state.loading.exerciseLoading)
     const [latestExercises,setLatestExercises] =useState([])
 
+    // fetch latestExercise when load.
     useEffect(()=>{
         fetchLatestExercises()
-    },[fetchTrigger])
-    // 最新meal
+    },[exerciseLoading])
+
+    // fetch latest exercise.
     const fetchLatestExercises = async() => {
-        const yourAuthToken = localStorage.getItem('authToken'); 
-        fetch(`http://127.0.0.1:8000/exercise/get-latest-exercise/?workout_type=${workout_type}`, {
+        const authToken = localStorage.getItem('authToken')
+        fetch(`${BACKEND_ENDPOINT}/exercise/get-latest-exercise/?workout_type=${workout_type}`, {
             method: 'GET',
             headers: {
-                'Authorization': `Token ${yourAuthToken}`, // トークンを設定
+                'Authorization': `Token ${authToken}`, // トークンを設定
                 'X-CSRFToken': getCookie('csrftoken') ,
                 // 'X-UserId': user_id,
             },
@@ -30,24 +37,24 @@ const LatestExerciseByType = ({exercise_date,workout_type, fetchTrigger,onUpdate
         })
         .then(data => {
             setLatestExercises(data.exercises);
-            console.log('最新',latestExercises)
+            console.log('success fetchLatestExercise!')
         })
         .catch(error => {
             console.error('Error:', error);
         });
     };
 
-    useAuthCheck(fetchLatestExercises);
 
-
+    // send data func
     const handleCreateExercise = async (e) => {
-        const yourAuthToken = localStorage.getItem('authToken');
         try {
-        const response = await fetch('http://127.0.0.1:8000/exercise/create-latest-exercise/', {
+        dispatch(setExerciseLoading(true))
+        const authToken = localStorage.getItem('authToken')
+        const response = await fetch(`${BACKEND_ENDPOINT}/exercise/create-latest-exercise/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${yourAuthToken}`, // トークンを設定
+                'Authorization': `Token ${authToken}`, // トークンを設定
                 'X-CSRFToken': getCookie('csrftoken') ,
             },
             body: JSON.stringify({
@@ -60,17 +67,20 @@ const LatestExerciseByType = ({exercise_date,workout_type, fetchTrigger,onUpdate
             const data = await response.json();
             console.log('Exercise created successfully:', data);
             fetchLatestExercises()
-            onUpdate()
+            
         } else {
             console.error('Failed to create exercise:', response.statusText);
         }
         } catch (error) {
-        console.error('Error creating exercise:', error.message);
+            console.error('Error creating exercise:', error.message);
+        } finally{
+            dispatch(setExerciseLoading(false))
         }
     };
 
 
 
+    // render
     return (
         <div className='relative'>
         <div className="dropdown dropdown-right dropdown-hover z-50">

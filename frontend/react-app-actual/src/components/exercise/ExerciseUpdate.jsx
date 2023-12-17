@@ -1,29 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import getCookie from '../../hooks/getCookie';
-import useAuthCheck from '../../hooks/useAuthCheck';
+import getCookie from '../../helpers/getCookie';
 
-const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData,onUpdate}) => {
+import { BACKEND_ENDPOINT } from '../../settings';
+import { useDispatch } from 'react-redux';
+import { setExerciseLoading } from '../../redux/store/LoadingSlice';
+
+const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData}) => {
+
+    const dispatch = useDispatch()
     const [updateData, setUpdateData] = useState({
-
         sets: exerciseData.sets,
         reps: exerciseData.reps,
         weight_kg: exerciseData.weight_kg,
-
         duration_minutes: exerciseData.duration_minutes,
         distance: exerciseData.distance,
         mets: exerciseData.mets,
         memos: exerciseData.memos
     });
     
-    useAuthCheck()
     
+    // detect input change
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         const sanitizedValue = value === '' ? null : value;
         setUpdateData((prevData) => ({ ...prevData, [name]: sanitizedValue }));
     };
 
-
+    // submit data func
     const handleSubmit = async (e) => {
         e.preventDefault();
         if((updateData.sets === null || updateData.reps === null) && updateData.duration_minutes === null){
@@ -32,8 +35,9 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData,onUpdate}) => {
         }
 
         try {
-        const authToken = localStorage.getItem('authToken');
-        const response = await fetch(`http://127.0.0.1:8000/exercise/exercise/update/${exerciseId}/`, {
+        dispatch(setExerciseLoading(true))
+        const authToken = localStorage.getItem('authToken')
+        const response = await fetch(`${BACKEND_ENDPOINT}/exercise/exercise/update/${exerciseId}/`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -45,15 +49,18 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData,onUpdate}) => {
 
         if (response.ok) {
             console.log('send data to server.')
-            onUpdate()
         } else {
             console.error('Failed to update exercise');
         }
         } catch (error) {
-        console.error('Failed to update exercise', error);
+            console.error('Failed to update exercise', error);
+        } finally{
+            dispatch(setExerciseLoading(false))
         }
     };
 
+
+    // render
     return (
         <form onSubmit={handleSubmit} className='border'>
                 <div className='flex max-sm:flex-col max-sm:items-center'>

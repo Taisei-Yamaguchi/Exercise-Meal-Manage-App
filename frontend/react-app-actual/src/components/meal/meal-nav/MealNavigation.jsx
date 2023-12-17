@@ -1,21 +1,28 @@
-// src/components/meal/MealNavigation.jsx
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import Calendar from './Calendar';
+import NavCalendar from '../../sub/navCalendar';
 import PFCByDate from './PFCByDate';
-import CalsByDate from './CalsByDate';
+import CalsByDate from '../../sub/CalsByDate';
 import FoodCreate from '../FoodCreate';
 import Navigation from '../../Navigation';
 
-const MealNavigation = (onUpdate) => {
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { useDispatch } from 'react-redux';
+import { setToastMes } from '../../../redux/store/ToastSlice';
+
+const MealNavigation = () => {
     const { date } = useParams();
-    const currentDate = new Date();
-    const  formattedCurrentDate= `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
+    const dispatch= useDispatch()
+    const toastMes = useSelector((state) => state.toast.toastMes);
+    const toastClass = useSelector((state) => state.toast.toastClass);
     
-    
+    // clear toastMes
+    const clearToastMes = ()=>{
+        dispatch(setToastMes(''))
+    }
+
+    // render
     return (
         <div className='sub-nav bg-gradient-to-r from-lime-400 to-green-300 text-neutral-100 '>
             {/* head & nav ハンバ-ガー */}
@@ -89,18 +96,18 @@ const MealNavigation = (onUpdate) => {
             </div>
             
             {/* カレンダー */}
-            <Calendar selectedDate={date}  />
+            <NavCalendar selectedDate={date}  btnColorClass={'btn-primary'}/>
 
             {/* Select 　Show*/}
             <div role="tablist" className="tabs tabs-lifted">
                 <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="PFC" />
                 <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box w-screen p-6 tab-content p-10  text-zinc-900">
-                    <PFCByDate selectedDate={date} onUpdate={onUpdate}/>
+                    <PFCByDate selectedDate={date} />
                 </div>
 
                 <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Cal" defaultChecked/>
                 <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box w-screen p-6 tab-content p-10  text-zinc-900">
-                    <CalsByDate selectedDate={date} onUpdate={onUpdate}/>
+                    <CalsByDate selectedDate={date} />
                 </div>
 
                 {/* <NavLink to={`/meal/food-create/${date}`}>Create Your Food</NavLink> */}
@@ -109,9 +116,17 @@ const MealNavigation = (onUpdate) => {
                             <div className="modal-box">
                                 <FoodCreate/>
                             </div>
-                            <form method="dialog" className="modal-backdrop">
+                            <form method="dialog" className="modal-backdrop" onClick={clearToastMes}>
                                     <button >✕</button>
                                 </form>
+
+                                {/* toast mes */}
+                                {toastMes && toastMes !=='' &&(
+                                    <div className="toast">
+                                        <div className={`alert ${toastClass}`}>
+                                                <span>{toastMes}</span>
+                                        </div>
+                                    </div>)}
                         </dialog>
             </div>
         </div>

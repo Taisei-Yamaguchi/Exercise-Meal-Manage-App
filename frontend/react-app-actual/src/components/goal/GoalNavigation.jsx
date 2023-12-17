@@ -1,16 +1,11 @@
-// src/components/meal/MealNavigation.jsx
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-// import CalsByDate from './CalsByDate';
 import Navigation from '../Navigation';
+import formattedCurrentDate from '../../helpers/getToday';
 
 const GoalNavigation = () => {
-    const currentDate = new Date();
-    const  date= `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
     
+    // render
     return (
         <div className='sub-nav bg-gradient-to-r from-fuchsia-400 to-sky-500 text-neutral-100'>
             {/* head & nav ハンバ-ガー */}
@@ -27,7 +22,7 @@ const GoalNavigation = () => {
                 <div className='flex items-center justify-between'>
                     {/* links */}
 
-                    <NavLink to={`/meal/${date}`} className='flex items-center'>
+                    <NavLink to={`/meal/${formattedCurrentDate}`} className='flex items-center'>
                         <img 
                         src='/icons/meal-icon.svg' 
                             className="swap-off fill-current w-5 h-5 mr-1" 
@@ -35,7 +30,7 @@ const GoalNavigation = () => {
                         </img>
                     </NavLink>
 
-                    <NavLink to={`/exercise/${date}`} className='flex items-center'>
+                    <NavLink to={`/exercise/${formattedCurrentDate}`} className='flex items-center'>
                         <img 
                         src='/icons/exercise-icon.svg' 
                             className="swap-off fill-current w-5 h-5 mr-1" 
@@ -83,7 +78,7 @@ const GoalNavigation = () => {
                 </div>
             </div>
 
-            <h2>{date}</h2>
+            <h2>{formattedCurrentDate}</h2>
             
             <div className='text-sm'>
                     <p>*基礎代謝が入力されない場合、体重、身長、年齢、性別から自動で計算されます</p>
@@ -96,15 +91,6 @@ const GoalNavigation = () => {
                 <NavLink to='/user_info/muscle-mass-graph' className='tab link' activeclassname="link-warning">Muscle Mass</NavLink>
                 <NavLink to='/user_info/cals-graph' className='tab link' activeclassname="link-warning">Cals</NavLink>
             </div>
-            
-            {/* 
-            <div role="tablist" className="tabs tabs-bordered">
-                <NavLink to='/user_info' className="tab link" activeClassName="link-warning">Info Form</NavLink>
-                <NavLink to='/user_info/weight-graph' className='tab link' activeClassName="link-warning">Weight</NavLink>
-                <NavLink to='/user_info/body-fat-percentage-graph' className='tab link' activeClassName="link-warning">Body Fat</NavLink>
-                <NavLink to='/user_info/muscle-mass-graph' className='tab link' activeClassName="link-warning">Muscle Mass</NavLink>
-                <NavLink to='/user_info/cals-graph' className='tab link' activeClassName="link-warning">Cals</NavLink> 
-             </div> */}
         </div>
     );
 };

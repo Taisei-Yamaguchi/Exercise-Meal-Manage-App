@@ -1,24 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import Navigation from '../Navigation';
-import getCookie from '../../hooks/getCookie';
-import useAuthCheck from '../../hooks/useAuthCheck';
-import MealNavigation from './meal-nav/MealNavigation';
+import getCookie from '../../helpers/getCookie';
 
-const LatestMealByType = ({meal_date,meal_type,fetchTrigger,onUpdate }) => {
-    
+import { BACKEND_ENDPOINT } from '../../settings';
+
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { setMealLoading } from '../../redux/store/LoadingSlice';
+
+
+const LatestMealByType = ({meal_date,meal_type}) => {    
+    const mealLoading = useSelector((state) => state.loading.mealLoading)
     const [latestMeals,setLatestMeals] =useState([])
+    const dispatch =useDispatch()
 
+    // fetch Latest Meal when load
     useEffect(()=>{
         fetchLatestMeals()
-    },[fetchTrigger])
+    },[mealLoading])
 
-    // 最新meal
+
+    // fetch latest meals.
     const fetchLatestMeals = async() => {
-        const yourAuthToken = localStorage.getItem('authToken'); 
-        fetch(`http://127.0.0.1:8000/meal/meal/latest-meals/?meal_type=${meal_type}`, {
+        const authToken = localStorage.getItem('authToken')
+        fetch(`${BACKEND_ENDPOINT}/meal/meal/latest-meals/?meal_type=${meal_type}`, {
             method: 'GET',
             headers: {
-                'Authorization': `Token ${yourAuthToken}`, // トークンを設定
+                'Authorization': `Token ${authToken}`, // トークンを設定
                 'X-CSRFToken': getCookie('csrftoken') ,
                 // 'X-UserId': user_id,
             },
@@ -32,24 +39,24 @@ const LatestMealByType = ({meal_date,meal_type,fetchTrigger,onUpdate }) => {
         })
         .then(latestMeals => {
             setLatestMeals(latestMeals.meals);
-            console.log('最新',latestMeals)
+            console.log('success fetchLatestMeals!')
         })
         .catch(error => {
             console.error('Error:', error);
         });
     };
 
-    useAuthCheck(fetchLatestMeals);
 
-
+    // create meal
     const handleCreateMeal = async (e) => {
-        const yourAuthToken = localStorage.getItem('authToken');
         try {
-        const response = await fetch('http://127.0.0.1:8000/meal/meal/create-latest/', {
+        dispatch(setMealLoading(true))
+        const authToken = localStorage.getItem('authToken')
+        const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/create-latest/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${yourAuthToken}`, // トークンを設定
+                'Authorization': `Token ${authToken}`, // トークンを設定
                 'X-CSRFToken': getCookie('csrftoken') ,
             },
             body: JSON.stringify({
@@ -62,17 +69,19 @@ const LatestMealByType = ({meal_date,meal_type,fetchTrigger,onUpdate }) => {
             const data = await response.json();
             console.log('Meal created successfully:', data);
             fetchLatestMeals()
-            onUpdate()
+            
         } else {
             console.error('Failed to create meal:', response.statusText);
         }
         } catch (error) {
-        console.error('Error creating meal:', error.message);
+            console.error('Error creating meal:', error.message);
+        }finally{
+            dispatch(setMealLoading(false))
         }
     };
 
 
-
+    // render
     return (
         <div className="dropdown dropdown-left dropdown-hover">
             <img 

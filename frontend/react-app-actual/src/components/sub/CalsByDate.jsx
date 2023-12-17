@@ -1,61 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import getCookie from '../../../hooks/getCookie';
+import getCookie from '../../helpers/getCookie';
 import { Bar } from 'react-chartjs-2';
-import 'chartjs-plugin-annotation';
-import { Chart, registerables } from 'chart.js';  // chart.jsのバージョンによっては必要
 
-// 必要なプラグインを登録
+import { BACKEND_ENDPOINT } from '../../settings';
+import { Chart, registerables } from 'chart.js';
+import { useSelector } from 'react-redux';
+
 Chart.register(...registerables);
 
-
-const CalsByDate = ({ selectedDate,onUpdate}) => {
-    
+const CalsByDate = ({ selectedDate}) => {
     const [calsData, setCalsData] = useState([]);
-    const [totalConsumedCals,setTotalConsume] =useState(0);
-    const [totalCals,setTotalCal]= useState(0);
     const [aspectRatio, setAspectRatio] = useState(3);
-
     const [goalIntake,setGoalIntake] = useState(0)
     const [goalConsuming,setGoalConsuming] =useState(0)
-
-
-    useEffect(()=>(
-        setTotalConsume(calsData.bm_cals + calsData.exercise_cals + calsData.food_cals),
-        setTotalCal(Math.max(totalConsumedCals, calsData.intake_cals))
-    ),[calsData])
+    const mealLoading = useSelector((state)=> state.loading.mealLoading)
+    const exerciseLoading = useSelector((state)=> state.loading.exerciseLoading)
     
+    // fetch cals data when load.
     useEffect(() => {
         fetchData()
-    }, [selectedDate,onUpdate]);
+    }, [mealLoading,exerciseLoading]);
 
-    useEffect(()=>{
-        handleWindowResize(); // 初回描画時にも実行
-        window.addEventListener('resize', handleWindowResize);
-
-        return () => {
-            window.removeEventListener('resize', handleWindowResize);
-        };
-    })
-
+    // fetch goal when first
     useEffect(()=>{
         fetchGoal()
-        
-    })
+    },[])
 
-    // goal をfetch
+
+    // fetch goal
     const fetchGoal =async()=>{
         try {
-            const response = await fetch('http://127.0.0.1:8000/goal/get/',{
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/goal/get/`,{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
+                    'Authorization': `Token ${authToken}`,
                     'X-CSRFToken': getCookie('csrftoken'),
                 }
             });
 
             const data = await response.json();
-
             if ('message' in data) {
                 console.log(data.message)
             }else{
@@ -67,12 +52,13 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
             console.error('Error fetching latest user info:', error);
         }
     }
+    
 
-    // API経由でログインユーザーのpfcを取得
+    // fetch cals data
     const fetchData = async() => {
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch(`http://127.0.0.1:8000/main/cals-by-date/?date=${selectedDate}`, {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/main/cals-by-date/?date=${selectedDate}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -83,7 +69,7 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
 
             const data = await response.json();
             setCalsData(data);
-            console.log('cals',data)
+            console.log('Success fetchCals!')
         } catch (error) {
             console.error('Error fetching data.:', error);
         }
@@ -91,10 +77,19 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
 
     
 
-    const handleWindowResize = () => {
-        // Windowのサイズに基づいてaspectRatioを計算する
+    // resize graph when window width changed.
+    useEffect(()=>{
+        handleWindowResize(); // 初回描画時にも実行
+        window.addEventListener('resize', handleWindowResize);
 
-        
+        return () => {
+            window.removeEventListener('resize', handleWindowResize);
+        };
+    })
+
+    // detect window resize and set aspect.
+    const handleWindowResize = () => {
+        // Windowのサイズに基づいてaspectRatioを計算する        
         const width = window.innerWidth;
         if(width<=400){
             setAspectRatio(2)
@@ -108,27 +103,22 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
         } else {
             setAspectRatio(6)
         }
-        
-        console.log('New Aspect Ratio:', );
-
-        
     };
 
 
+    // chart data
     const chartData = {
-        labels: [''],
-        // data:{
-        //     labels:['intake','consu'],
-        // },
+        labels: [' '],
         datasets: [
-            
             {
                 label: '目標摂取cal',
                 type: 'line',
-                borderColor: 'green',
-                pointBackgroundColor: 'green', // ドットの内側の色を設定
+                borderColor: 'blue',
+                pointBackgroundColor: 'blue', // ドットの内側の色を設定
                 pointRadius: 5, // ドットのサイズを設定
-                data: [goalIntake],
+                data: [
+                    goalIntake
+                ],
                 fill: false,
             },
             {
@@ -138,7 +128,7 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
                 pointBackgroundColor: 'red', // ドットの内側の色を設定
                 pointRadius: 5, // ドットのサイズを設定
                 data: [
-                    goalConsuming,
+                    goalConsuming
                 ],
                 fill: false,
             },
@@ -175,45 +165,27 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
     };
     
     
-    
+    // cart option
     const chartOptions = {
-        plugins: {
-            annotation: {
-                annotations: {
-                    line1: {
-                    type: 'line',
-                    xMin: 2900,
-                    xMax: 2900,
-                    borderColor: 'rgb(255, 99, 132)',
-                    borderWidth: 2,
-                    },
-                }
-            }
-        },
         aspectRatio: aspectRatio, // 適切なアスペクト比を調整
 
         indexAxis: 'y',
         scales: {
             x: {
                 // stacked:true,
-                display: true,
-                max: calsData.bm_cals + 2000,
+                max: Math.max(calsData.bm_cals + 2000,goalIntake+500,goalConsuming+500),
                 beginAtZero: true,
-                
                 
             },
             y: {
                 // stacked: true,
             },
         },
-
         
     };
-
-    
-    
     
 
+    // render
     return (
         <div className='h-38 cals-box'>
             {/* <ul className='flex'>
@@ -223,10 +195,10 @@ const CalsByDate = ({ selectedDate,onUpdate}) => {
             <div className=' border-solid'>
                 <Bar key={aspectRatio} data={chartData} options={chartOptions} />
             </div>
-            {/* <div className="text-xs">
+            <div className="text-xs">
                 <p >*基礎代謝量ぶんは最低限食べましょう！</p>
                 <p>*活動量は250kcalを超えるぐらいが健康的だそうです</p>
-            </div> */}
+            </div>
         </div>
         );
         

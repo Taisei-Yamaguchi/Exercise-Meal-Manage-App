@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Navigation from '../../components/Navigation';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const PasswordResetRequestPage = () => {
     const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ const PasswordResetRequestPage = () => {
     const handlePasswordResetRequest = async () => {
         try {
         // バックエンドにメール送信の要求を送信
-        const response = await axios.post('http://127.0.0.1:8000/accounts/reset-password-request/', {
+        const response = await axios.post( `${BACKEND_ENDPOINT}/accounts/reset-password-request/`, {
             email,
         });
         setRequestSent(true)
@@ -34,12 +35,12 @@ const PasswordResetRequestPage = () => {
             <div className='sub-container'>
             <div className="hero min-h-screen bg-base-200">
                 <div className="hero-content flex-col lg:flex-row-reverse">
-                    <div className="text-center lg:text-left">
+                    <div className="text-center lg:text-left flex items-center">
                         <div className="drawer open-nav">
-                        <h1 className="text-5xl font-bold">Password Reset Request</h1>
+                        <h1 className="text-5xl font-bold">Password <br></br> Reset <br></br> Request</h1>
                         <input id="my-drawer" type="checkbox" className="drawer-toggle" />
                         <div className="drawer-content">
-                                <label htmlFor="my-drawer" className="btn btn-circle swap swap-rotate drawer-button">
+                                <label htmlFor="my-drawer" className="bg-gradient-to-r from-stone-400 to-transparentbtn btn btn-circle swap swap-rotate drawer-button">
                                     {/* this hidden checkbox controls the state */}
                                     <input type="checkbox" />
                                     <svg className="swap-off fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"/></svg>

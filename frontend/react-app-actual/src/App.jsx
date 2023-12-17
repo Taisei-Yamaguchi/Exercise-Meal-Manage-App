@@ -18,32 +18,26 @@ import PasswordResetProcess from './pages/auth/PasswordResetProcess';
 
 import Dashboard from './pages/Dashboard';
 
-import MealsByDate from './pages/MealsByDate';
+import MealsByDate from './pages/meal/MealsByDate';
 // import NutrientsByDateGraph from './components/meal/NutriensByDateGraph';
 
-import ExerciseByDate from './pages/ExerciseByDate';
-import ExerciseTotalWeightGraph from './pages/ExerciseTotalWeightGraph';
-import DailyExerciseWeightGraph from './pages/DailyExerciseWeightGraph';
+import ExerciseByDate from './pages/exercise/ExerciseByDate';
+import ExerciseTotalWeightGraph from './pages/exercise/ExerciseTotalWeightGraph';
+import DailyExerciseWeightGraph from './pages/exercise/DailyExerciseWeightGraph';
 
-import UserInfo from './pages/UserInfo';
-import WeightGraph from './pages/WeightGraph';
-import BodyFatPercentageGraph from './pages/BodyFatPercentageGraph';
-import MuscleMassGraph from './pages/MuscleMassGraph';
-import CalsGraph from './pages/CalsGraph';
+import UserInfo from './pages/user_info/UserInfo';
+import WeightGraph from './pages/user_info/WeightGraph';
+import BodyFatPercentageGraph from './pages/user_info/BodyFatPercentageGraph';
+import MuscleMassGraph from './pages/user_info/MuscleMassGraph';
+import CalsGraph from './pages/user_info/CalsGraph';
 
 import SettingsAccount from './pages/SettingsAccount';
-
-import Goal from './pages/Goal';
-
-import { FetchFoodProvider } from './hooks/fetchFoodContext';
-import { FetchWorkoutProvider } from './hooks/fetchWorkoutContext';
+import Goal from './pages/goal/Goal';
 
 
 const App = () => {
   return (
     <Provider store={store}>
-      <FetchFoodProvider>
-      <FetchWorkoutProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -74,8 +68,6 @@ const App = () => {
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </Router>
-      </FetchWorkoutProvider>
-      </FetchFoodProvider>
     </Provider>
   );
 };

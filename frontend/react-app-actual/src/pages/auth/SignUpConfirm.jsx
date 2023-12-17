@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import Navigation from '../../components/Navigation';
 import { Link } from 'react-router-dom';
+import { BACKEND_ENDPOINT } from '../../settings';
+
 
 const SignUpConfirm = () => {
     const { uid, token } = useParams();
@@ -11,7 +12,7 @@ const SignUpConfirm = () => {
     
         const confirmEmail = async () => {
             try {
-                const response = await axios.post('http://127.0.0.1:8000/accounts/signup-confirmation/', { uid, token });
+                const response = await axios.post(`${BACKEND_ENDPOINT}/accounts/signup-confirmation/`, { uid, token });
 
                 const data = response.data;
                 

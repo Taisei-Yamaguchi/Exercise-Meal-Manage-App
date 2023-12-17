@@ -1,21 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import getCookie from '../../helpers/getCookie';
 
-import useAuthCheck from '../../hooks/useAuthCheck';
-import getCookie from '../../hooks/getCookie';
+import { BACKEND_ENDPOINT } from '../../settings';
+import { useDispatch } from 'react-redux';
+import { setMealLoading } from '../../redux/store/LoadingSlice';
 
-
-function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
-    
+function MealCreateFormWithHistory({meal_type,meal_date}) {
+    const dispatch =useDispatch()
     const [foods, setFoods] = useState([]);
     const [selectedFood, setSelectedFood] = useState('');
     const [serving, setServing] = useState(1);
     
-
-    // API経由でログインユーザーのfood historyを取得
+    // fetch Food first
+    useEffect(()=>{
+        fetchFoods()
+    },[])
+    
+    // fetch food history
     const fetchFoods = async() => {
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:8000/meal/food/get-searched-food-history/', {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/meal/food/get-searched-food-history/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -25,28 +30,31 @@ function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
             });
 
             const data = await response.json();
-            setFoods(data.foods);
-            console.log(data)
+
+            if(response.ok){
+                setFoods(data.foods);
+                console.log('succcess fetchFoods (History)!')
+            }else{
+                console.log('Error!')
+            }
         } catch (error) {
             console.error('Error fetching searched food history.:', error);
         }
     };
 
-    useAuthCheck(fetchFoods);
 
-
-
-// post meal
+    // post meal
     const handleCreateMeal = async (e) => {
         e.preventDefault();
         
-        const yourAuthToken = localStorage.getItem('authToken');
         try {
-        const response = await fetch('http://127.0.0.1:8000/meal/meal/create/', {
+        dispatch(setMealLoading(true))
+        const authToken = localStorage.getItem('authToken')
+        const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/create/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${yourAuthToken}`, // トークンを設定
+                'Authorization': `Token ${authToken}`, // トークンを設定
                 'X-CSRFToken': getCookie('csrftoken') ,
             },
             body: JSON.stringify({
@@ -61,15 +69,18 @@ function MealCreateFormWithHistory({meal_type,meal_date,onUpdate}) {
         if (response.ok) {
             const data = await response.json();
             console.log('Meal created successfully:', data);
-            onUpdate()
         } else {
             console.error('Failed to create meal:', response.statusText);
         }
         } catch (error) {
-        console.error('Error creating meal:', error.message);
+            console.error('Error creating meal:', error.message);
+        } finally{
+            dispatch(setMealLoading(false))
         }
     };
 
+
+    // render
     return (
         <form className='w-full' onSubmit={handleCreateMeal}>
             <div className="join">

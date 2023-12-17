@@ -1,20 +1,15 @@
-// src/components/meal/MealNavigation.jsx
-import React, { useState, useEffect } from 'react';
+import React  from 'react';
 import { useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import Calendar from './Calendar';
-import CalsByDate from './CalsByDate';
+import NavCalendar from '../../sub/navCalendar';
+import CalsByDate from '../../sub/CalsByDate';
 import Navigation from '../../Navigation';
 
 
-const ExerciseNavigation = (onUpdate) => {
+const ExerciseNavigation = () => {
     const { date } = useParams();
-    const currentDate = new Date();
-    const  formattedCurrentDate= `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
     
-    
+    // render
     return (
         <div className='sub-nav bg-gradient-to-r from-orange-600 to-red-700 text-neutral-100'>
             {/* head & nav ハンバ-ガー */}
@@ -92,7 +87,7 @@ const ExerciseNavigation = (onUpdate) => {
 
 
             {/* カレンダー */}
-            <Calendar selectedDate={date}  />
+            <NavCalendar selectedDate={date}  btnColorClass={'btn-accent'}/>
             {/* メッセージ */}
             <p className='text-xs'>*Metsはカロリー計算の指標です。mins,sets,repsおよびUser Infoの最新の体重データ、性別から計算しています。</p>
 
@@ -101,25 +96,17 @@ const ExerciseNavigation = (onUpdate) => {
 
                 <input type="radio" name="my_tabs_2" role="tab" className="tab w-10" aria-label="Cal" defaultChecked/>
                 <div className="bg-base-100 border-base-300 rounded-box w-screen p-6 tab-content p-10  text-zinc-900">
-                    <CalsByDate selectedDate={date} onUpdate={onUpdate}/>
+                    <CalsByDate selectedDate={date} />
                 </div>
                 
                 <input type="radio" name="my_tabs_2" role="tab" className="tab w-10" aria-label="Graph" defaultChecked/>
                 <div className="bg-base-100 border-base-300 rounded-box w-screen p-6 tab-content p-10 text-zinc-900">
                     <NavLink to={`/exercise/exercise-total-weight-graph/${date}`} className="tab">Total</NavLink>
                     <NavLink to={`/exercise/daily-exercise-weight-graph/${date}/All`} className="tab">Daily </NavLink>
-                    <NavLink to='/user_info' className="tab">Info Form</NavLink>
-                    <NavLink to='/user_info/weight-graph' className='tab'>Weight</NavLink>
-                    <NavLink to='/user_info/body-fat-percentage-graph' className='tab'>Body Fat</NavLink>
-                    <NavLink to='/user_info/muscle-mass-graph' className='tab'>Muscle Mass</NavLink>
-                    <NavLink to='/user_info/cals-graph' className='tab'>Cals</NavLink>
-                
                 </div>
             </div>
         </div>
     );
 };
-
-// 他のコンポーネントをimportして使う部分は後で実装
 
 export default ExerciseNavigation;

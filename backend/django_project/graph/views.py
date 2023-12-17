@@ -16,6 +16,7 @@ from django.utils import timezone
 from django.db.models import Q
 from django.db.models import Min
 from user_info.models import UserInfo
+from goal.models import Goal
 
 from helpers.calc_daily_exercise_cals import calc_daily_exercise_cals
 from helpers.calc_daily_bm_cals import calc_daily_bm_cals
@@ -39,30 +40,35 @@ class WeightDataAPIView(APIView):
         interpolated_data = []
         # 現在の日付を取得
         today = date.today()
-        
+        oldest_date = min(entry['date'] for entry in user_info.values('date'))
+        print(oldest_date)
+
         # 最初の日付から今日までの日数
-        days_diff = (today - weight_data[0]['date']).days
+        days_diff = (today - oldest_date).days
+        for j in range(days_diff + 1):
+            current_date = oldest_date + timedelta(days=j)
+            existing_entry = next((entry for entry in weight_data if entry['date'] == current_date), None)
 
-        for j in range(1, days_diff + 1):
-            missing_date = weight_data[0]['date'] + timedelta(days=j)
-
+            print('ミッシング',existing_entry)
             # 既にデータがある場合はスキップ
-            if missing_date not in [entry['date'] for entry in weight_data]:
-                interpolated_data.append({'date': missing_date, 'weight': None})
-                
+            if not existing_entry:
+                interpolated_data.append({'date': current_date, 'weight': None})
+
         # 補完データを元のデータに結合
         weight_data.extend(interpolated_data)
         
         # 日付でリストをソート
         weight_data.sort(key=lambda x: x['date'])
+        print('体重',weight_data)
 
-        # 最新の目標体重を取得
-        latest_traget_weight = user_info.latest('date').target_weight
-
+        # 最新の目標体重を取得 Goalモデルから取得
+        user_goal = Goal.objects.filter(account=request.user).first()
+        goal_weight = user_goal.goal_weight if user_goal else None
+            
         # シリアライズしてレスポンス
         serialized_data = WeightDataSerializer(weight_data, many=True).data
 
-        return Response({'weight_data':serialized_data,'latest_target_weight':latest_traget_weight}, status=status.HTTP_200_OK)
+        return Response({'weight_data':serialized_data,'goal_weight':goal_weight}, status=status.HTTP_200_OK)
 
 
 
@@ -79,23 +85,33 @@ class BodyFatDataAPIView(APIView):
         body_fat_data = list(user_info.values('date', 'body_fat_percentage'))
 
         interpolated_data = []
+        
+        # 現在の日付を取得
         today = date.today()
-        days_diff = (today - body_fat_data[0]['date']).days
+        oldest_date = min(entry['date'] for entry in user_info.values('date'))
+        print(oldest_date)
+        
+        # 最初の日付から今日までの日数
+        days_diff = (today - oldest_date).days
+        for j in range(days_diff + 1):
+            current_date = oldest_date + timedelta(days=j)
+            existing_entry = next((entry for entry in body_fat_data if entry['date'] == current_date), None)
 
-        for j in range(1, days_diff + 1):
-            missing_date = body_fat_data[0]['date'] + timedelta(days=j)
-            if missing_date not in [entry['date'] for entry in body_fat_data]:
-                interpolated_data.append({'date': missing_date, 'body_fat_percentage': None})
-
+            print('ミッシング',existing_entry)
+            # 既にデータがある場合はスキップ
+            if not existing_entry:
+                interpolated_data.append({'date': current_date, 'body_fat_percentage': None})
+                
         body_fat_data.extend(interpolated_data)
         body_fat_data.sort(key=lambda x: x['date'])
 
         #　ここで最新のbody_fatの目標を取得
-        latest_body_fat_target = user_info.latest('date').target_body_fat_percentage
+        user_goal = Goal.objects.filter(account=request.user).first()
+        goal_body_fat = user_goal.goal_body_fat if user_goal else None
 
         serialized_data = BodyFatDataSerializer(body_fat_data, many=True).data
 
-        return Response({'body_fat_data': serialized_data, 'latest_body_fat_target': latest_body_fat_target},
+        return Response({'body_fat_data': serialized_data, 'goal_body_fat': goal_body_fat},
                         status=status.HTTP_200_OK)
 
 
@@ -114,23 +130,33 @@ class MuscleMassDataAPIView(APIView):
         muscle_mass_data = list(user_info.values('date', 'muscle_mass'))
 
         interpolated_data = []
+        # 現在の日付を取得
         today = date.today()
-        days_diff = (today - muscle_mass_data[0]['date']).days
+        oldest_date = min(entry['date'] for entry in user_info.values('date'))
+        print(oldest_date)
+        
+        # 最初の日付から今日までの日数
+        days_diff = (today - oldest_date).days
+        for j in range(days_diff + 1):
+            current_date = oldest_date + timedelta(days=j)
+            existing_entry = next((entry for entry in muscle_mass_data if entry['date'] == current_date), None)
 
-        for j in range(1, days_diff + 1):
-            missing_date = muscle_mass_data[0]['date'] + timedelta(days=j)
-            if missing_date not in [entry['date'] for entry in muscle_mass_data]:
-                interpolated_data.append({'date': missing_date, 'muscle_mass': None})
-
+            print('ミッシング',existing_entry)
+            # 既にデータがある場合はスキップ
+            if not existing_entry:
+                interpolated_data.append({'date': current_date, 'muscle_mass': None})
+                
+                
         muscle_mass_data.extend(interpolated_data)
         muscle_mass_data.sort(key=lambda x: x['date'])
 
         # MuscleMassDataAPIViewではmuscle_mass_targetが存在しないためNoneとします
-        latest_muscle_mass_target = user_info.latest('date').target_muscle_mass
+        user_goal = Goal.objects.filter(account=request.user).first()
+        goal_muscle_mass = user_goal.goal_muscle_mass if user_goal else None
 
         serialized_data = MuscleMassDataSerializer(muscle_mass_data, many=True).data
 
-        return Response({'muscle_mass_data': serialized_data, 'latest_muscle_mass_target': latest_muscle_mass_target},
+        return Response({'muscle_mass_data': serialized_data, 'goal_muscle_mass': goal_muscle_mass},
                         status=status.HTTP_200_OK)
 
 
@@ -143,7 +169,11 @@ class ExerciseTotalWeightGraphDataAPIView(APIView):
 
     def get(self, request):
         # 筋トレ部位別総重量グラフのデータを取得
-        total_weight_data = Exercise.objects.filter(account=request.user,workout__isnull=False).exclude(workout__workout_type='Aerobic').values('workout__workout_type').annotate(
+        total_weight_data = Exercise.objects.filter(
+            account=request.user,workout__isnull=False
+            ).exclude(
+                Q(workout__workout_type='Aerobic') | Q(workout__workout_type='Living')
+            ).values('workout__workout_type').annotate(
             total_weight=Coalesce(
                 Cast(
                     Sum(
@@ -162,6 +192,7 @@ class ExerciseTotalWeightGraphDataAPIView(APIView):
         total_weight_data_dict = {item['workout__workout_type']: item['total_weight'] for item in total_weight_data}
         # 結果をリストに変換
         result_list = [{'workout__workout_type': key, 'total_weight': value} for key, value in total_weight_data_dict.items()]
+        
         # 総合計を計算
         grand_total = sum(item['total_weight'] for item in result_list)
         

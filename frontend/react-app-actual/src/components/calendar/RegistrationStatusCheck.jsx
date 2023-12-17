@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Navigation from '../Navigation';
 import getCookie from '../../hooks/getCookie';
 import useAuthCheck from '../../hooks/useAuthCheck';
-
+// import { authToken } from '../../helpers/getAuthToken';
 
 const RegistrationStatusCheck = () => {
     const [data, setData] = useState([]);   
@@ -11,7 +10,7 @@ const RegistrationStatusCheck = () => {
     // API経由でログインユーザーのmealを取得
     const fetchData = async() => {
         try {
-            const authToken = localStorage.getItem('authToken');
+            const authToken = localStorage.getItem('authToken')
             const response = await fetch('http://127.0.0.1:8000/main/registration-status-check/', {
             method: 'GET',
             headers: {
@@ -35,8 +34,6 @@ const RegistrationStatusCheck = () => {
         <div>
             <Navigation />
             <h1>Registration Status Check</h1>
-            
-
             <div>
                 
             </div>

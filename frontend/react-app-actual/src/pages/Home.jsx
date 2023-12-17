@@ -1,4 +1,3 @@
-// src/components/Home.jsx
 import React from 'react';
 import Navigation from '../components/Navigation';
 import { NavLink } from 'react-router-dom';

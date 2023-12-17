@@ -1,27 +1,35 @@
-import React, {  createContext, useContext,useState } from 'react';
-import Navigation from '../Navigation';
-import getCookie from '../../hooks/getCookie';
-import useAuthCheck from '../../hooks/useAuthCheck';
-import MealNavigation from './meal-nav/MealNavigation';
-import { useFetchFoodContext } from '../../hooks/fetchFoodContext';
+import React, { useState } from 'react';
+import getCookie from '../../helpers/getCookie';
 
+import { BACKEND_ENDPOINT } from '../../settings';
 
-const FoodCreate = ({ onUpdate }) => {
-    
+import { useDispatch } from 'react-redux';
+import { setToastMes } from '../../redux/store/ToastSlice';
+import { setToastClass } from '../../redux/store/ToastSlice';
+import { setFoodLoading } from '../../redux/store/LoadingSlice';
+import { setModalLoading } from '../../redux/store/LoadingSlice';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+
+const FoodCreate = () => {
     const [name, setName] = useState('');
     const [cal, setCal] = useState('');
     const [amount_per_serving,setAmount_per_servnig] =useState('');
     const [carbohydrate,setCarbohydrate] =useState('');
     const [fat,setFat] =useState('');
     const [protein,setProtein] =useState('');
+    const dispatch =useDispatch()
+    const modalLoading =useSelector((state)=> state.loading.modalLoading);
+    const clearForm =()=>{
+        setName('')
+        setCal('')
+        setAmount_per_servnig('')
+        setCarbohydrate('')
+        setFat('')
+        setProtein('')
+    }
 
 
-    const { toggleFoodCreateTrigger } = useFetchFoodContext();
-
-    
-    
-    useAuthCheck()
-
+    // create food
     const handlePostFood = async (e) => {
         e.preventDefault()
         if(carbohydrate===''){
@@ -34,7 +42,6 @@ const FoodCreate = ({ onUpdate }) => {
             setProtein(null)
         }
 
-        const yourAuthToken = localStorage.getItem('authToken'); 
         const FoodCredentias ={
             name:name,
             cal:cal,
@@ -45,39 +52,52 @@ const FoodCreate = ({ onUpdate }) => {
         }
 
         try {
-            const response = await fetch('http://127.0.0.1:8000//meal/food/post/',{
+            dispatch(setModalLoading(false))
+            dispatch(setToastMes(''))
+            dispatch(setFoodLoading(true))
+
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/meal/food/post/`,{
                 method: 'POST',
                 headers: {
                     'Content-Type':'application/json',
-                    'Authorization': `Token ${yourAuthToken}`, // トークンを設定
+                    'Authorization': `Token ${authToken}`, // トークンを設定
                     'X-CSRFToken': getCookie('csrftoken') ,
                 },
                 body: JSON.stringify(FoodCredentias)
             });
 
             if (response.ok) {
-                // ログイン成功時の処理
-                console.log('Food posted successfully:', response.data);
-                // onUpdate() 
-                toggleFoodCreateTrigger()
-                
+                dispatch(setToastMes('Created Food Successfully!'))
+                dispatch(setToastClass('alert-info'))
+                clearForm()
             } else {
-                // ログイン失敗時の処理
                 console.log(response.json());
+                dispatch(setToastMes('Error'))
+                dispatch(setToastClass('alert-error'))
             }
 
         } catch (error) {
             console.error('Failed to post food:', error);
+            dispatch(setToastMes('Error'))
+            dispatch(setToastClass('alert-error'))
+        } finally{
+            dispatch(setModalLoading(false))
+            dispatch(setFoodLoading(false))
         }
     };
 
 
 
+    // render
     return (
-
         <div className="card shrink-0 w-full max-w-sm shadow-2xl text-slate-400" onSubmit={handlePostFood}>
+        
+        {modalLoading ?(
+                <span className="loading loading-dots loading-lg"></span>
+            ):(
         <form className="card-body">
-
+            
             <div className="form-control">
                 <label className="label">
                     <span className="label-text">Name (必須)</span>
@@ -166,10 +186,8 @@ const FoodCreate = ({ onUpdate }) => {
             <button className="btn btn-primary" type='submit'>Create Food</button>
             </div>
         </form>
+        )}
     </div>
-
-
-            
     );
 };
 

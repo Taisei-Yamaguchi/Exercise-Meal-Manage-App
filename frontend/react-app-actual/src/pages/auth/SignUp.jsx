@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Navigation from '../../components/Navigation';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const SignUp = () => {
     const [userData, setUserData] = useState({
@@ -36,7 +37,7 @@ const SignUp = () => {
                 username: userData.email // emailをusernameに自動割り当て
             };
 
-            const response = await fetch('http://127.0.0.1:8000/accounts/signup/', {
+            const response = await fetch(`${BACKEND_ENDPOINT}/accounts/signup/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,14 +47,14 @@ const SignUp = () => {
 
             if (response.ok) {
                 // リクエストが成功した場合
-                const data = await response.json();
-                console.log(data);
+                // const data = await response.json();
+                // console.log(data);
                 setErrorMes('')
                 setSuccessMes('We sent the link to your email. Please check and activate your account. Your account is not available yet.');
             }else{
                 // リクエストが失敗した場合
-                const data = await response.json();
-                console.log(data);
+                // const data = await response.json();
+                // console.log(data);
                 setErrorMes(' email is already registered.')
             }
 
@@ -78,7 +79,7 @@ const SignUp = () => {
                         <h1 className="text-5xl font-bold">SignUp!</h1>
                             <input id="my-drawer" type="checkbox" className="drawer-toggle" />
                             <div className="drawer-content">
-                                <label htmlFor="my-drawer" className="btn btn-circle swap swap-rotate drawer-button">
+                                <label htmlFor="my-drawer" className="bg-gradient-to-r from-stone-400 to-transparentbtn btn btn-circle swap swap-rotate drawer-button">
                                     {/* this hidden checkbox controls the state */}
                                     <input type="checkbox" />
                                     <svg className="swap-off fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"/></svg>
@@ -161,7 +162,6 @@ const SignUp = () => {
                             onChange={handleChange} 
                         />             
                         </div>
-
 
                         <div className="signup-sex">
                             <label>

@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import getCookie from '../../hooks/getCookie';
-import useAuthCheck from '../../hooks/useAuthCheck';
-import WorkoutCreate from './WorkoutCreate';
-import { useFetchWorkoutContext } from '../../hooks/fetchWorkoutContext';
+import getCookie from '../../helpers/getCookie';
 
+import { BACKEND_ENDPOINT } from '../../settings';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { useDispatch } from 'react-redux';
+import { setExerciseLoading } from '../../redux/store/LoadingSlice';
 
-const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
-    
+const ExerciseCreate = ({workoutType,exercise_date}) => {
+
+    const dispatch =useDispatch()
+    const workoutLoading = useSelector((state)=> state.loading.workoutLoading)
     const [workouts,setWorkouts]= useState([])
     const [default_workouts,setDefaultWorkouts]= useState([])
     const [formData, setFormData] = useState({
@@ -26,17 +27,16 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
         memos: null
     });
 
-    const { workoutCreateTrigger, toggleWorkoutCreateTrigger } = useFetchWorkoutContext();
-
+    // fetch when load.
     useEffect(() => {
         fetchWorkouts();
-    }, [workoutCreateTrigger]);
+    }, [workoutLoading]);
 
     // fetch workouts and use in form.
     const fetchWorkouts = async () => {
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:8000/exercise/get-workout/', {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/exercise/get-workout/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -46,16 +46,20 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
             });
 
             const data = await response.json();
-            setWorkouts(data.workout);
-            setDefaultWorkouts(data.default_workout)
-            
+
+            if(response.ok){
+                setWorkouts(data.workout);
+                setDefaultWorkouts(data.default_workout)
+                console.log('Success fetchWorkouts!');
+            }else{
+                console.log("Error!")
+            }
         } catch (error) {
             console.error('Error fetching workouts:', error);
         }
     };
 
-    useAuthCheck(fetchWorkouts)
-
+    
     // post exercise
     const handleCreateExercise = async (e) => {
         e.preventDefault()
@@ -65,8 +69,9 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
         }
         
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:8000/exercise/post-exercise/', {
+            dispatch(setExerciseLoading(true))
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/exercise/post-exercise/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -77,15 +82,19 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
         });
 
         const data = await response.json();
-
-        console.log('Exercise created successfully:', data);
+        if(response.ok){
+            console.log('Exercise created successfully:', data);
         // 成功時の処理を追加
-        onUpdate()
-
+        }else{
+            console.log('Error!')
+        }
+        
         } catch (error) {
             console.error('Error creating exercise:', error);
         ;
-        } 
+        }finally{
+            dispatch(setExerciseLoading(false))
+        }
     };
 
 
@@ -101,7 +110,6 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
                 [name]: isNumeric ? Number(value) : value,
             }));
             
-
             const selectedWorkoutId = e.target.value;
 
             // 選択された workout を workouts リストから取得
@@ -140,10 +148,9 @@ const ExerciseCreate = ({workoutType,exercise_date,onUpdate}) => {
         }
     };
 
-
-
-
     
+
+    // render
     return (
         <div>
             <form className='border'onSubmit={handleCreateExercise}>

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Navigation from '../../components/Navigation';
 import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
+import { BACKEND_ENDPOINT } from '../../settings';
+// import { authToken } from '../../helpers/getAuthToken';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -17,7 +19,7 @@ const Login = () => {
         };
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/accounts/login/', {
+            const response = await fetch(`${BACKEND_ENDPOINT}/accounts/login/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -29,9 +31,9 @@ const Login = () => {
                 // ログイン成功時の処理
                 console.log('Logged in successfully!');
                 const userData = await response.json();
-                setAuthToken(userData.token);
+                // setAuthToken(userData.token);
                 localStorage.setItem('authToken', userData.token);
-                
+                console.log(localStorage.getItem('authToken'));
                 navigate('/dashboard');
             } else {
                 // ログイン失敗時の処理
@@ -53,7 +55,7 @@ const Login = () => {
                             <h1 className="text-5xl font-bold">Login now!</h1>
                             <input id="my-drawer" type="checkbox" className="drawer-toggle" />
                             <div className="drawer-content">
-                                <label htmlFor="my-drawer" className="btn btn-circle swap swap-rotate drawer-button">
+                                <label htmlFor="my-drawer" className="bg-gradient-to-r from-stone-400 to-transparentbtn btn btn-circle swap swap-rotate drawer-button">
                                     {/* this hidden checkbox controls the state */}
                                     <input type="checkbox" />
                                     <svg className="swap-off fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"/></svg>

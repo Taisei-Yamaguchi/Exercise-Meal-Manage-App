@@ -34,15 +34,29 @@ using Django &amp; React
 
 <del>・workout create, food create, food searchを実行後データを再フェッチ（context）<br></del>
 
-・コード整理(back,front) <br>
-・詳細設定 <br>
+<de>・コード整理(back,front) <br></del>
+<del>・ローディング<br></del>
+<del>・トースト<br></del>
+<del>・loading when add item.<br></del>
+<del>・onUpdate　redux<br></del>
+<del>・frontend　コンポーネント<br></del>
+<del>・edit graph part goal user_info form. <br></del>
 
-・バックエンドテストケースの作成 <br>
-・フロントエンドのテスト　<br>
+
+・setting (back,front)<br>
 
 ・email送信は後で設定。<br>
 ・sign up用tokenが、email confirmされずに、期限切れたらaccount自動削除<br>
+・ログイン永続<br>
+・authページデザイン<br>
 ・garden app <br>
 ・デプロイ用設定 <br>
-・デプロイ
+・詳細設定 <br>
+・SSL<br>
 
+・バックエンドテストケースの作成 <br>
+・フロントエンドのテスト　<br>
+・ドキュメント
+
+・デプロイ<br>
+・

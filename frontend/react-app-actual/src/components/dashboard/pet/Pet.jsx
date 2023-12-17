@@ -1,20 +1,32 @@
-// Pet.jsx
 import React, { useEffect, useState } from 'react';
-import getCookie from '../../../hooks/getCookie';
-import useAuthCheck from '../../../hooks/useAuthCheck';
+import getCookie from '../../../helpers/getCookie';
+
+import formattedCurrentDate from '../../../helpers/getToday';
+import { BACKEND_ENDPOINT } from '../../../settings';
+
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { setMainLoading } from '../../../redux/store/LoadingSlice';
+
 
 const Pet = () => {
     const [petData, setPetData] = useState(null);
-    const currentDate = new Date();
-    const petDate= `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
+    const dispatch = useDispatch()
+    const mainLoading = useSelector((state) => state.loading.mainLoading);
 
 
+    // fetch Pet data first render.
+    useEffect(()=>{
+        fetchPetData()
+    },[])
+
+
+    // fetch pet data.
     const fetchPetData = async () => {
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch(`http://127.0.0.1:8000/pet/get-pet/?pet_date=${petDate}`,{
+            dispatch(setMainLoading(true))
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/pet/get-pet/?pet_date=${formattedCurrentDate}`,{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -28,13 +40,17 @@ const Pet = () => {
             }
 
             const data = await response.json();
-            console.log(data)
+            console.log('Success fetchPet!')
             setPetData(data);
         } catch (error) {
             console.error('Error fetching pet data:', error);
+        } finally{
+            dispatch(setMainLoading(false))
         }
     }
 
+
+    // get Pet Image Function
     const getPetImage = () => {
         if (petData && petData.grow) {
             switch (petData.grow) {
@@ -60,25 +76,19 @@ const Pet = () => {
         return '/pets/Egg.png';
     };
 
-    useAuthCheck(fetchPetData)
-
+    
+    // render
     return (
-        <div >
-        {/* {petData ? (
-            <div className='flex flex-row justify-between'>
-                <p>{petData.grow}</p>
-                <p>{petData.body_status}</p>
-            </div>
+        <div>
+        {mainLoading ? (
+            <span className="loading loading-bars loading-lg"></span>
         ) : (
-            <p>Loading pet data...</p>
-        )} */}
-        
-
-            <div className=" shadow-xl image-full" style={{ backgroundImage: 'url(/pets-bg/brown-grass.jpeg)' }}>
+            <div className="shadow-xl image-full" style={{ backgroundImage: 'url(/pets-bg/brown-grass.jpeg)' }}>
             <div className="card-body">
                 <img src={getPetImage()} width={200} alt="Pet" />
             </div>
             </div>
+        )}
         </div>
     );
 };

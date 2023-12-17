@@ -1,11 +1,8 @@
-// PasswordResetPage.jsx
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import Navigation from '../../components/Navigation';
 import { Link } from 'react-router-dom';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const PasswordResetProcess = () => {
     const [newPassword, setNewPassword] = useState('');
@@ -18,7 +15,7 @@ const PasswordResetProcess = () => {
     const handlePasswordReset = async () => {
         if(newPassword===againPassword && newPassword.length>6){
             try {
-                const response = await axios.post('http://127.0.0.1:8000/accounts/reset-password-confirm/', {
+                const response = await axios.post(`${BACKEND_ENDPOINT}/accounts/reset-password-confirm/`, {
                     uid,
                     token,
                     new_password: newPassword,

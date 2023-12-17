@@ -1,21 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import getCookie from '../../../hooks/getCookie';
-import { NavLink } from 'react-router-dom';
+import getCookie from '../../../helpers/getCookie';
+
 import 'chartjs-plugin-datalabels';
 
+import { BACKEND_ENDPOINT } from '../../../settings';
+import { useSelector } from 'react-redux';
 
-
-const PFCByDate = ({ selectedDate,onUpdate}) => {
-    
+const PFCByDate = ({ selectedDate}) => {
     const [pfcData, setPfcData] = useState([]);
     const [totalAmount,setTotalAmount] =useState(0);
     const [ratioPFC,setRatioPFC] = useState([]);
     const [mes,setMes] = useState('');
     const [mesClass,setMesClass] =useState('');
+    const mealLoading = useSelector((state) => state.loading.mealLoading)
 
+
+    // fetch pfc data when load
+    useEffect(() => {
+        fetchData()
+    }, [mealLoading]);
+
+
+    // calculate total amount (pfc)
     useEffect(()=>{
         setTotalAmount(pfcData.reduce((total, item) => total + item.amount, 0));
     },[pfcData])
+
     
     // set Ratio
     useEffect(()=>{
@@ -25,12 +35,11 @@ const PFCByDate = ({ selectedDate,onUpdate}) => {
                 ratio: Math.round((item.amount / totalAmount) * 100),
             }));
             setRatioPFC(newRatioPFC);
-            console.log('ratio',newRatioPFC)
         }
     },[pfcData,totalAmount])
 
 
-    // メッセージ　depending on ratioPFC
+    // set message depending on ratioPFC
     useEffect(()=>{
         if (ratioPFC.length > 0) {
             const proteinRatio = ratioPFC.find(
@@ -62,25 +71,19 @@ const PFCByDate = ({ selectedDate,onUpdate}) => {
                 message = 'Well-balanced!';
                 messageClass = 'btn-success';
             }else{
-                message='other'
+                message=''
             }
-
-            console.log('mes',message)
-
             setMes(message);
             setMesClass(messageClass);
         }
     },[ratioPFC])
 
 
-    useEffect(() => {
-        fetchData()
-    }, [selectedDate,onUpdate]);
-    // API経由でログインユーザーのpfcを取得
+    // fetch pfc data.
     const fetchData = async() => {
         try {
-            const authToken = localStorage.getItem('authToken');
-            const response = await fetch(`http://127.0.0.1:8000/main/pfc-by-date/?date=${selectedDate}`, {
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/main/pfc-by-date/?date=${selectedDate}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -90,29 +93,26 @@ const PFCByDate = ({ selectedDate,onUpdate}) => {
             });
 
             const data = await response.json();
-            setPfcData(data);
-            console.log('pfc',data)
+            if(response.ok){
+                setPfcData(data);
+                console.log('Success fetchPFC!')
+            }else{
+                console.log("Error!")
+            }
         } catch (error) {
             console.error('Error fetching data.:', error);
-        }
+        } 
     };
 
-    
-    // const pieChartData = {
-    //     labels: false,
-    //     datasets: [{
-    //         data: pfcData.map((item) => Math.round(item.amount)),
-    //         backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'], // You can customize the colors
-    //         hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-    //     },],
-    // };
 
 
+    // getColor
     const getColor = (index) => {
         const colors = ['#FF6384', '#36A2EB', '#FFCE56']; // ご希望の色を追加または変更
         return colors[index % colors.length];
     };
     
+    // render
     return (
         <div className='flex flex-col text-sm'>       
             <ul className='flex justify-between'>

@@ -1,22 +1,15 @@
-// src/components/Home.jsx
 import React from 'react';
 
-import useAuthCheck from '../hooks/useAuthCheck';
+import useAuthCheck from '../helpers/useAuthCheck';
 import Navigation from '../components/Navigation';
 import Pet from '../components/dashboard/pet/Pet';
 import { NavLink } from 'react-router-dom';
 import MainCalendar from '../components/calendar/MainCalendar';
+import formattedCurrentDate from '../helpers/getToday';
 
 const Dashboard = () => {
     useAuthCheck();
 
-    const currentDate = new Date();
-    const  selectedDate= `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
-    
-    
-    
     return (
         <div className='container'>
             <div className='sub-container' style={{ backgroundImage: 'url(/pets-bg/forest.jpg)' }}>
@@ -54,14 +47,14 @@ const Dashboard = () => {
                                 </img> 
                                 <dialog id={`my_modal_calendar`} className="modal">
                                     <div className="modal-box text-slate-500">
-                                        <MainCalendar  month={`${selectedDate.split('-').slice(0,2).join('-')}`}/>
+                                        <MainCalendar  month={`${formattedCurrentDate.split('-').slice(0,2).join('-')}`}/>
                                     </div>
                                     <form method="dialog" className="modal-backdrop">
                                         <button >✕</button>
                                     </form>
                                 </dialog>
 
-                                <NavLink to={`/meal/${selectedDate}`}>
+                                <NavLink to={`/meal/${formattedCurrentDate}`}>
                                     <img 
                                         src='/icons/meal-icon.svg' 
                                         className="swap-off fill-current w-10 h-10 " 
@@ -69,7 +62,7 @@ const Dashboard = () => {
                                     </img> 
                                 </NavLink>
 
-                                <NavLink to={`/exercise/${selectedDate}`}>
+                                <NavLink to={`/exercise/${formattedCurrentDate}`}>
                                     <img 
                                         src='/icons/exercise-icon.svg' 
                                         className="swap-off fill-current w-10 h-10" 

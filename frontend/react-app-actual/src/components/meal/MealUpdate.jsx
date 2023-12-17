@@ -1,11 +1,20 @@
 import React, { useState,useEffect } from 'react';
-import getCookie from '../../hooks/getCookie';
+import getCookie from '../../helpers/getCookie';
 
-function MealUpdate({ meal,onUpdate }) {
+import { BACKEND_ENDPOINT } from '../../settings';
+import { useDispatch } from 'react-redux';
+import { setUpdateContentLoading } from '../../redux/store/LoadingSlice';
+import { setUpdateContentId } from '../../redux/store/LoadingSlice';
+import { setMealLoading } from '../../redux/store/LoadingSlice';
+
+function MealUpdate({ meal }) {
     const [serving, setServing] = useState(meal.serving);
     const [grams,setGrams] =useState(meal.grams);
     const [isServingSelected, setIsServingSelected] = useState(!(meal.serving === null || meal.serving === 0));
+    const dispatch =useDispatch()
 
+
+    // send data func
     const handleUpdateMeal = async (e) => {
         e.preventDefault()
         if((serving!==null&&grams!==null) || (serving===null&&grams===null)){
@@ -13,11 +22,16 @@ function MealUpdate({ meal,onUpdate }) {
             return
         }
         try {
-            const response = await fetch(`http://127.0.0.1:8000/meal/meal/update/${meal.id}/`, {
+            dispatch(setUpdateContentLoading(true))
+            dispatch(setUpdateContentId(meal.id))
+            dispatch(setMealLoading(true))
+
+            const authToken = localStorage.getItem('authToken')
+            const response = await fetch(`${BACKEND_ENDPOINT}/meal/meal/update/${meal.id}/`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
+                    'Authorization': `Token ${authToken}`,
                     'X-CSRFToken': getCookie('csrftoken'),
                 },
                 body: JSON.stringify({
@@ -29,16 +43,20 @@ function MealUpdate({ meal,onUpdate }) {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Meal updated successfully:', data);
-                onUpdate()
             } else {
                 console.error('Failed to update meal:', response.statusText);
             }
         } catch (error) {
             console.error('Error updating meal:', error.message);
+        } finally{
+            dispatch(setUpdateContentLoading(false))
+            dispatch(setUpdateContentId(meal.id))
+            dispatch(setMealLoading(false))
         }
     };
 
-    
+
+    // toggle srving form & grams form.
     useEffect(() => {
         if (isServingSelected) {
             setGrams(null);
@@ -47,6 +65,8 @@ function MealUpdate({ meal,onUpdate }) {
         }
     }, [isServingSelected])
 
+
+    //render 
     return (
         <>
         <form className='meal-update' onSubmit={handleUpdateMeal}>

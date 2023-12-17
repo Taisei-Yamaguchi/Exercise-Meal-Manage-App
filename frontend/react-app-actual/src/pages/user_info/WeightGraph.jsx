@@ -1,23 +1,31 @@
 import React, { useState, useEffect, useRef } from 'react';
-import getCookie from '../hooks/getCookie';
+import getCookie from '../../helpers/getCookie';
 import { Line } from 'react-chartjs-2';
-import Chart from 'chart.js/auto';
-import Navigation from '../components/Navigation';
-import UserInfoNavigation from '../components/user_info/user_info-nav/UserInfoNavigation';
+import UserInfoNavigation from '../../components/user_info/user_info-nav/UserInfoNavigation';
+import { BACKEND_ENDPOINT } from '../../settings';
+import useAuthCheck from '../../helpers/useAuthCheck';
 
 const WeightGraph = () => {
     const [weightData, setWeightData] = useState([]);
-    const [latestTargetWeight, setLatestTargetWeight] = useState(null);
+    const [goalWeight, setGoalWeight] = useState(null);
     const [error, setError] = useState(null);
     const chartRef = useRef(null); // チャートの参照
     const [graphWidth, setGraphWidth] = useState(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-        console.log('start fetch');
+    useAuthCheck()
+
+    //fetch Data first render.
+    useEffect(()=>{
+        fetchData()
+    },[])
+
+    
+    // fetch Data
+    const fetchData = async () => {
+        console.log(BACKEND_ENDPOINT);
         try {
             const authToken = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:8000/graph/weight-graph/', {
+            const response = await fetch(`${BACKEND_ENDPOINT}/graph/weight-graph/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -32,33 +40,25 @@ const WeightGraph = () => {
 
             const data = await response.json();
             setWeightData(data.weight_data);
-            setLatestTargetWeight(data.latest_target_weight);
-            console.log(data.latest_target_weight);
+            setGoalWeight(data.goal_weight);
+            // console.log(data.latest_target_weight);
             console.log(data.weight_data);
 
-
-            const xAxisLabelMinWidth = 20; // データ当たりの幅を設定
+            const xAxisLabelMinWidth = 30; // データ当たりの幅を設定
             const width = data.weight_data.length * xAxisLabelMinWidth;
             setGraphWidth(width);
 
             // Chartを破棄
             if (chartRef.current) {
-            chartRef.current.destroy();
+                chartRef.current.destroy();
             }
 
-            // Chartを再描画
-            // const newChart = new Chart(chartRef.current, {
-            // type: 'line',
-            // data: data,
-            // options: options,
-            // });
         } catch (error) {
             setError('An error occurred while fetching data.');
         }
-        };
+    };
 
-        fetchData();
-    }, []); // 依存する変数はありません
+    
 
     // ラベルとデータを用意
     const labels = weightData.map(entry => entry.date);
@@ -71,7 +71,7 @@ const WeightGraph = () => {
         }
     }
 
-    // Chart.jsのデータ構造
+    // chart data
     const data = {
         labels: labels,
         datasets: [
@@ -98,17 +98,18 @@ const WeightGraph = () => {
         },
         {
             type: 'line',
-            label: 'Target Weight',
+            label: 'Goal Weight',
             fill: false,
             borderColor: 'rgba(255, 0, 0, 0.5)',
             borderDash: [5, 5], // 破線
-            data: Array(labels.length).fill(latestTargetWeight),
+            data: Array(labels.length).fill(goalWeight),
             showLine: true, // プロットなしで直線を描画
             pointRadius: 0, // プロットを非表示
         },
         ],
     };
 
+    // cart option
     const options = {
         scales: {
             x: {
@@ -146,6 +147,8 @@ const WeightGraph = () => {
         responsive: false,
     };
 
+
+    // render
     return (
         <div className='container'>
             <div className='sub-container flex justify-center'>

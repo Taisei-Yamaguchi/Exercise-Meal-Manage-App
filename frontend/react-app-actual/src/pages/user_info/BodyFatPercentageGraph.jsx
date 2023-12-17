@@ -1,24 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react';
-import getCookie from '../hooks/getCookie';
+import getCookie from '../../helpers/getCookie';
 import { Line } from 'react-chartjs-2';
-import Chart from 'chart.js/auto';
-import Navigation from '../components/Navigation';
-import UserInfoNavigation from '../components/user_info/user_info-nav/UserInfoNavigation';
+import UserInfoNavigation from '../../components/user_info/user_info-nav/UserInfoNavigation';
+import { BACKEND_ENDPOINT } from '../../settings';
+import useAuthCheck from '../../helpers/useAuthCheck';
 
-const MuscleMassGraph = () => {
-    const [muscleMassData, setMuscleMassData] = useState([]);
-    const [targetMuscleMass,setTargetMuscleMass] =useState([]);
+const BodyFatPercentageGraph = () => {
+    const [bodyFatData, setBodyFatData] = useState([]);
+    const [goalBodyFat, setGoalBodyFat] = useState(null);
     const [error, setError] = useState(null);
     const chartRef = useRef(null); // チャートの参照
     const [graphWidth, setGraphWidth] = useState(null);
 
+    useAuthCheck()
 
-    useEffect(() => {
-        const fetchData = async () => {
-        console.log('start fetch');
+    //fetch data first render
+    useEffect(()=>{
+        fetchData()
+    },[])
+    
+    // fetch body fat data
+    const fetchData = async () => {    
         try {
             const authToken = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:8000/graph/muscle_mass-graph/', {
+            const response = await fetch(`${BACKEND_ENDPOINT}/graph/body_fat_percentage-graph/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -32,53 +37,44 @@ const MuscleMassGraph = () => {
             }
 
             const data = await response.json();
-            setMuscleMassData(data.muscle_mass_data);
-            setTargetMuscleMass(data.latest_muscle_mass_target);
-            console.log(data.muscle_mass_data);
-            console.log(data.latest_muscle_mass_target);
-            
-            const xAxisLabelMinWidth = 20; // データ当たりの幅を設定
-            const width = data.muscle_mass_data.length * xAxisLabelMinWidth;
-            setGraphWidth(width);
+            setBodyFatData(data.body_fat_data);
+            setGoalBodyFat(data.goal_body_fat);
 
+            const xAxisLabelMinWidth = 30; // データ当たりの幅を設定
+            const width = data.body_fat_data.length * xAxisLabelMinWidth;
+            setGraphWidth(width);
+            console.log('Success fetch BodyFat Data!')
 
             // Chartを破棄
             if (chartRef.current) {
             chartRef.current.destroy();
             }
 
-            // // Chartを再描画
-            // const newChart = new Chart(chartRef.current, {
-            // type: 'line',
-            // data: data,
-            // options: options,
-            // });
         } catch (error) {
             setError('An error occurred while fetching data.');
             
         }
-        };
+    };
 
-        fetchData();
-    }, []); // 依存する変数はありません
+    
 
     // ラベルとデータを用意
-    const labels = muscleMassData.map(entry => entry.date);
-    const muscle_masses = muscleMassData.map(entry => entry.muscle_mass);
+    const labels = bodyFatData.map(entry => entry.date);
+    const body_fat_percentages = bodyFatData.map(entry => entry.body_fat_percentage);
 
     // 直前のデータを使って null を補完する
-    for (let i = 1; i < muscle_masses.length; i++) {
-        if (muscle_masses[i] === null) {
-            muscle_masses[i] = muscle_masses[i - 1];
+    for (let i = 1; i < body_fat_percentages.length; i++) {
+        if (body_fat_percentages[i] === null) {
+            body_fat_percentages[i] = body_fat_percentages[i - 1];
         }
     }
 
-    // Chart.jsのデータ構造
+    // chart data
     const data = {
         labels: labels,
         datasets: [
         {
-            label: 'Muscle Mass',
+            label: 'Body Fat Percentage',
             fill: false,
             lineTension: 0.1,
             backgroundColor: 'rgba(75,192,192,0.4)',
@@ -96,21 +92,23 @@ const MuscleMassGraph = () => {
             pointHoverBorderWidth: 2,
             pointRadius: 3,
             pointHitRadius: 10,
-            data: muscle_masses,
+            data: body_fat_percentages,
         },
         {
             type: 'line',
-            label: 'Target Weight',
+            label: 'Goal Weight',
             fill: false,
             borderColor: 'rgba(255, 0, 0, 0.5)',
             borderDash: [5, 5], // 破線
-            data: Array(labels.length).fill(targetMuscleMass),
+            data: Array(labels.length).fill(goalBodyFat),
             showLine: true, // プロットなしで直線を描画
             pointRadius: 0, // プロットを非表示
         },
         ],
     };
 
+
+    // chart options
     const options = {
         scales: {
         x: {
@@ -120,13 +118,13 @@ const MuscleMassGraph = () => {
         y: {
             beginAtZero: true, // y軸を0から始めない
             min: 0,
-            max: 100, // y軸の最大値
+            max: 30, // y軸の最大値
             stepSize: 5,
             position: 'right',
 
             title: {
                 display: true,
-                text: '(kg)', // y軸のタイトルに単位を追加
+                text: '(%)', // y軸のタイトルに単位を追加
                 color: 'black', // タイトルの色
                 font: {
                     weight: 'bold', // タイトルの太さ
@@ -149,12 +147,14 @@ const MuscleMassGraph = () => {
         responsive: false,
     };
 
+
+    // render
     return (
         <div className='container'>
             <div className='sub-container flex justify-center'>
                 <UserInfoNavigation />
                 <div className='graph-container'>
-                <h2>Muscle Mass (kg)</h2>
+                <h2>Body Fat (%)</h2>
                 <div className='flex  border overflow-x-auto ml-px pl-px'>
                     {/* <canvas ref={chartRef} /> */}
                     {graphWidth && 
@@ -173,4 +173,4 @@ const MuscleMassGraph = () => {
     );
 };
 
-export default MuscleMassGraph;
+export default BodyFatPercentageGraph;
