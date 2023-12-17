@@ -23,9 +23,22 @@ from django.contrib.auth import logout
 #Sign Up with Email Confirm
 class SignupAPIView(APIView):
     def post(self, request):
+        email = request.data.get('email')
+
+        # 既存のユーザーを確認
+        existing_user = CustomUser.objects.filter(username=email).first()
+
+        if existing_user:
+            # 既存のユーザーが確認されていない場合
+            # email_checkがtrueなら、勝手に変更されない
+            if not existing_user.email_check:
+                existing_user.delete()
+                
         hashed_password = make_password(request.data['password'])
         # ハッシュ化したパスワードをセット
         request.data['password'] = hashed_password
+        request.data['email_check'] = False #froendでどんな値があたえられても強制的にfalseにする
+        
         serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
@@ -43,7 +56,6 @@ class SignupAPIView(APIView):
             
             # 実際にはここでメール送信
             send_mail('EMMA Activate Account', message, 'aries0326business@gmail.com', [user.email])
-
             return Response({'detail': 'Success! Check your email for confirmation.'}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

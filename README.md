@@ -50,14 +50,18 @@ using Django &amp; React
 ・SSL<br>
 
 <del>・email送信は後で設定。</del>-> 本番では、　SSLにする必要がある<br>
-・sign up用tokenが、email confirmされずに、期限切れたらaccount自動削除<br>
-
-・authページデザイン<br>
-・garden app <br>
+<del>・sign up用tokenが、email confirmされずに、期限切れたらaccount自動削除<br>
+ー＞signup時に、emailがすでに使われてるか確認。
+ー＞使われていなければ普通にcreate.
+ー＞つかわれてる場合、email_checkを確認。もし、falseなら、既存のものを削除して新規登録。
+ー＞trueなら、すでに利用されてる旨を返す。<del><br>
 
 ・バックエンドテストケースの作成 <br>
 ・フロントエンドのテスト　<br>
 ・ドキュメント
+
+・authページデザイン<br>
+・garden app <br>
 
 ・デプロイ<br>
 
