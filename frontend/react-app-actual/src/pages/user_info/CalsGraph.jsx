@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import getCookie from '../hooks/getCookie';
+import getCookie from '../../helpers/getCookie';
 import { Bar } from 'react-chartjs-2';
-import UserInfoNavigation from '../components/user_info/user_info-nav/UserInfoNavigation';
+import UserInfoNavigation from '../../components/user_info/user_info-nav/UserInfoNavigation';
 
-import useAuthCheck from '../hooks/useAuthCheck';
-import { BACKEND_ENDPOINT } from '../settings';
+import useAuthCheck from '../../helpers/useAuthCheck';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const CalsGraph = () => {
     const [intakeCals, setIntakeCals] = useState([]);
@@ -17,7 +17,7 @@ const CalsGraph = () => {
 
     // fetch data first render
     useEffect(() =>{
-        fetch()
+        fetchData()
     },[])
 
     // fetch data and save cals data

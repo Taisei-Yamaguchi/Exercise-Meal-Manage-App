@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import useAuthCheck from '../hooks/useAuthCheck';
-import getCookie from '../hooks/getCookie';
+import useAuthCheck from '../../helpers/useAuthCheck';
+import getCookie from '../../helpers/getCookie';
 
-import { BACKEND_ENDPOINT } from '../settings';
+import { BACKEND_ENDPOINT } from '../../settings';
 
-import MealNavigation from '../components/meal/meal-nav/MealNavigation';
-import MealCreateForm from '../components/meal/MealCreateForm';
-import MealCreateFormWithHistory from '../components/meal/MealCreateFormWithHistory';
-import MealUpdate from '../components/meal/MealUpdate';
-import MealDelete from '../components/meal/MealDelete';
-import FoodSearch from '../components/meal/FoodSearch';
-import LatestMealByType from '../components/meal/LatestMealsByType';
+import MealNavigation from '../../components/meal/meal-nav/MealNavigation';
+import MealCreateForm from '../../components/meal/MealCreateForm';
+import MealCreateFormWithHistory from '../../components/meal/MealCreateFormWithHistory';
+import MealUpdate from '../../components/meal/MealUpdate';
+import MealDelete from '../../components/meal/MealDelete';
+import FoodSearch from '../../components/meal/FoodSearch';
+import LatestMealByType from '../../components/meal/LatestMealsByType';
 
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { setToastMes } from '../redux/store/ToastSlice';
+import { setToastMes } from '../../redux/store/ToastSlice';
 
 
 const MealsByDate = () => {

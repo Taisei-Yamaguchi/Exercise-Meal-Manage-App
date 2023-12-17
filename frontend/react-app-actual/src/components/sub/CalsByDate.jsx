@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import getCookie from '../../hooks/getCookie';
+import getCookie from '../../helpers/getCookie';
 import { Bar } from 'react-chartjs-2';
 
 import { BACKEND_ENDPOINT } from '../../settings';
@@ -173,7 +173,7 @@ const CalsByDate = ({ selectedDate}) => {
         scales: {
             x: {
                 // stacked:true,
-                max: calsData.bm_cals + 2000,
+                max: Math.max(calsData.bm_cals + 2000,goalIntake+500,goalConsuming+500),
                 beginAtZero: true,
                 
             },

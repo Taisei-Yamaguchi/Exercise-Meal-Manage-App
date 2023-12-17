@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import getCookie from '../../../hooks/getCookie';
+import getCookie from '../../../helpers/getCookie';
 
 import 'chartjs-plugin-datalabels';
 
@@ -25,7 +25,7 @@ const PFCByDate = ({ selectedDate}) => {
     useEffect(()=>{
         setTotalAmount(pfcData.reduce((total, item) => total + item.amount, 0));
     },[pfcData])
-    
+
     
     // set Ratio
     useEffect(()=>{

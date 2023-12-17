@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import getCookie from '../../hooks/getCookie';
+import getCookie from '../../helpers/getCookie';
 
 import { BACKEND_ENDPOINT } from '../../settings';
 

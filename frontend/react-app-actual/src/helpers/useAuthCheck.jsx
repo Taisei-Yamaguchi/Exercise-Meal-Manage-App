@@ -11,9 +11,7 @@ const useAuthCheck =(fetchFunc) => {
             console.log('Token Error');
             navigate('/login');
         }else{
-            if (typeof fetchFunc === 'function') {
-                fetchFunc();
-            }
+            console.log('authentication!')
         }
     }, []);
 

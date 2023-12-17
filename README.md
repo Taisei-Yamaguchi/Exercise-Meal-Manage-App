@@ -40,13 +40,10 @@ using Django &amp; React
 <del>・loading when add item.<br></del>
 <del>・onUpdate　redux<br></del>
 <del>・frontend　コンポーネント<br></del>
-・edit graph part goal. <br>
+<del>・edit graph part goal user_info form. <br></del>
 
 ・詳細設定 <br>
 ・setting (back,front)<br>
-
-・バックエンドテストケースの作成 <br>
-・フロントエンドのテスト　<br>
 
 ・email送信は後で設定。<br>
 ・sign up用tokenが、email confirmされずに、期限切れたらaccount自動削除<br>
@@ -55,6 +52,8 @@ using Django &amp; React
 ・garden app <br>
 ・デプロイ用設定 <br>
 ・SSL<br>
+・バックエンドテストケースの作成 <br>
+・フロントエンドのテスト　<br>
 
 ・デプロイ<br>
 ・

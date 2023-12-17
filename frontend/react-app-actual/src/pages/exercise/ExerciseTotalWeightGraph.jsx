@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import getCookie from '../hooks/getCookie';
+import getCookie from '../../helpers/getCookie';
 import { Bar } from 'react-chartjs-2';
-import useAuthCheck from '../hooks/useAuthCheck';
-import ExerciseNavigation from '../components/exercise/exercise-nav/ExerciseNavigation';
-import { BACKEND_ENDPOINT } from '../settings';
+import useAuthCheck from '../../helpers/useAuthCheck';
+import ExerciseNavigation from '../../components/exercise/exercise-nav/ExerciseNavigation';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 const ExerciseTotalWeightGraph = () => {
     const [totalWeightData, setTotalWeightData] = useState([]);

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import getCookie from '../hooks/getCookie';
-import useAuthCheck from '../hooks/useAuthCheck';
-import UserInfoNavigation from '../components/user_info/user_info-nav/UserInfoNavigation';
-import formattedCurrentDate from '../helpers/getToday';
-import { BACKEND_ENDPOINT } from '../settings';
+import getCookie from '../../helpers/getCookie';
+import useAuthCheck from '../../helpers/useAuthCheck';
+import UserInfoNavigation from '../../components/user_info/user_info-nav/UserInfoNavigation';
+import formattedCurrentDate from '../../helpers/getToday';
+import { BACKEND_ENDPOINT } from '../../settings';
 
 import { useDispatch } from 'react-redux';
-import { setToastMes } from '../redux/store/ToastSlice';
-import { setToastClass } from '../redux/store/ToastSlice';
+import { setToastMes } from '../../redux/store/ToastSlice';
+import { setToastClass } from '../../redux/store/ToastSlice';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 
@@ -22,9 +22,9 @@ const UserInfo = () => {
         body_fat_percentage: null,
         muscle_mass: null,
         metabolism: null,
-        target_weight: null,
-        target_body_fat_percentage: null,
-        target_muscle_mass: null,
+        // target_weight: null,
+        // target_body_fat_percentage: null,
+        // target_muscle_mass: null,
     });
 
     useAuthCheck()
@@ -60,9 +60,9 @@ const UserInfo = () => {
                     body_fat_percentage: data.body_fat_percentage,
                     muscle_mass: data.muscle_mass,
                     metabolism: data.metabolism,
-                    target_weight: data.target_weight,
-                    target_body_fat_percentage: data.target_body_fat_percentage,
-                    target_muscle_mass: data.target_muscle_mass,
+                    // target_weight: data.target_weight,
+                    // target_body_fat_percentage: data.target_body_fat_percentage,
+                    // target_muscle_mass: data.target_muscle_mass,
                 });
             }
         } catch (error) {
@@ -125,7 +125,6 @@ const UserInfo = () => {
             <div className='sub-container '>
                 <UserInfoNavigation />
                 <div className='main'>
-                <h2>User Info Form</h2>
                 
                 <form onSubmit={handleSubmit} className='user-info-form'>
                     {/* Render form fields with their corresponding values */}
@@ -187,35 +186,7 @@ const UserInfo = () => {
                         className="input input-bordered input-primary w-full max-w-xs"
                     /></label>
 
-                    <label>Target Weight (kg)<input
-                        type="number"
-                        name="target_weight"
-                        value={formData.target_weight ===null?'': formData.target_weight}
-                        onChange={handleInputChange}
-                        min={1}
-                        step={0.1}
-                        className="input input-bordered input-primary w-full max-w-xs"
-                    /></label>
-
-                    <label>Target Body Fat Rate (%)<input
-                        type="number"
-                        name="target_body_fat_percentage"
-                        value={formData.target_body_fat_percentage ===null?'': formData.target_body_fat_percentage}
-                        onChange={handleInputChange}
-                        min={1}
-                        step={0.1}
-                        className="input input-bordered input-primary w-full max-w-xs"
-                    /></label>
-
-                    <label>Target Muscle Mass (kg)<input
-                        type="number"
-                        name="target_muscle_mass"
-                        value={formData.target_muscle_mass ===null?'': formData.target_muscle_mass}
-                        onChange={handleInputChange}
-                        min={1}
-                        step={0.1}
-                        className="input input-bordered input-primary w-full max-w-xs"
-                    /></label>
+                    
                     {toastMes && toastMes !==''&&(
                         <div role="alert" className={`alert ${toastClass}`} >
                             <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>

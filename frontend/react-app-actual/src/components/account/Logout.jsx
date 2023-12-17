@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import getCookie from '../../hooks/getCookie';
+import getCookie from '../../helpers/getCookie';
 import { BACKEND_ENDPOINT } from '../../settings';
 
 const LogoutButton = () => {
@@ -30,7 +30,7 @@ const LogoutButton = () => {
         }
     };
 
-    
+
     // render
     return (
         <button onClick={handleLogout}>Logout</button>

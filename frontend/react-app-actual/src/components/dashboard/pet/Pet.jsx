@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import getCookie from '../../../hooks/getCookie';
+import getCookie from '../../../helpers/getCookie';
 
 import formattedCurrentDate from '../../../helpers/getToday';
 import { BACKEND_ENDPOINT } from '../../../settings';

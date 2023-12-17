@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import getCookie from '../../hooks/getCookie';
+import getCookie from '../../helpers/getCookie';
 
 import { BACKEND_ENDPOINT } from '../../settings';
 import { useSelector } from 'react-redux/es/hooks/useSelector';

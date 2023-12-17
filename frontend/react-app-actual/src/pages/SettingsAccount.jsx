@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navigation from '../components/Navigation';
-import getCookie from '../hooks/getCookie';
-import useAuthCheck from '../hooks/useAuthCheck';
+import getCookie from '../helpers/getCookie';
+import useAuthCheck from '../helpers/useAuthCheck';
 
 import { BACKEND_ENDPOINT } from '../settings';
 
@@ -96,7 +96,7 @@ const SettingsAccount = () => {
         }
     };
 
-    
+
     // detect input change
     const handleChange = (e) => {
         switch (e.target.name) {

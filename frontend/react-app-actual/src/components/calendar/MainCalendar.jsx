@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import getCookie from '../../hooks/getCookie';
+import getCookie from '../../helpers/getCookie';
 import { BACKEND_ENDPOINT } from '../../settings';
 
 const MainCalendar = ({month}) => {
@@ -9,6 +9,10 @@ const MainCalendar = ({month}) => {
     const [selectedMonth,setSelectedMonth] = useState(month)
     const [date, setDate] = useState(selectedMonth ? new Date(`${selectedMonth}T00:00:00Z`) : new Date());
     const [data, setData] = useState([]);
+
+useEffect(()=>{
+    console.log(selectedMonth)
+},[selectedMonth])
 
 
     // go Previous month.

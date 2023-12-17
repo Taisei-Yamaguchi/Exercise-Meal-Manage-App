@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import getCookie from '../hooks/getCookie';
+import getCookie from '../../helpers/getCookie';
 import { useParams } from 'react-router-dom';
 
-import { BACKEND_ENDPOINT } from '../settings';
+import { BACKEND_ENDPOINT } from '../../settings';
 
-import useAuthCheck from '../hooks/useAuthCheck';
-import ExerciseCreate from '../components/exercise/ExerciseCreate';
-import ExerciseDelete from '../components/exercise/ExerciseDelete';
-import ExerciseUpdate from '../components/exercise/ExerciseUpdate';
-import ExerciseNavigation from '../components/exercise/exercise-nav/ExerciseNavigation';
-import WorkoutCreate from '../components/exercise/WorkoutCreate';
-import LatestExerciseByType from '../components/exercise/LatestExerciseByType';
+import useAuthCheck from '../../helpers/useAuthCheck';
+import ExerciseCreate from '../../components/exercise/ExerciseCreate';
+import ExerciseDelete from '../../components/exercise/ExerciseDelete';
+import ExerciseUpdate from '../../components/exercise/ExerciseUpdate';
+import ExerciseNavigation from '../../components/exercise/exercise-nav/ExerciseNavigation';
+import WorkoutCreate from '../../components/exercise/WorkoutCreate';
+import LatestExerciseByType from '../../components/exercise/LatestExerciseByType';
 
-import ExerciseLivingCreate from '../components/exercise/ExerciseLivingCreate';
-import ExerciseLivingUpdate from '../components/exercise/ExerciseLivingUpdate';
+import ExerciseLivingCreate from '../../components/exercise/ExerciseLivingCreate';
+import ExerciseLivingUpdate from '../../components/exercise/ExerciseLivingUpdate';
 
 import { useDispatch } from 'react-redux';
-import { setToastMes } from '../redux/store/ToastSlice';
+import { setToastMes } from '../../redux/store/ToastSlice';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 
