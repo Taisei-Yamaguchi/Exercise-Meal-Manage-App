@@ -8,9 +8,9 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.tokens import default_token_generator
-# from allauth.account.models import EmailConfirmation, EmailConfirmationHMAC
-# from django.core.mail import send_mail
-# from django.template.loader import render_to_string
+from allauth.account.models import EmailConfirmation, EmailConfirmationHMAC
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth import get_user_model
@@ -35,19 +35,19 @@ class SignupAPIView(APIView):
             token = default_token_generator.make_token(user)
             confirm_url = f"http://localhost:5173/signup/email-confirmation/{uid}/{token}"
 
-            # とりあえず、ターミナルから確認
-            print(confirm_url)
-            # # メール本文を作成
-            # message = render_to_string('account/email/confirmation_signup_message.txt', {
-            #     'user': user.name,
-            #     'confirm_url': confirm_url,
-            # })
-            # # 実際にはここでメール送信
-            # send_mail('Confirm your email', message, 'from@example.com', [user.email])
+            # メール本文を作成
+            message = render_to_string('email/confirmation_signup_message.txt', {
+                'user': user.name,
+                'confirm_url': confirm_url,
+            })
+            
+            # 実際にはここでメール送信
+            send_mail('EMMA Activate Account', message, 'aries0326business@gmail.com', [user.email])
 
             return Response({'detail': 'Success! Check your email for confirmation.'}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
     
     
 # Signup Confirmation via email.
@@ -92,14 +92,15 @@ class PasswordResetRequestAPIView(APIView):
         # Send the reset link to the user's email (replace with your email sending logic)
         reset_url = f"http://localhost:5173/password-reset/process/{uid}/{token}"
         
-        print(reset_url)  # For testing purposes
-        # # メール本文を作成
-        # message = render_to_string('account/email/reset_password_message.txt', {
-        #     'user': user.name,
-        #     'rest_url': reset_url,
-        # })
-        # # 実際にはここでメール送信
-        # send_mail('Confirm your email', message, 'from@example.com', [user.email])
+        # print(reset_url)  # For testing purposes
+        # メール本文を作成
+        message = render_to_string('email/reset_password_message.txt', {
+            'user': user.name,
+            'reset_url': reset_url,
+        })
+        # print(message)
+        # 実際にはここでメール送信
+        send_mail('EMMA PAssword Reset', message, 'aries0326business@gmail.com', [user.email])
         return Response({'detail': 'Password reset link sent successfully.'}, status=status.HTTP_200_OK)
 
 

@@ -1,0 +1,10 @@
+Hello, {{user}}.
+
+Your email is registered in EMMA.
+Please click this link and activate your new account.
+{{confirm_url}}
+
+If you are not sure. Please ignore.
+
+
+EMMA (Taisei Yamaguchi)

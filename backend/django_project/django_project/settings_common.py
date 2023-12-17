@@ -205,3 +205,13 @@ REST_FRAMEWORK = {
         # 他の認証クラスも追加できます
     ],
 }
+
+
+# Gmailを使用してメールを送信するための設定
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587  # GmailのSMTPポート
+EMAIL_USE_SSL = True  # GmailはSSLを使用するためTrueに設定
+EMAIL_HOST_USER = 'aries0326business@gmail.com'  # Gmailのメールアドレス
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+

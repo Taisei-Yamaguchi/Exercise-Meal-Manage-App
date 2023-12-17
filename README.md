@@ -49,7 +49,7 @@ using Django &amp; React
 ・詳細設定 <br>
 ・SSL<br>
 
-・email送信は後で設定。<br>
+<del>・email送信は後で設定。</del>-> 本番では、　SSLにする必要がある<br>
 ・sign up用tokenが、email confirmされずに、期限切れたらaccount自動削除<br>
 
 ・authページデザイン<br>
