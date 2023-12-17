@@ -51,6 +51,10 @@ LOGGING={
 
 EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
 
+# CORS
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
+
 CSRF_COOKIE_SAMESITE = None
 CORS_ALLOW_CREDENTIALS = True
-CSRF_COOKIE_SECURE = False
