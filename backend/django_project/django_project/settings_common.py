@@ -176,9 +176,7 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-]
+
 
 AUTH_USER_MODEL ="accounts.CustomUser"
 
@@ -196,7 +194,7 @@ CSRF_COOKIE_HTTPONLY = False
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_DB_ALIAS = 'default'  # 使用するデータベースエイリアスを指定（デフォルトは'default'）
-SESSION_COOKIE_AGE = 900  # 15分 × 60秒
+SESSION_COOKIE_AGE = 36000  # 15分 × 60秒
 SESSION_COOKIE_NAME = 'sessionid'
 
 
