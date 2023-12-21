@@ -12,6 +12,7 @@ from django.core.mail import outbox
 from django.utils.encoding import force_bytes
 from datetime import timedelta
 from django.utils import timezone 
+from rest_framework.authtoken.models import Token
 
 
 ENDPOINT = 'http://127.0.0.1:8000/'
@@ -405,6 +406,57 @@ class LoginViewTest(APITestCase):
         # レスポンスの確認
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertNotIn('token', response.data)
+        
+        
+        
+class LogoutViewTest(APITestCase):
+    def setUp(self):
+        # テストユーザーの作成
+        self.user_data = {
+            'username': 'testuser',
+            'password': 'securepassword',
+            'email': 'testuser@example.com',
+            'name': 'John Doe',
+            'birthday': '2000-01-01',
+            'sex': False,
+            'email_check': True,
+        }
+        self.user = get_user_model().objects.create_user(**self.user_data)
+
+        # ログインしてトークンを取得
+        self.client.login(username='testuser', password='securepassword')
+        self.token, created = Token.objects.get_or_create(user=self.user)
+
+        # LogoutView の URL
+        self.logout_url = ENDPOINT+"accounts/logout/"
+        # トークンをセット
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+
+    def test_logout_success(self):
+        # ログアウト
+        response = self.client.post(self.logout_url, format='json')
+
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, {'message': 'Logout successful.'})
+
+        # ログアウト後はトークンが無効化されていることを確認
+        self.assertIsNone(Token.objects.filter(key=self.token.key).first())
+
+        # ログアウト後はセッションからユーザーが削除されていることを確認
+        self.assertNotIn('_auth_user_id', self.client.session)
+        
+        
+    def test_logout_failure_not_authenticated(self):
+        # ログインしていない状態でログアウト
+        self.client.logout()
+        response = self.client.post(self.logout_url, format='json')
+
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        
+        
         
         
         
