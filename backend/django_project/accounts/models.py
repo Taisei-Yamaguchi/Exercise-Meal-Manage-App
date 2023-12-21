@@ -16,6 +16,8 @@ class CustomUser(AbstractUser):
     
     # name,birthday,sex は必須
     name=models.CharField(default='unkown',null=False,max_length=100)
+    email = models.EmailField(unique=True, max_length=150)
+    
     password = models.CharField(
         max_length=128,
         null=False,
