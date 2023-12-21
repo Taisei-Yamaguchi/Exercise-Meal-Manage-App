@@ -501,3 +501,87 @@ class GetAccountViewTest(APITestCase):
             'birthday': '2000-01-01',
         }
         self.assertEqual(response.data, expected_data)
+        
+        
+        
+        
+        
+        
+        
+class UpdateAccountViewTest(APITestCase):
+    def setUp(self):
+        # テストユーザーの作成
+        self.user_data = {
+            'username': 'testuser',
+            'password': 'securepassword',
+            'email': 'testuser@example.com',
+            'name': 'John Doe',
+            'birthday': '2000-01-01',
+            'sex': False,
+            'email_check': True,
+        }
+        self.user = get_user_model().objects.create_user(**self.user_data)
+
+        # ログイン
+        self.client.login(username='testuser', password='securepassword')
+
+        # トークンの取得
+        self.token, _ = Token.objects.get_or_create(user=self.user)
+
+        # UpdateAccountView の URL
+        self.update_account_url = ENDPOINT + "accounts/update/"
+
+        # トークンをセット
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+    def test_update_account_success(self):
+        # 更新データ
+        updated_data = {
+            'name': 'Updated Name',
+            'birthday': '1990-02-02',
+            'sex': True,
+        }
+
+        # UpdateAccountView にアクセス
+        response = self.client.put(self.update_account_url, data=updated_data, format='json')
+
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, 'detail: update success.')
+
+        # ユーザーの情報が更新されているか確認
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.name, 'Updated Name')
+        self.assertEqual(str(self.user.birthday), '1990-02-02')
+        self.assertEqual(self.user.sex, True)
+
+    def test_update_account_invalid_data(self):
+        # 不正なデータ（例: 空の名前）
+        invalid_data = {
+            'name': '',
+            'birthday': '1990-02-02',
+            'sex': True,
+        }
+
+        # UpdateAccountView にアクセス
+        response = self.client.put(self.update_account_url, data=invalid_data, format='json')
+
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data, 'detail: update error.')
+        
+    # email,passwordを変更しようとする。
+    def test_update_account_eamil_password(self):
+        # 不正なデータ（例: 空の名前）
+        invalid_data = {
+            'email':'newemail@example.com' ,
+            'password': 'newpassword',
+            'username': 'newusername',
+        }
+
+        # UpdateAccountView にアクセス
+        response = self.client.put(self.update_account_url, data=invalid_data, format='json')
+
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data, 'detail: update error.')
