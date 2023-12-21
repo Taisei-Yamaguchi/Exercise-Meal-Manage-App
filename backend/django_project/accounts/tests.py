@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.contrib.auth.tokens import default_token_generator
 from rest_framework.test import APITestCase
 from django.utils.http import urlsafe_base64_encode
+from django.core.mail import outbox
 
 
 ENDPOINT = 'http://127.0.0.1:8000/'
@@ -178,3 +179,45 @@ class SignUpConfirmEmailAPIViewTest(APITestCase):
         
         
 
+class PasswordResetRequestAPIViewTest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.password_reset_request_url = ENDPOINT+'accounts/reset-password-request/'
+
+    def test_password_reset_request_existing_user(self):
+        # 既存のユーザーを作成
+        user_data = {
+            'username': 'testuser',
+            'password': 'securepassword',
+            'email': 'testuser@example.com',
+            'name': 'John Doe',
+            'birthday': '2000-01-01',
+            'sex': False,
+            'email_check': True,
+        }
+        user = get_user_model().objects.create_user(**user_data)
+
+        # リセットリクエストを送信
+        data = {'email': user.email}
+        response = self.client.post(self.password_reset_request_url, data, format='json')
+        
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['detail'], 'Password reset link sent successfully.')
+
+        # # ユーザーのデータが更新されていることを確認
+        user.refresh_from_db()
+        self.assertIsNotNone(user.password_reset_sent)
+
+        # # メールが送信されていることを確認 SSLを設定してないから、まだできない
+        # self.assertEqual(len(outbox), 1)
+        # self.assertIn('Password Reset', outbox[0].subject)
+        # self.assertIn(user.email, outbox[0].to)
+
+    def test_password_reset_request_non_existing_user(self):
+        # 存在しないユーザーのメールを指定してリセットリクエストを送信
+        data = {'email': 'nonexistentuser@example.com'}
+        response = self.client.post(self.password_reset_request_url, data, format='json')
+
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
