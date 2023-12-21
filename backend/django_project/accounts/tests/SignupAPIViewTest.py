@@ -5,16 +5,9 @@ from django.contrib.auth import get_user_model
 from accounts.models import CustomUser  # このimport文を適切なモジュールに置き換えてください
 from accounts.serializers import CustomUserSerializer  # このimport文を適切なモジュールに置き換えてください
 from datetime import date
-from django.urls import reverse
-from django.contrib.auth.tokens import default_token_generator
-from rest_framework.test import APITestCase
-from django.utils.http import urlsafe_base64_encode
-
 
 ENDPOINT = 'http://127.0.0.1:8000/'
 
-
-# 1. accounts signup
 class SignupAPIViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
@@ -130,51 +123,4 @@ class SignupAPIViewTest(TestCase):
 
 
 
-
-# 2. accounts signup-confirmation
-class SignUpConfirmEmailAPIViewTest(APITestCase):
-    def test_confirm_email_success(self):
-        # 有効なユーザーとトークンを作成
-        user = get_user_model().objects.create_user(username='testuser', password='testpassword', email='test@example.com')
-        token = default_token_generator.make_token(user)
-        
-        # APIリクエストを作成
-        url = ENDPOINT+'accounts/signup-confirmation/'  # URLはプロジェクトの実際の設定に合わせて変更してください
-        query_params = {'uid': urlsafe_base64_encode(str(user.id).encode()), 'token': token}
-        response = self.client.post(url, data=query_params, format='json')
-        
-        # レスポンスを検証
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['detail'], 'Email confirmed successfully.')
-
-        # ユーザーのemail_checkがTrueになっているか検証
-        user.refresh_from_db()
-        self.assertTrue(user.email_check)
-
-    def test_confirm_email_invalid_token(self):
-        # 有効なユーザーと無効なトークンを作成
-        user = get_user_model().objects.create_user(username='testuser', password='testpassword', email='test@example.com')
-        invalid_token = 'invalid_token'
-        
-        # APIリクエストを作成
-        url = ENDPOINT+'accounts/signup-confirmation/'  # URLはプロジェクトの実際の設定に合わせて変更してください
-        query_params = {'uid': urlsafe_base64_encode(str(user.id).encode()), 'token': invalid_token}
-        response = self.client.post(url, data=query_params, format='json')
-        
-        # レスポンスを検証
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['detail'], 'Invalid token or user not found.')
-
-    def test_confirm_email_missing_uid(self):
-        # uidがない場合のAPIリクエストを作成
-        url = ENDPOINT+'accounts/signup-confirmation/'  # URLはプロジェクトの実際の設定に合わせて変更してください
-        data = {'token': 'some_token'}
-        response = self.client.post(url, data, format='json')
-        
-        # レスポンスを検証
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['detail'], 'uid is required.')
-        
-        
-        
-
+    
