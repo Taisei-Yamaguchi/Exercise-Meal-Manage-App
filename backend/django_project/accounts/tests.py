@@ -460,3 +460,44 @@ class LogoutViewTest(APITestCase):
         
         
         
+
+
+
+class GetAccountViewTest(APITestCase):
+    def setUp(self):
+        # テストユーザーの作成
+        self.user_data = {
+            'username': 'testuser',
+            'password': 'securepassword',
+            'email': 'testuser@example.com',
+            'name': 'John Doe',
+            'birthday': '2000-01-01',
+            'sex': False,
+            'email_check': True,
+        }
+        self.user = get_user_model().objects.create_user(**self.user_data)
+        # ログイン
+        self.client.login(username='testuser', password='securepassword')
+        # トークンの取得
+        self.token, _ = Token.objects.get_or_create(user=self.user)
+        # GetAccountView の URL
+        self.get_account_url = ENDPOINT + "accounts/get/"
+        # トークンをセット
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+    def test_get_account_success(self):
+        # GetAccountView にアクセス
+        response = self.client.get(self.get_account_url, format='json')
+
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # 期待通りのデータが得られているか確認
+        expected_data = {
+            'name': 'John Doe',
+            'email_address': 'testuser@example.com',
+            'picture': None,  # 仮に空文字としています。必要に応じて変更してください。
+            'sex': False,
+            'birthday': '2000-01-01',
+        }
+        self.assertEqual(response.data, expected_data)
