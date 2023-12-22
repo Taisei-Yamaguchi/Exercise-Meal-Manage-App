@@ -32,17 +32,74 @@ class WorkoutListViewTest(APITestCase):
         # トークンをセット
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
-
+        self.get_workout_url = ENDPOINT+'get-workout/'
         # テスト用のWorkoutの作成
         self.workout = Workout.objects.create(account=self.user, is_default=False, name='Test Workout', workout_type='Other')
 
     def test_get_workout_list(self):
-        # WorkoutListViewのURLを取得
-        url = ENDPOINT+'get-workout/'
         # GETリクエストを実行
-        response = self.client.get(url)
+        response = self.client.get(self.get_workout_url)
         # レスポンスの検証
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # レスポンスのデータを検証（例：シリアライザのデータと一致するか）
         expected_data = WorkoutSerializer([self.workout], many=True).data
         self.assertEqual(response.data, {'workout': expected_data, 'default_workout': default_workout_data})
+        
+        
+        
+        
+        
+# 2. create workout
+class WorkoutCreateViewTest(APITestCase):
+    def setUp(self):
+        self.user_data = {
+            'username': 'testuser',
+            'password': 'securepassword',
+            'email': 'testuser@example.com',
+            'name': 'John Doe',
+            'birthday': '2000-01-01',
+            'sex': False,
+            'email_check': True,
+        }
+        self.user = CustomUser.objects.create_user(**self.user_data)
+        # ログイン
+        self.client.login(username='testuser', password='securepassword')
+        # トークンの取得
+        self.token, _ = Token.objects.get_or_create(user=self.user)
+        # トークンをセット
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        # WorkoutCreateView の URL
+        self.workout_create_url = ENDPOINT+'post-workout/'
+
+        # テスト用のデータ
+        self.workout_data = {
+            'name': 'Test Workout',
+            'workout_type': 'Other'
+        }
+        
+
+    def test_create_workout_success(self):
+        # POSTリクエストを送信
+        response = self.client.post(self.workout_create_url, self.workout_data, format='json')
+
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Workout.objects.count(), 1)
+        self.assertEqual(Workout.objects.get().name, 'Test Workout')
+
+    def test_create_workout_failure(self):
+        # 不正なデータでPOSTリクエストを送信
+        invalid_data = {
+            'name': 'test',  
+            'workout_type':None #ここは、Noneではダメ。指定したものである必要あり。
+        }
+        response = self.client.post(self.workout_create_url, invalid_data, format='json')
+
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Workout.objects.count(), 0)
+        
+        
+
+
