@@ -139,7 +139,7 @@ class SignupAPIViewTest(TestCase):
 class SignUpConfirmEmailAPIViewTest(APITestCase):
     def test_confirm_email_success(self):
         # 有効なユーザーとトークンを作成
-        user = get_user_model().objects.create_user(username='testuser', password='testpassword', email='test@example.com')
+        user = CustomUser.objects.create_user(username='testuser', password='testpassword', email='test@example.com')
         token = default_token_generator.make_token(user)
         
         # APIリクエストを作成
@@ -157,7 +157,7 @@ class SignUpConfirmEmailAPIViewTest(APITestCase):
 
     def test_confirm_email_invalid_token(self):
         # 有効なユーザーと無効なトークンを作成
-        user = get_user_model().objects.create_user(username='testuser', password='testpassword', email='test@example.com')
+        user = CustomUser.objects.create_user(username='testuser', password='testpassword', email='test@example.com')
         invalid_token = 'invalid_token'
         
         # APIリクエストを作成
@@ -181,7 +181,7 @@ class SignUpConfirmEmailAPIViewTest(APITestCase):
         
         
         
-
+# 3. password reset request
 class PasswordResetRequestAPIViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
@@ -198,7 +198,7 @@ class PasswordResetRequestAPIViewTest(TestCase):
             'sex': False,
             'email_check': True,
         }
-        user = get_user_model().objects.create_user(**user_data)
+        user = CustomUser.objects.create_user(**user_data)
 
         # リセットリクエストを送信
         data = {'email': user.email}
@@ -229,123 +229,122 @@ class PasswordResetRequestAPIViewTest(TestCase):
         
         
         
+#4. password reset confirm 
+class PasswordResetConfirmAPIViewTest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.password_reset_confirm_url = ENDPOINT+'accounts/reset-password-confirm/'
+
+    def test_password_reset_confirm_success(self):
+        user_data = {
+            'username': 'testuser',
+            'password': 'securepassword',
+            'email': 'testuser@example.com',
+            'name': 'John Doe',
+            'birthday': '2000-01-01',
+            'sex': False,
+            'email_check':True,
+            'password_reset_sent':timezone.now(),
+        }
+        user = CustomUser.objects.create_user(**user_data)
+
+        # パスワードリセットトークンを作成
+        uid =urlsafe_base64_encode(str(user.id).encode())
+        token = default_token_generator.make_token(user)
+        data = {'uid': uid, 'token': token, 'new_password': 'newsecurepassword'}
         
-# class PasswordResetConfirmAPIViewTest(TestCase):
-#     def setUp(self):
-#         self.client = APIClient()
-#         self.password_reset_confirm_url = ENDPOINT+'reset-password-confirm/'
+        response = self.client.post(self.password_reset_confirm_url, data, format='json')
 
-#     def test_password_reset_confirm_success(self):
-#         # 仮のユーザーを作成
-#         user_data = {
-#             'username': 'testuser',
-#             'password': 'securepassword',
-#             'email': 'testuser@example.com',
-#             'name': 'John Doe',
-#             'birthday': '2000-01-01',
-#             'sex': False,
-#             'email_check':True,
-#         }
-#         user = get_user_model().objects.create_user(user_data)
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['detail'], 'Password reset successful.')
 
-#         # パスワードリセットトークンを作成
-#         uid = urlsafe_base64_encode(force_bytes(user.pk))
-#         token = default_token_generator.make_token(user)
+        # パスワードが更新されていることを確認
+        user.refresh_from_db()
+        self.assertTrue(user.check_password('newsecurepassword'))
 
-#         # パスワードリセットリクエストを送信
-#         data = {'uid': uid, 'token': token, 'new_password': 'newsecurepassword'}
-#         response = self.client.post(self.password_reset_confirm_url, data, format='json')
+        # トークンが無効になっていることを確認
+        self.assertIsNone(user.password_reset_sent)
 
-#         # レスポンスの確認
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertEqual(response.data['detail'], 'Password reset successful.')
+    def test_password_reset_confirm_invalid_token(self):
+        # 仮のユーザーを作成
+        user_data = {
+            'username': 'testuser',
+            'password': 'securepassword',
+            'email': 'testuser@example.com',
+            'name': 'John Doe',
+            'birthday': '2000-01-01',
+            'sex': False,
+        }
+        user = CustomUser.objects.create_user(**user_data)
 
-#         # パスワードが更新されていることを確認
-#         user.refresh_from_db()
-#         self.assertTrue(user.check_password('newsecurepassword'))
+        # 無効なトークンを作成
+        uid =urlsafe_base64_encode(str(user.id).encode())
+        invalid_token = 'invalidtoken'
 
-#         # トークンが無効になっていることを確認
-#         self.assertIsNone(user.password_reset_sent)
+        # パスワードリセットリクエストを送信
+        data = {'uid': uid, 'token': invalid_token, 'new_password': 'newsecurepassword'}
+        response = self.client.post(self.password_reset_confirm_url, data, format='json')
 
-#     def test_password_reset_confirm_invalid_token(self):
-#         # 仮のユーザーを作成
-#         user_data = {
-#             'username': 'testuser',
-#             'password': 'securepassword',
-#             'email': 'testuser@example.com',
-#             'name': 'John Doe',
-#             'birthday': '2000-01-01',
-#             'sex': False,
-#         }
-#         user = get_user_model().objects.create_user(**user_data)
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['detail'], 'Invalid or expired token.')
 
-#         # 無効なトークンを作成
-#         uid = urlsafe_base64_encode(force_bytes(user.pk))
-#         invalid_token = 'invalidtoken'
+        # パスワードが更新されていないことを確認
+        user.refresh_from_db()
+        self.assertTrue(user.check_password('securepassword'))
 
-#         # パスワードリセットリクエストを送信
-#         data = {'uid': uid, 'token': invalid_token, 'new_password': 'newsecurepassword'}
-#         response = self.client.post(self.password_reset_confirm_url, data, format='json')
+    def test_password_reset_confirm_invalid_uid(self):
+        # 無効な UID を指定してリクエストを送信
+        invalid_uid = 'invaliduid'
+        invalid_token = 'invalidtoken'
 
-#         # レスポンスの確認
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-#         self.assertEqual(response.data['detail'], 'Invalid or expired token.')
+        data = {'uid': invalid_uid, 'token': invalid_token, 'new_password': 'newsecurepassword'}
+        response = self.client.post(self.password_reset_confirm_url, data, format='json')
 
-#         # パスワードが更新されていないことを確認
-#         user.refresh_from_db()
-#         self.assertTrue(user.check_password('securepassword'))
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['detail'], 'Invalid uid.')
 
-#     def test_password_reset_confirm_invalid_uid(self):
-#         # 無効な UID を指定してリクエストを送信
-#         invalid_uid = 'invaliduid'
-#         invalid_token = 'invalidtoken'
+    def test_password_reset_confirm_expired_token(self):
+        # 仮のユーザーを作成
+        user_data = {
+            'username': 'testuser',
+            'password': 'securepassword',
+            'email': 'testuser@example.com',
+            'name': 'John Doe',
+            'birthday': '2000-01-01',
+            'sex': False,
+        }
+        user = get_user_model().objects.create_user(**user_data)
 
-#         data = {'uid': invalid_uid, 'token': invalid_token, 'new_password': 'newsecurepassword'}
-#         response = self.client.post(self.password_reset_confirm_url, data, format='json')
+        if user.password_reset_sent is None:
+            user.password_reset_sent = timezone.now()  # あるいはデフォルトの値を設定
+        user.password_reset_sent = user.password_reset_sent - timedelta(days=2)  # 2日前に設定
+        # 有効期限切れのトークンを作成
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        expired_token = default_token_generator.make_token(user)
+        user.password_reset_sent = user.password_reset_sent - timedelta(days=2)  # 2日前に設定
+        user.save()
 
-#         # レスポンスの確認
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-#         self.assertEqual(response.data['detail'], 'Invalid uid.')
+        # パスワードリセットリクエストを送信
+        data = {'uid': uid, 'token': expired_token, 'new_password': 'newsecurepassword'}
+        response = self.client.post(self.password_reset_confirm_url, data, format='json')
 
-#     def test_password_reset_confirm_expired_token(self):
-#         # 仮のユーザーを作成
-#         user_data = {
-#             'username': 'testuser',
-#             'password': 'securepassword',
-#             'email': 'testuser@example.com',
-#             'name': 'John Doe',
-#             'birthday': '2000-01-01',
-#             'sex': False,
-#         }
-#         user = get_user_model().objects.create_user(**user_data)
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['detail'], 'Invalid or expired token.')
 
-#         if user.password_reset_sent is None:
-#             user.password_reset_sent = timezone.now()  # あるいはデフォルトの値を設定
-#         user.password_reset_sent = user.password_reset_sent - timedelta(days=2)  # 2日前に設定
-#         # 有効期限切れのトークンを作成
-#         uid = urlsafe_base64_encode(force_bytes(user.pk))
-#         expired_token = default_token_generator.make_token(user)
-#         user.password_reset_sent = user.password_reset_sent - timedelta(days=2)  # 2日前に設定
-#         user.save()
-
-#         # パスワードリセットリクエストを送信
-#         data = {'uid': uid, 'token': expired_token, 'new_password': 'newsecurepassword'}
-#         response = self.client.post(self.password_reset_confirm_url, data, format='json')
-
-#         # レスポンスの確認
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-#         self.assertEqual(response.data['detail'], 'Invalid or expired token.')
-
-#         # パスワードが更新されていないことを確認
-#         user.refresh_from_db()
-#         self.assertTrue(user.check_password('securepassword'))
+        # パスワードが更新されていないことを確認
+        user.refresh_from_db()
+        self.assertTrue(user.check_password('securepassword'))
 
 
 
 
 
 
-
+# 5. Login
 class LoginViewTest(APITestCase):
     def setUp(self):
         # テストユーザーの作成
@@ -358,7 +357,7 @@ class LoginViewTest(APITestCase):
             'sex': False,
             'email_check': True,
         }
-        self.user = get_user_model().objects.create_user(**self.user_data)
+        self.user = CustomUser.objects.create_user(**self.user_data)
 
         # LoginView の URL
         self.login_url = ENDPOINT+"accounts/login/"
@@ -408,7 +407,7 @@ class LoginViewTest(APITestCase):
         self.assertNotIn('token', response.data)
         
         
-        
+# 6. Logout
 class LogoutViewTest(APITestCase):
     def setUp(self):
         # テストユーザーの作成
@@ -421,7 +420,7 @@ class LogoutViewTest(APITestCase):
             'sex': False,
             'email_check': True,
         }
-        self.user = get_user_model().objects.create_user(**self.user_data)
+        self.user = CustomUser.objects.create_user(**self.user_data)
 
         # ログインしてトークンを取得
         self.client.login(username='testuser', password='securepassword')
@@ -462,7 +461,7 @@ class LogoutViewTest(APITestCase):
         
 
 
-
+# 7. get account
 class GetAccountViewTest(APITestCase):
     def setUp(self):
         # テストユーザーの作成
@@ -475,7 +474,7 @@ class GetAccountViewTest(APITestCase):
             'sex': False,
             'email_check': True,
         }
-        self.user = get_user_model().objects.create_user(**self.user_data)
+        self.user = CustomUser.objects.create_user(**self.user_data)
         # ログイン
         self.client.login(username='testuser', password='securepassword')
         # トークンの取得
@@ -506,8 +505,7 @@ class GetAccountViewTest(APITestCase):
         
         
         
-        
-        
+# 8. update account
 class UpdateAccountViewTest(APITestCase):
     def setUp(self):
         # テストユーザーの作成
@@ -520,7 +518,7 @@ class UpdateAccountViewTest(APITestCase):
             'sex': False,
             'email_check': True,
         }
-        self.user = get_user_model().objects.create_user(**self.user_data)
+        self.user = CustomUser.objects.create_user(**self.user_data)
 
         # ログイン
         self.client.login(username='testuser', password='securepassword')
