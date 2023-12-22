@@ -8,7 +8,8 @@ from rest_framework.authtoken.models import Token
 from .default_workout import default_workout_data
 from django.utils import timezone
 from datetime import timedelta
-
+from django.db import transaction
+from .serializers import GetExerciseSerializer
 
 ENDPOINT = 'http://127.0.0.1:8000/exercise/'
 
@@ -206,7 +207,7 @@ class ExerciseCreateViewTest(APITestCase):
 
         # APIを呼び出してExerciseを作成
         response = self.client.post(self.post_exercise_url, data=exercise_data,format='json')
-        print(response.data)
+        # print(response.data)
         
         # レスポンスの確認
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -241,7 +242,7 @@ class ExerciseCreateViewTest(APITestCase):
 
         # APIを呼び出してExerciseを作成
         response = self.client.post(self.post_exercise_url, data=exercise_data,format='json')
-        print(response.data)
+        # print(response.data)
         
         # レスポンスの確認
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -262,3 +263,265 @@ class ExerciseCreateViewTest(APITestCase):
         self.assertEqual(created_exercise.memos, 'Test memo')
         
         
+
+
+
+
+# 5. Exercise Update
+class ExerciseUpdateViewTest(APITestCase):
+    def setUp(self):
+        self.user_data = {
+            'username': 'testuser',
+            'password': 'securepassword',
+            'email': 'testuser@example.com',
+            'name': 'John Doe',
+            'birthday': '2000-01-01',
+            'sex': False,
+            'email_check': True,
+        }
+        self.user = CustomUser.objects.create_user(**self.user_data)
+        self.client.login(username='testuser', password='securepassword')
+        self.token, _ = Token.objects.get_or_create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        # テスト用のWorkoutの作成
+        self.workout = Workout.objects.create(account=self.user, is_default=False, name='Test Workout', workout_type='Other')
+        
+        # テスト用のExerciseの作成
+        self.exercise = Exercise.objects.create(
+            account=self.user,
+            exercise_date='2023-12-22',
+            sets=3,
+            reps=10,
+            weight_kg=None,
+            duration_minutes=None,
+            distance=None,
+            mets=None,
+            memos='Test memo',
+            workout=self.workout,
+        )
+        
+        self.exercise_update_url = ENDPOINT+f'exercise/update/{self.exercise.id}/'
+
+    def test_update_exercise(self):
+        # 更新用のデータ
+        update_data = {
+            'sets': None,
+            'reps': None,
+            'duration_minutes':30,
+            'memos': 'Updated memo',
+        }
+
+        # エクササイズの更新
+        response = self.client.put(
+            self.exercise_update_url,
+            data=update_data,
+            format='json'
+        )
+
+        # print(response.data)
+
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # データベースからエクササイズを再取得して更新されているか確認
+        updated_exercise = Exercise.objects.get(id=self.exercise.id)
+        self.assertEqual(updated_exercise.sets, update_data['sets'])
+        self.assertEqual(updated_exercise.reps, update_data['reps'])
+        self.assertEqual(updated_exercise.duration_minutes, update_data['duration_minutes'])
+        self.assertEqual(updated_exercise.memos, update_data['memos'])
+
+
+
+# 6. Exercise Delete
+class ExerciseDeleteViewTest(APITestCase):
+    def setUp(self):
+        self.user_data = {
+            'username': 'testuser',
+            'password': 'securepassword',
+            'email': 'testuser@example.com',
+            'name': 'John Doe',
+            'birthday': '2000-01-01',
+            'sex': False,
+            'email_check': True,
+        }
+        self.user = CustomUser.objects.create_user(**self.user_data)
+        self.client.login(username='testuser', password='securepassword')
+        self.token, _ = Token.objects.get_or_create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        
+        # other user
+        self.other_user_data = {
+            'username': 'otheruser',
+            'password': 'otherpassword',
+            'email': 'otheruser@example.com',
+            'name': 'John Doe',
+            'birthday': '2000-01-01',
+            'sex': False,
+            'email_check': True,
+        }
+        self.other_user = CustomUser.objects.create_user(**self.other_user_data)
+        self.client.login(username='otheruser', password='otherpassword')
+        self.other_token, _ = Token.objects.get_or_create(user=self.other_user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.other_token.key)
+
+    @transaction.atomic
+    def test_delete_exercise(self):
+        # テスト用のWorkoutの作成
+        workout = Workout.objects.create(account=self.user, is_default=False, name='Test Workout', workout_type='Other')
+        # テスト用のExerciseの作成
+        exercise = Exercise.objects.create(
+            account=self.user,
+            exercise_date='2023-12-22',
+            sets=3,
+            reps=10,
+            weight_kg=None,
+            duration_minutes=None,
+            distance=None,
+            mets=None,
+            memos='Test memo',
+            workout=workout,
+        )
+        
+        # Send a DELETE request to the ExerciseDeleteView
+        response = self.client.delete(ENDPOINT+f'exercise/delete/{exercise.id}/')
+        # Check that the response status code is 204 (No Content)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        # Check that the exercise was actually deleted
+        deleted_exercise = Exercise.objects.filter(id=exercise.id).first()
+        print(deleted_exercise) #あとで、再度確認する
+
+
+    # def test_delete_exercise_unauthorized(self):
+    #     other_workout = Workout.objects.create(account=self.other_user, is_default=False, name='Test Workout', workout_type='Other') 
+    #     # Create a test exercise owned by the other user
+    #     other_exercise = Exercise.objects.create(
+    #         account=self.user,
+    #         exercise_date='2023-12-22',
+    #         sets=3,
+    #         reps=10,
+    #         weight_kg=None,
+    #         duration_minutes=None,
+    #         distance=None,
+    #         mets=None,
+    #         memos='other user memo',
+    #         workout=other_workout,
+    #     )
+
+    #     # Get the initial count of exercises
+    #     initial_count = Exercise.objects.count()
+    #     # Send a DELETE request to the ExerciseDeleteView for the exercise owned by the other user
+    #     response = self.client.delete(ENDPOINT+f'exercise/delete/{other_exercise.id}/')
+    #     # Check that the response status code is 403 (Forbidden)
+    #     self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    #     # Check that the exercise was not deleted
+    #     self.assertEqual(Exercise.objects.count(), initial_count)
+    
+    
+    
+    
+
+# 7. latest exercise by type
+class GetLatestExerciseByTypeViewTest(APITestCase):
+    def setUp(self):
+        self.user_data = {
+            'username': 'testuser',
+            'password': 'securepassword',
+            'email': 'testuser@example.com',
+            'name': 'John Doe',
+            'birthday': '2000-01-01',
+            'sex': False,
+            'email_check': True,
+        }
+        self.user = CustomUser.objects.create_user(**self.user_data)
+        self.client.login(username='testuser', password='securepassword')
+        self.token, _ = Token.objects.get_or_create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        # テスト用のWorkoutとExerciseの作成
+        self.workout_type = 'Aerobic'
+        self.workout = Workout.objects.create(account=self.user, is_default=False, name='Test Workout', workout_type=self.workout_type)
+        self.exercise = Exercise.objects.create(
+            account=self.user,
+            exercise_date='2023-12-22',
+            sets=None,
+            reps=None,
+            weight_kg=None,
+            duration_minutes=30,
+            distance=3,
+            mets=None,
+            memos='Test memo',
+            workout=self.workout,
+        )
+
+    def test_get_latest_exercise_by_type(self):
+        url = ENDPOINT+'get-latest-exercise/'
+        response = self.client.get(url, {'workout_type': self.workout_type})
+        # レスポンスのステータスコードが正しいか確認
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # レスポンスのデータが期待通りの形式か確認
+        self.assertIn('exercises', response.data)
+        self.assertIsInstance(response.data['exercises'], list)
+        # レスポンスのデータに作成したExerciseが含まれているか確認
+        self.assertEqual(len(response.data['exercises']), 1)
+        serialized_exercise = GetExerciseSerializer(self.exercise)
+        self.assertIn(serialized_exercise.data, response.data['exercises'])
+        
+
+
+
+
+
+# 8. create exercises with latest data by type
+class CreateExercisesWithLatestHistoryByTypeTest(APITestCase):
+    def setUp(self):
+        self.user_data = {
+            'username': 'testuser',
+            'password': 'securepassword',
+            'email': 'testuser@example.com',
+            'name': 'John Doe',
+            'birthday': '2000-01-01',
+            'sex': False,
+            'email_check': True,
+        }
+        self.user = CustomUser.objects.create_user(**self.user_data)
+        self.client.login(username='testuser', password='securepassword')
+        self.token, _ = Token.objects.get_or_create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        # テスト用のWorkoutとExerciseの作成
+        self.workout_type = 'Aerobic'
+        self.workout = Workout.objects.create(account=self.user, is_default=False, name='Test Workout', workout_type=self.workout_type)
+        self.exercise = Exercise.objects.create(
+            account=self.user,
+            exercise_date='2023-12-20', #3日前
+            sets=None,
+            reps=None,
+            weight_kg=None,
+            duration_minutes=30,
+            distance=3,
+            mets=None,
+            memos='Test memo',
+            workout=self.workout,
+        )
+
+    def test_create_exercises_with_latest_history_by_type(self):
+        # リクエストデータをセットアップ
+        request_data = {
+            'workout_type': self.workout_type,
+            'exercise_date': '2023-12-23',  # 新しいexercise_date
+        }
+
+        # APIエンドポイントを呼び出す
+        url = ENDPOINT+'create-latest-exercise/'
+        response = self.client.post(url, request_data)
+
+        # レスポンスのステータスコードが正しいか確認
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # レスポンスのデータが期待通りの形式か確認
+        self.assertIn('exercises', response.data)
+        
+        new_exercise = Exercise.objects.get(exercise_date='2023-12-23')
+        serialized_new_exercise = GetExerciseSerializer(new_exercise)
+        print('新規',serialized_new_exercise.data)

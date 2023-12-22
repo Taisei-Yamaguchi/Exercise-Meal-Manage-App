@@ -165,8 +165,9 @@ class ExerciseDeleteView(DestroyAPIView):
     queryset = Exercise.objects.all()
     serializer_class = POSTExerciseSerializer
     
-
     def perform_destroy(self, instance):
+        print("Performing destroy for Exercise ID:", instance.id)
+        
         # check wheter login user and exercise.accound matches or not.
         if self.request.user == instance.account:
             instance.delete()
