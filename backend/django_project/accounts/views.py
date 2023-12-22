@@ -1,5 +1,5 @@
 from .models import CustomUser
-from .serializers import CustomUserSerializer
+from .serializers import CustomUserSerializer,CustomUserUpdateSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -212,7 +212,7 @@ class UpdateAccountView(APIView):
     
     def put(self, request):
         user = request.user
-        serializer = CustomUserSerializer(user, data=request.data, partial=True)
+        serializer = CustomUserUpdateSerializer(user, data=request.data, partial=True)
         
         if serializer.is_valid():
             serializer.save()
