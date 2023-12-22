@@ -67,8 +67,6 @@ class ExerciseGetByDateView(APIView):
         
 
 
-
-
 #create new Exercise
 class ExerciseCreateView(APIView):
     permission_classes = [IsAuthenticated]

@@ -147,13 +147,10 @@ class ExerciseGetByDateViewTest(APITestCase):
             sets=3,
             reps=10
         )
-
         # GETリクエストを送信
         response = self.client.get(self.get_exercise_url, {'date': self.exercise_date}, format='json')
-
         # レスポンスの確認
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # 必要に応じて、返ってくるデータの構造や内容をテスト
 
     def test_get_exercise_by_date_failure_missing_date(self):
         # 'date'パラメータがない場合のGETリクエストを送信
@@ -161,4 +158,107 @@ class ExerciseGetByDateViewTest(APITestCase):
 
         # レスポンスの確認
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        # 必要に応じて、返ってくるエラーメッセージなどをテスト
+        
+        
+
+
+
+# 4. Exercise Create
+class ExerciseCreateViewTest(APITestCase):
+    def setUp(self):
+        self.user_data = {
+            'username': 'testuser',
+            'password': 'securepassword',
+            'email': 'testuser@example.com',
+            'name': 'John Doe',
+            'birthday': '2000-01-01',
+            'sex': False,
+            'email_check': True,
+        }
+        self.user = CustomUser.objects.create_user(**self.user_data)
+        # ログイン
+        self.client.login(username='testuser', password='securepassword')
+        # トークンの取得
+        self.token, _ = Token.objects.get_or_create(user=self.user)
+        # トークンをセット
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        
+        # テスト用のWorkoutの作成
+        self.workout = Workout.objects.create(account=self.user, is_default=False, name='Test Workout', workout_type='Other')
+        
+        # exercise get url
+        self.post_exercise_url = ENDPOINT+'post-exercise/'
+        
+        
+    def test_create_exercise(self):
+        # Exercise作成のためのデータ(is_default:False)
+        exercise_data = {
+            'workout_id': self.workout.id,
+            'is_default':False,
+            'sets': 3,
+            'reps': 10,
+            'duration_minutes': None,
+            'distance': None,
+            'mets': 6,
+            'memos': 'Test memo',
+            'exercise_date':timezone.now().date(),
+        }
+
+        # APIを呼び出してExerciseを作成
+        response = self.client.post(self.post_exercise_url, data=exercise_data,format='json')
+        print(response.data)
+        
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # Exerciseが作成されているか確認
+        self.assertEqual(Exercise.objects.count(), 1)
+
+        # 作成されたExerciseの内容が期待通りか確認
+        created_exercise = Exercise.objects.first()
+        self.assertEqual(created_exercise.workout, self.workout)
+        self.assertEqual(created_exercise.sets, 3)
+        self.assertEqual(created_exercise.reps, 10)
+        self.assertIsNone(created_exercise.duration_minutes)
+        self.assertIsNone(created_exercise.distance)
+        self.assertEqual(created_exercise.mets,6)
+        self.assertEqual(created_exercise.memos, 'Test memo')
+        
+        
+    def test_create_exercise_with_default(self):
+        # Exercise作成のためのデータ(is_default:True)
+        exercise_data = {
+            'workout_id': 'd20',
+            'is_default':True,
+            'sets': 3,
+            'reps': 10,
+            'duration_minutes': None,
+            'distance': None,
+            'mets': 8,
+            'memos': 'Test memo',
+            'exercise_date':timezone.now().date(),
+        }
+
+        # APIを呼び出してExerciseを作成
+        response = self.client.post(self.post_exercise_url, data=exercise_data,format='json')
+        print(response.data)
+        
+        # レスポンスの確認
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # Exerciseが作成されているか確認
+        self.assertEqual(Exercise.objects.count(), 1)
+
+        # 作成されたExerciseの内容が期待通りか確認
+        created_exercise = Exercise.objects.first()
+        self.assertEqual(created_exercise.workout.name,'Leg Curl')
+        self.assertEqual(created_exercise.workout.workout_type,'Leg')
+        self.assertEqual(created_exercise.workout.is_default,True)
+        self.assertEqual(created_exercise.sets, 3)
+        self.assertEqual(created_exercise.reps, 10)
+        self.assertIsNone(created_exercise.duration_minutes)
+        self.assertIsNone(created_exercise.distance)
+        self.assertEqual(created_exercise.mets,8)
+        self.assertEqual(created_exercise.memos, 'Test memo')
+        
+        
