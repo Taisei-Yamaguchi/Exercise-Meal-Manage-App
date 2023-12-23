@@ -53,5 +53,5 @@ class GetGoalView(APIView):
             serializer = GoalSerializer(goal)
             return Response(serializer.data)
         except Goal.DoesNotExist:
-            # if latest_info doesn't exist.
-            return Response({"message": "No user info available for the current user."}, status=status.HTTP_200_OK)
+            # if goal doesn't exist yet.
+            return Response({"message": "No user goal available for the current user."}, status=status.HTTP_200_OK)
