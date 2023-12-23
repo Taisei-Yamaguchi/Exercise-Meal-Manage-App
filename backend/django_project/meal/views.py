@@ -99,6 +99,9 @@ class MealByDateView(APIView):
         user = self.request.user
             
         meal_date = request.query_params.get('meal_date', None)
+        if meal_date is None:
+            return Response({'error': 'meal_date parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        
         meals = Meal.objects.filter(meal_date=meal_date,account=user.id).order_by('id')   # ログインユーザーのmealを取得
 
         serialized_meals=GetMealSerializer(meals,many=True).data
@@ -269,7 +272,7 @@ class GetSearchedFoodHistoryView(APIView):
     
     
     
-# GetSearchedFoodHistory (検索して登録したfoodの履歴を返す)
+# GetLatest Meals (最新の登録されたmealのリストを返す)
 class GetLatestMealsByType(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):

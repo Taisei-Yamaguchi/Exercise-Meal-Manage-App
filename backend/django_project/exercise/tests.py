@@ -365,12 +365,10 @@ class ExerciseDeleteViewTest(APITestCase):
         self.other_token, _ = Token.objects.get_or_create(user=self.other_user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.other_token.key)
 
-    @transaction.atomic
-    def test_delete_exercise(self):
         # テスト用のWorkoutの作成
-        workout = Workout.objects.create(account=self.user, is_default=False, name='Test Workout', workout_type='Other')
+        self.workout = Workout.objects.create(account=self.user, is_default=False, name='Test Workout', workout_type='Other')
         # テスト用のExerciseの作成
-        exercise = Exercise.objects.create(
+        self.exercise = Exercise.objects.create(
             account=self.user,
             exercise_date='2023-12-22',
             sets=3,
@@ -380,17 +378,18 @@ class ExerciseDeleteViewTest(APITestCase):
             distance=None,
             mets=None,
             memos='Test memo',
-            workout=workout,
+            workout=self.workout,
         )
         
+    def test_delete_exercise(self):
         # Send a DELETE request to the ExerciseDeleteView
-        response = self.client.delete(ENDPOINT+f'exercise/delete/{exercise.id}/')
+        response = self.client.delete(ENDPOINT+f'exercise/delete/{self.exercise.id}/')
         # Check that the response status code is 204 (No Content)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-        # Check that the exercise was actually deleted
-        deleted_exercise = Exercise.objects.filter(id=exercise.id).first()
-        print(deleted_exercise) #あとで、再度確認する
+        # データベースからExerciseオブジェクトが削除されているか確認
+        # with self.assertRaises(Exercise.DoesNotExist):
+        #     Exercise.objects.get(id=self.exercise.id)
 
 
     # def test_delete_exercise_unauthorized(self):
