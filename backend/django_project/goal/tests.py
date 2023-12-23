@@ -94,19 +94,19 @@ class GetGoalViewTest(APITestCase):
     def test_get_goal_no_goal_available(self):
         # Goal がまだ登録されていない場合のテストケース
         response = self.client.get(self.url)
-        # ステータスコードが 200 OK であることを確認
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_goal_with_goal_available(self):
-    # Goal が登録されている場合のテストケース
+        # Goal が登録されている場合のテストケース
         goal_data = {
             'goal_intake_cals': 3000,
             'goal_consuming_cals': 3200,
             'goal_weight': 80,
             'goal_body_fat': None,
             'goal_muscle_mass': None,
+            'account':self.user
         }
-        self.client.post(self.url_create, goal_data, format='json')
+        goal= Goal.objects.create(**goal_data)
 
         # Goal を取得するための GET リクエストを送信
         response = self.client.get(self.url)
@@ -120,5 +120,3 @@ class GetGoalViewTest(APITestCase):
         self.assertIn("goal_weight", response.data)
         self.assertIn("goal_body_fat", response.data)
         self.assertIn("goal_muscle_mass", response.data)
-    
-    
