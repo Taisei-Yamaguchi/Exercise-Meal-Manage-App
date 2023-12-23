@@ -32,7 +32,7 @@ class WeightDataAPIView(APIView):
 
         # # データがない場合の処理
         if not user_info.exists():
-            return Response({'weight_data':[],'latest_target_weight':None}, status=status.HTTP_200_OK)
+            return Response({'weight_data':[],'goal_weight':None}, status=status.HTTP_200_OK)
         # 日付、体重のデータを取得
         weight_data = list(user_info.values('date', 'weight'))
         
@@ -81,7 +81,7 @@ class BodyFatDataAPIView(APIView):
         user_info = UserInfo.objects.filter(account=request.user)
 
         if not user_info.exists():
-            return Response({'body_fat_data': [], 'latest_body_fat_target': None}, status=status.HTTP_200_OK)
+            return Response({'body_fat_data': [], 'goal_body_fat': None}, status=status.HTTP_200_OK)
         body_fat_data = list(user_info.values('date', 'body_fat_percentage'))
 
         interpolated_data = []
@@ -97,7 +97,7 @@ class BodyFatDataAPIView(APIView):
             current_date = oldest_date + timedelta(days=j)
             existing_entry = next((entry for entry in body_fat_data if entry['date'] == current_date), None)
 
-            print('ミッシング',existing_entry)
+            # print('ミッシング',existing_entry)
             # 既にデータがある場合はスキップ
             if not existing_entry:
                 interpolated_data.append({'date': current_date, 'body_fat_percentage': None})
@@ -125,7 +125,7 @@ class MuscleMassDataAPIView(APIView):
         user_info = UserInfo.objects.filter(account=request.user)
 
         if not user_info.exists():
-            return Response({'muscle_mass_data': [], 'latest_muscle_mass_target': None}, status=status.HTTP_200_OK)
+            return Response({'muscle_mass_data': [], 'goal_muscle_mass': None}, status=status.HTTP_200_OK)
 
         muscle_mass_data = list(user_info.values('date', 'muscle_mass'))
 
@@ -141,7 +141,7 @@ class MuscleMassDataAPIView(APIView):
             current_date = oldest_date + timedelta(days=j)
             existing_entry = next((entry for entry in muscle_mass_data if entry['date'] == current_date), None)
 
-            print('ミッシング',existing_entry)
+            # print('ミッシング',existing_entry)
             # 既にデータがある場合はスキップ
             if not existing_entry:
                 interpolated_data.append({'date': current_date, 'muscle_mass': None})
