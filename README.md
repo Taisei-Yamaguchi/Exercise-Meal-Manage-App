@@ -42,13 +42,6 @@ using Django &amp; React
 <del>・frontend　コンポーネント<br></del>
 <del>・edit graph part goal user_info form. <br></del>
 
-
-・setting (back,front)<br>
-・データベースバックアップバッチ<br>
-・デプロイ用設定 <br>
-・詳細設定 <br>
-・SSL<br>
-
 <del>・email送信は後で設定。</del>-> 本番では、　SSLにする必要がある<br>
 <del>・sign up用tokenが、email confirmされずに、期限切れたらaccount自動削除<br>
 ー＞signup時に、emailがすでに使われてるか確認。
@@ -56,8 +49,13 @@ using Django &amp; React
 ー＞つかわれてる場合、email_checkを確認。もし、falseなら、既存のものを削除して新規登録。
 ー＞trueなら、すでに利用されてる旨を返す。<del><br>
 
-・バックエンドテストケースの作成 <br>
+<del>・バックエンドテストケースの作成 <br></del>
 ・フロントエンドのテスト　<br>
+・setting (back,front)<br>
+・データベースバックアップバッチ<br>
+・デプロイ用設定 <br>
+・詳細設定 <br>
+・SSL<br>
 ・ドキュメント
 
 ・authページデザイン<br>
