@@ -52,7 +52,8 @@ using Django &amp; React
 <del>・バックエンドテストケースの作成 <br></del>
 
 ・setting (back,front)<br>
-・データベースバックアップバッチ<br>
+<del>・データベースバックアップバッチ<br></del>
+
 ・デプロイ用設定 <br>
 ・詳細設定 <br>
 ・SSL<br>
