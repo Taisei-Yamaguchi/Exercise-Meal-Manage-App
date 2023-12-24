@@ -215,3 +215,7 @@ EMAIL_USE_SSL = True  # GmailはSSLを使用するためTrueに設定
 EMAIL_HOST_USER = 'aries0326business@gmail.com'  # Gmailのメールアドレス
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
+
+# BACKUP bathc
+BACKUP_PATH = 'backup/'
+NUM_SAVED_BACKUP = 30
