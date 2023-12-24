@@ -183,7 +183,18 @@ def determine_pet_status(user, pet_date,user_info):
 
             # 分岐7
             return 'Fatting'
-        
-
-    # 上記のどれにも当てはまらない場合
+    else: # 消費カロリーの方が多い日が続く場合
+        if(user.sex == False): #性別が男の場合
+            # 分岐8
+            if total_weight_data >70000:
+                # 分岐9
+                return 'Semi-Muscular'
+            else:
+                return 'Normal'
+        else: #女性の場合
+            if total_weight_data >30000:
+                return 'Semi-Muscular'
+            else:
+                return 'Normal'
+            
     return 'Normal'  # またはデフォルトの状態を設定
