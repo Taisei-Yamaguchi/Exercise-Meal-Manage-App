@@ -111,7 +111,7 @@ const CalsByDate = ({ selectedDate}) => {
         labels: [' '],
         datasets: [
             {
-                label: '目標摂取cal',
+                label: 'goal intake cal',
                 type: 'line',
                 borderColor: 'blue',
                 pointBackgroundColor: 'blue', // ドットの内側の色を設定
@@ -122,7 +122,7 @@ const CalsByDate = ({ selectedDate}) => {
                 fill: false,
             },
             {
-                label: '目標消費cal',
+                label: 'goal consuming cal',
                 type: 'line',
                 borderColor: 'red',
                 pointBackgroundColor: 'red', // ドットの内側の色を設定
@@ -141,21 +141,21 @@ const CalsByDate = ({ selectedDate}) => {
                 stack: 'stack1', // 同じスタック名を指定することでスタックする
             },
             {
-                label: '基礎代謝量',
+                label:'BMR',
                 data: [calsData.bm_cals],
                 backgroundColor: '#FF33CC',
                 stack: 'stack2',
                 barThickness: 40
             },
             {
-                label: '食事誘発熱生産',
+                label: 'dietary heat production',
                 data: [calsData.food_cals],
                 backgroundColor: '#FF9966',
                 stack: 'stack2',
                 barThickness: 40
             },
             {
-                label: '活動量',
+                label: 'activity level',
                 data: [calsData.exercise_cals],
                 backgroundColor: '#FF6633',
                 stack: 'stack2',
@@ -196,8 +196,7 @@ const CalsByDate = ({ selectedDate}) => {
                 <Bar key={aspectRatio} data={chartData} options={chartOptions} />
             </div>
             <div className="text-xs">
-                <p >*基礎代謝量ぶんは最低限食べましょう！</p>
-                <p>*活動量は250kcalを超えるぐらいが健康的だそうです</p>
+                <p >*At a minimum, eat enough for your basal metabolic rate!</p>
             </div>
         </div>
         );

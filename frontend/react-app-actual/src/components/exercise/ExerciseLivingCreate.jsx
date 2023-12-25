@@ -75,14 +75,14 @@ const ExerciseLivingCreate = ({exercise_date}) => {
                             >
                                 <option value="1">1 (Sitting)</option>
                                 <option value="1.5">1.5 (Standing)</option>
-                                <option value="2">2 (洗濯、料理、ストレッチ)</option>
+                                <option value="2">2 (Cooking,Stretch)</option>
                                 <option value="2.5">2.5 (Walk)</option>
-                                <option value="3">3 (掃除、荷造り)</option>
-                                <option value="3.5">3.5 (昇降運動)</option>
-                                <option value="4">4 (ドラム)</option>
-                                <option value="4.5">4.5 (早歩き、農耕)</option>
+                                <option value="3">3 (Cleaning)</option>
+                                <option value="3.5">3.5 (Climb stair)</option>
+                                <option value="4">4 (Playing the instrument)</option>
+                                <option value="4.5">4.5 (Walk fast)</option>
                                 <option value="5">5</option>
-                                <option value="5.5">5.5 (家具運搬)</option>
+                                <option value="5.5">5.5 (Carrying furniture)</option>
                                 <option value="6">6</option>
                                 <option value="6.5">6.5</option>
                                 <option value="7">7 (Light Jog)</option>

@@ -50,12 +50,10 @@ using Django &amp; React
 ー＞trueなら、すでに利用されてる旨を返す。<del><br>
 
 <del>・バックエンドテストケースの作成 <br></del>
-
-・setting (back,front)<br>
 <del>・データベースバックアップバッチ<br></del>
 
 ・デプロイ用設定 <br>
-・詳細設定 <br>
+<del>・詳細設定 <br></del>
 ・SSL<br>
 
 ・ドキュメント<br>

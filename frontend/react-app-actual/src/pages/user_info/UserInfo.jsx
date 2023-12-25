@@ -59,7 +59,7 @@ const UserInfo = () => {
                     height: data.height,
                     body_fat_percentage: data.body_fat_percentage,
                     muscle_mass: data.muscle_mass,
-                    metabolism: data.metabolism,
+                    metabolism: Math.round(data.metabolism*10)/10,
                     // target_weight: data.target_weight,
                     // target_body_fat_percentage: data.target_body_fat_percentage,
                     // target_muscle_mass: data.target_muscle_mass,
@@ -129,7 +129,7 @@ const UserInfo = () => {
                 <form onSubmit={handleSubmit} className='user-info-form'>
                     {/* Render form fields with their corresponding values */}
                     <label>
-                        <strong>Weight (kg) (必須)</strong>
+                        <strong className='text-sm'>Weight (kg) <span className='bg-red-500 text-white text-xs'>necessary</span></strong>
                         <input
                             type="number"
                             name="weight"
@@ -143,7 +143,7 @@ const UserInfo = () => {
                     </label>
 
                     <label>
-                        <strong>Tall (cm) (必須)</strong>
+                        <strong className='text-sm'>Tall (cm) <span className='bg-red-500 text-white text-xs'>necessary</span></strong>
                         <input
                             type="number"
                             name="height"
@@ -156,7 +156,7 @@ const UserInfo = () => {
                         />
                     </label>
 
-                    <label>Body Fat Rate (%)<input
+                    <label className='text-sm'>Body Fat Rate (%)<input
                         type="number"
                         name="body_fat_percentage"
                         value={formData.body_fat_percentage ===null?'': formData.body_fat_percentage}
@@ -166,7 +166,7 @@ const UserInfo = () => {
                         className="input input-bordered input-primary w-full max-w-xs"
                     /></label>
 
-                    <label>Muscle Mass (kg) <input
+                    <label className='text-sm'>Muscle Mass (kg) <input
                         type="number"
                         name="muscle_mass"
                         value={formData.muscle_mass ===null?'': formData.muscle_mass}
@@ -176,7 +176,7 @@ const UserInfo = () => {
                         className="input input-bordered input-primary w-full max-w-xs"
                     /></label>
 
-                    <label>Basic Metabolism (kcal)<input
+                    <label className='text-sm'>Basic Metabolism (kcal)<input
                         type="number"
                         name="metabolism"
                         value={formData.metabolism ===null?'': formData.metabolism}

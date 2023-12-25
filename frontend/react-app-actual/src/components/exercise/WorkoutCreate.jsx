@@ -72,8 +72,8 @@ const WorkoutCreate = ({workoutType}) => {
                         value={workoutName}
                         onChange={(e) => setWorkoutName(e.target.value)}
                         required
-                        pattern="\S+" // スペース以外の文字が1文字以上必要
-                        title="スペースのみの入力は無効です"
+                        pattern=".*\S+.*"
+                        title="You cannot input with only space."
                     />
                     <button type='submit' className="btn join-item rounded-r-full btn-sm">Add</button>
                 </div>

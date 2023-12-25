@@ -91,7 +91,7 @@ const FoodCreate = () => {
 
     // render
     return (
-        <div className="card shrink-0 w-full max-w-sm shadow-2xl text-slate-400" onSubmit={handlePostFood}>
+        <div className="card shrink-0 w-full max-w-sm shadow-2xl text-slate-700" onSubmit={handlePostFood}>
         
         {modalLoading ?(
                 <span className="loading loading-dots loading-lg"></span>
@@ -100,7 +100,7 @@ const FoodCreate = () => {
             
             <div className="form-control">
                 <label className="label">
-                    <span className="label-text">Name (必須)</span>
+                    <span className="label-text">Name <span className='bg-red-500 text-white text-xs'>necessary</span></span>
                 </label>
                 <input
                     type="text" 
@@ -109,13 +109,13 @@ const FoodCreate = () => {
                     value={name} 
                     onChange={(e) => setName(e.target.value)} 
                     required
-                    pattern="\S+" // スペース以外の文字が1文字以上必要
-                    title="スペースのみの入力は無効です" />
+                    pattern=".*\S+.*"
+                    title="You cannot input with only space." />
             </div>
 
             <div className="form-control">
                 <label className="label">
-                    <span className="label-text">Cal (kcal) (必須)</span>
+                    <span className="label-text">Cal (kcal) <span className='bg-red-500 text-white text-xs'>necessary</span></span>
                 </label>
                 <input 
                     type="number" 
@@ -128,7 +128,7 @@ const FoodCreate = () => {
 
             <div className="form-control">
                 <label className="label">
-                    <span className="label-text">Amount (g/serving) (必須)</span>
+                    <span className="label-text">Amount (g/serving) <span className='bg-red-500 text-white text-xs'>necessary</span></span>
                 </label>
                 <input 
                     type="number" 
@@ -142,7 +142,7 @@ const FoodCreate = () => {
 
             <div className="form-control">
                 <label className="label">
-                    <span className="label-text">Carbohydrate (g) (必須)</span>
+                    <span className="label-text">Carbohydrate (g) <span className='bg-red-500 text-white text-xs'>necessary</span></span>
                 </label>
                 <input 
                     type="number" 
@@ -156,7 +156,7 @@ const FoodCreate = () => {
 
             <div className="form-control">
                 <label className="label">
-                    <span className="label-text">Fat (g) (必須)</span>
+                    <span className="label-text">Fat (g) <span className='bg-red-500 text-white text-xs'>necessary</span></span>
                 </label>
                 <input 
                     type="number" 
@@ -170,7 +170,7 @@ const FoodCreate = () => {
 
             <div className="form-control">
                 <label className="label">
-                    <span className="label-text">Protein (g) (必須)</span>
+                    <span className="label-text">Protein (g) <span className='bg-red-500 text-white text-xs'>necessary</span></span>
                 </label>
                 <input 
                     type="number" 

@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework.authtoken',
     'django.contrib.postgres',
+    
+    'sslserver',
 ]
 
 # django-allauthで利用するdjango.contirb.sitesを使うためにサイト識別用IDを設定
@@ -208,10 +210,11 @@ REST_FRAMEWORK = {
 
 
 # Gmailを使用してメールを送信するための設定
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587  # GmailのSMTPポート
+EMAIL_PORT = 465  # GmailのSMTPポート 587
 EMAIL_USE_SSL = True  # GmailはSSLを使用するためTrueに設定
+EMAIL_USE_TLS = False
 EMAIL_HOST_USER = 'aries0326business@gmail.com'  # Gmailのメールアドレス
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 

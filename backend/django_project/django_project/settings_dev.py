@@ -49,12 +49,27 @@ LOGGING={
     }
 }
 
-EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
+
 
 # CORS
 CORS_ALLOWED_ORIGINS = [
+    "https://localhost:5173",
     "http://localhost:5173",
 ]
 
 CSRF_COOKIE_SAMESITE = None
 CORS_ALLOW_CREDENTIALS = True
+
+# SSL
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# ENDPOINT
+FRONTEND_ENDPOINT = 'http://localhost:5173/'
+
+# EMAIL
+# EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
+# EMAIL_TLS_VERSION = 'TLSv1.2'
+

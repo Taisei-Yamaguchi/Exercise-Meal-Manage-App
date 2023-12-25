@@ -127,8 +127,8 @@ const FoodSearch = ({meal_type,date}) => {
                         value={searchExpression}
                         onChange={(e) => setSearchExpression(e.target.value)}
                         required
-                        pattern="\S+" // スペース以外の文字が1文字以上必要
-                        title="スペースのみの入力は無効です"
+                        pattern=".*\S+.*"
+                        title="You cannot input with only space."
                     />
                 </div>
                 <div className="indicator">

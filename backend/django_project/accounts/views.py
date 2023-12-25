@@ -18,6 +18,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.contrib.auth import logout
+from django.conf import settings
 
 
 #Sign Up with Email Confirm
@@ -46,7 +47,7 @@ class SignupAPIView(APIView):
             # トークンを含んだURLを構築
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
-            confirm_url = f"http://localhost:5173/signup/email-confirmation/{uid}/{token}"
+            confirm_url = f"{settings.FRONTEND_ENDPOINT}signup/email-confirmation/{uid}/{token}"
 
             # メール本文を作成
             message = render_to_string('email/confirmation_signup_message.txt', {
@@ -102,7 +103,7 @@ class PasswordResetRequestAPIView(APIView):
         user.save()
 
         # Send the reset link to the user's email (replace with your email sending logic)
-        reset_url = f"http://localhost:5173/password-reset/process/{uid}/{token}"
+        reset_url = f"{settings.FRONTEND_ENDPOINT}password-reset/process/{uid}/{token}"
         
         # print(reset_url)  # For testing purposes
         # メール本文を作成

@@ -105,7 +105,9 @@ const SignUp = () => {
                             className="input input-bordered" 
                             value={userData.name}
                             onChange={handleChange}
-                            required 
+                            required
+                            pattern=".*\S+.*"
+                            title="You cannot input with only space."
                         />
                         
                         </div>

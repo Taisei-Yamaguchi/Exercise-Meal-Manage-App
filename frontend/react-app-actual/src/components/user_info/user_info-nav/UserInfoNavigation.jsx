@@ -81,8 +81,12 @@ const UserInfoNavigation = () => {
             <h2>{formattedCurrentDate}</h2>
             
             <div className='text-sm'>
-                    <p>*基礎代謝が入力されない場合、体重、身長、年齢、性別から自動で計算されます</p>
-                    <p>*ここのフォームでsave処理をしなかった日は、それ以前の最新日のデータが使用されます。</p>
+                    <p>
+                        *If basal metabolism is not entered, it is automatically calculated based on weight, height, age, and gender.
+                    </p>
+                    <p>
+                        *If you do not save the data in this form, the data of the latest date before that date will be used.
+                    </p>
             </div>
 
             <div role="tablist" className="tabs tabs-bordered">

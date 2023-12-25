@@ -80,10 +80,10 @@ const GoalNavigation = () => {
 
             <h2>{formattedCurrentDate}</h2>
             
-            <div className='text-sm'>
+            {/* <div className='text-sm'>
                     <p>*基礎代謝が入力されない場合、体重、身長、年齢、性別から自動で計算されます</p>
                     <p>*ここのフォームでsave処理をしなかった日は、それ以前の最新日のデータが使用されます。</p>
-            </div>
+            </div> */}
 
             <div role="tablist" className="tabs tabs-bordered">
                 <NavLink to='/user_info/weight-graph' className='tab link' activeclassname="link-warning">Weight</NavLink>
