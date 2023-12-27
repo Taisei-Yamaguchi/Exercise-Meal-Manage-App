@@ -56,7 +56,7 @@ class SignupAPIView(APIView):
             })
             
             # 実際にはここでメール送信
-            send_mail('EMMA Activate Account', message, 'aries0326business@gmail.com', [user.email])
+            send_mail('EMMA Activate Account', message, settings.DEFAULT_FROM_EMAIL, [user.email])
             return Response({'detail': 'Success! Check your email for confirmation.'}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -113,7 +113,7 @@ class PasswordResetRequestAPIView(APIView):
         })
         # print(message)
         # 実際にはここでメール送信
-        send_mail('EMMA PAssword Reset', message, 'aries0326business@gmail.com', [user.email])
+        send_mail('EMMA PAssword Reset', message, settings.DEFAULT_FROM_EMAIL, [user.email])
         return Response({'detail': 'Password reset link sent successfully.'}, status=status.HTTP_200_OK)
 
 

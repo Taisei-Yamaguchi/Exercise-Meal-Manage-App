@@ -50,8 +50,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework.authtoken',
     'django.contrib.postgres',
-    
     'sslserver',
+    'django_ses'
 ]
 
 # django-allauthで利用するdjango.contirb.sitesを使うためにサイト識別用IDを設定
@@ -122,19 +122,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "django_project.wsgi.application"
 
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "emma",
-        "USER": os.environ.get("DB_USER"),
-        "PASSWORD": os.environ.get("DB_PASSWORD"),
-        "HOST":"",
-        "PORT":"",
-    }
-}
 
 
 # Password validation
@@ -209,16 +197,18 @@ REST_FRAMEWORK = {
 }
 
 
-# Gmailを使用してメールを送信するための設定
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 465  # GmailのSMTPポート 587
-EMAIL_USE_SSL = True  # GmailはSSLを使用するためTrueに設定
-EMAIL_USE_TLS = False
-EMAIL_HOST_USER = 'aries0326business@gmail.com'  # Gmailのメールアドレス
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+# # Gmailを使用してメールを送信するための設定
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 465  # GmailのSMTPポート 587
+# EMAIL_USE_SSL = True  # GmailはSSLを使用するためTrueに設定
+# EMAIL_USE_TLS = False
+# EMAIL_HOST_USER = 'aries0326business@gmail.com'  # Gmailのメールアドレス
+# EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
 
-# BACKUP bathc
+# BACKUP batch
 BACKUP_PATH = 'backup/'
 NUM_SAVED_BACKUP = 30
+
+DEFAULT_FROM_EMAIL = os.environ.get('FROM_EMAIL')
