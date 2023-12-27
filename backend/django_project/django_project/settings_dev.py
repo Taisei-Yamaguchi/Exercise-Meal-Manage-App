@@ -71,7 +71,7 @@ CSRF_COOKIE_SECURE = True
 FRONTEND_ENDPOINT = 'http://localhost:5173/'
 
 # EMAIL
-EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
 # EMAIL_TLS_VERSION = 'TLSv1.2'
 
 # Database

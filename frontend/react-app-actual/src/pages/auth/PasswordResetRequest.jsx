@@ -9,9 +9,11 @@ const PasswordResetRequestPage = () => {
     const [email, setEmail] = useState('');
     const [requestSent, setRequestSent] = useState(false);
     const [errorMes,setErrorMes] =useState('');
+    const [loading,setLoading] =useState(false)
 
     const handlePasswordResetRequest = async () => {
         try {
+        setLoading(true)
         // バックエンドにメール送信の要求を送信
         const response = await axios.post( `${BACKEND_ENDPOINT}/accounts/reset-password-request/`, {
             email,
@@ -27,7 +29,9 @@ const PasswordResetRequestPage = () => {
                 console.error(error);
             }
         // エラー処理を行う
-        };
+        } finally{
+            setLoading(false)
+        }
     }
 
     return (
@@ -55,7 +59,7 @@ const PasswordResetRequestPage = () => {
                 </div>
                 <div className="shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                     {requestSent ? (
-                                <div role="alert" className="alert alert-info">
+                                <div role="alert" className="alert alert-info text-xs">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                     <span>Sending links to your email and reset password.</span>
                                 </div>
@@ -77,13 +81,17 @@ const PasswordResetRequestPage = () => {
                         </div>
                         
                         <div className="form-control mt-6">
-                        <button className="btn btn-primary" onClick={handlePasswordResetRequest}>Reset Password Request</button>
+                        {loading ?(
+                        <span className="loading loading-spinner loading-md"></span>
+                        ):(
+                            <button className="btn btn-primary" onClick={handlePasswordResetRequest}>Reset Password Request</button>
+                        )}
                         </div>
                     </div>
                     {errorMes ==='' ?(
                         <></>
                         ):(
-                            <div role="alert" className="alert alert-error">
+                            <div role="alert" className="alert alert-error text-xs">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 <span>{errorMes}</span>
                             </div>

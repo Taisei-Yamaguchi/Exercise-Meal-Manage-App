@@ -11,10 +11,13 @@ const PasswordResetProcess = () => {
     const [successMes,setSuccessMes] = useState('');
 
     const { uid, token} = useParams();
+
+    const [loading,setLoading] =useState(false)
     
     const handlePasswordReset = async () => {
         if(newPassword===againPassword && newPassword.length>6){
             try {
+                setLoading(true)
                 const response = await axios.post(`${BACKEND_ENDPOINT}/accounts/reset-password-confirm/`, {
                     uid,
                     token,
@@ -33,6 +36,8 @@ const PasswordResetProcess = () => {
                 } catch (error) {
                 console.error(error);
                 setErrorMes('Error happend!')
+                } finally{
+                    setLoading(false)
                 }
         }else{
             setErrorMes('Please write same password.(minimum is 6 words.)')
@@ -49,7 +54,6 @@ const PasswordResetProcess = () => {
                 <div className="hero-content flex-col lg:flex-row-reverse">
                     <div className="text-center lg:text-left">
                     <h1 className="text-5xl font-bold">Reset Password!</h1>
-                    <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
                     </div>
                     <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                     <div className="card-body">
@@ -79,7 +83,11 @@ const PasswordResetProcess = () => {
                         </div>
                         </div>
                         <div className="form-control mt-6">
-                            <button className="btn btn-primary" onClick={handlePasswordReset}>Reset Password</button>
+                            {loading ?(
+                            <span className="loading loading-spinner loading-md"></span>
+                            ):(
+                                <button className="btn btn-primary" onClick={handlePasswordReset}>Reset Password</button>
+                            )}
                         </div>
                         {errorMes ==='' ?(
                             <></>

@@ -81,13 +81,6 @@ ACCOUNT_LOGIN_ON_GET = True
 # django-allauthが送信するメールの件名に自動付与される接頭辞をブランクにする設定
 ACCOUNT_EMAIL_SUBJECT_PREFIX =''
 
-#デフォルトのメール送信元を設定
-DEFAULT_FROM_EMAIL = os.environ.get("FROM_EMAIL")
-
-
-
-
-
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -196,19 +189,19 @@ REST_FRAMEWORK = {
     ],
 }
 
-
-# # Gmailを使用してメールを送信するための設定
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 465  # GmailのSMTPポート 587
-# EMAIL_USE_SSL = True  # GmailはSSLを使用するためTrueに設定
-# EMAIL_USE_TLS = False
-# EMAIL_HOST_USER = 'aries0326business@gmail.com'  # Gmailのメールアドレス
-# EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-
-
 # BACKUP batch
 BACKUP_PATH = 'backup/'
 NUM_SAVED_BACKUP = 30
 
-DEFAULT_FROM_EMAIL = os.environ.get('FROM_EMAIL')
+
+
+# # Gmailを使用してメールを送信するための設定
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587  # GmailのSMTPポート 587
+EMAIL_USE_SSL = False  
+EMAIL_USE_TLS = True # GmailはTLSを使用するためTrueに設定
+EMAIL_HOST_USER = 'aries0326business@gmail.com'  # Gmailのメールアドレス
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+
+DEFAULT_FROM_EMAIL = 'aries0326business@gmail.com'#os.environ.get('FROM_EMAIL')

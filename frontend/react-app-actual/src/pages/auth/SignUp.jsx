@@ -14,6 +14,7 @@ const SignUp = () => {
     });
     const [successMes,setSuccessMes]=useState('')
     const [errorMes,setErrorMes] =useState('')
+    const [loading,setLoading] =useState(false)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,7 +37,7 @@ const SignUp = () => {
                 ...userData,
                 username: userData.email // emailをusernameに自動割り当て
             };
-
+            setLoading(true)
             const response = await fetch(`${BACKEND_ENDPOINT}/accounts/signup/`, {
                 method: 'POST',
                 headers: {
@@ -61,6 +62,8 @@ const SignUp = () => {
         } catch (error) {
             console.error('Error:', error);
             // エラーハンドリング
+        } finally{
+            setLoading(false)
         }
     };
 
@@ -190,14 +193,17 @@ const SignUp = () => {
                             {/* <NavLink className="label-text-alt link link-hover" to="/password-reset/request">Forgot password?</NavLink> */}
                         </label>
                         
-
-                        <div className="form-control mt-6">
-                            <button type='submit'className="btn btn-primary">SignUp</button>
-                        </div>
+                        {loading ?(
+                            <span className="loading loading-spinner loading-md"></span>
+                        ):(
+                            <div className="form-control mt-6">
+                                <button type='submit'className="btn btn-primary">SignUp</button>
+                            </div>
+                        )}
                         {errorMes ==='' ?(
                             <></>
                         ):(
-                            <div role="alert" className="alert alert-error">
+                            <div role="alert" className="alert alert-error text-xs">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 <span>{errorMes}</span>
                             </div>
@@ -206,7 +212,7 @@ const SignUp = () => {
                         {successMes ==='' ?(
                             <></>
                         ):(
-                            <div role="alert" className="alert alert-success">
+                            <div role="alert" className="alert alert-success text-xs">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 <span>{successMes}</span>
                             </div>

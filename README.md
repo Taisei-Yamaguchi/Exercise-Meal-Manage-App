@@ -3,7 +3,7 @@ using Django &amp; React
 
 ・最初に、export でDB_USER,DB_PASSWORDを設定する。これによりDBにアクセスできるようにする。<br
 ・FOOD_API_CONSUMER_KEY, FOOD_API_CONSUMER_SECRETを同様に設定する。<br>
-・EMAIL_HOST_PASSWORDを設定
+・EMAIL_HOST_PASSWORD,FRONTEND_ENDPOINT,DJANGO_SECRET_KEY,ALLOWED_HOSTS,を設定
 ・package install<br>
 
 ・SECRET_KEYの作成<br>
@@ -63,7 +63,7 @@ using Django &amp; React
 
 ・SSL (front, back)<br>
 ・デプロイ用設定 (front, back)<br>
-・email送信<br>
+<del>・email送信<br> </del>
 
 ・ドキュメント<br>
 ・フロントエンドのテスト　<br>
