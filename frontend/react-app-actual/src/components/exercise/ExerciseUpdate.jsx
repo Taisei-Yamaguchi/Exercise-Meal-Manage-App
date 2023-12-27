@@ -118,15 +118,15 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData}) => {
                             >
                                 <option value="1">1 (Sitting)</option>
                                 <option value="1.5">1.5 (Standing)</option>
-                                <option value="2">2 (洗濯、料理、ストレッチ)</option>
+                                <option value="2">2 (light trainnig)</option>
                                 <option value="2.5">2.5 (Walk)</option>
-                                <option value="3">3 (掃除、荷造り)</option>
-                                <option value="3.5">3.5 (昇降運動)</option>
-                                <option value="4">4 (ドラム)</option>
-                                <option value="4.5">4.5 (早歩き、農耕)</option>
-                                <option value="5">5</option>
-                                <option value="5.5">5.5 (家具運搬)</option>
-                                <option value="6">6</option>
+                                <option value="3">3 (light trainning)</option>
+                                <option value="3.5">3.5 (middle trainning)</option>
+                                <option value="4">4 ()</option>
+                                <option value="4.5">4.5 ()</option>
+                                <option value="5">5 ()</option>
+                                <option value="5.5">5.5 ()</option>
+                                <option value="6">6 (hard trainning)</option>
                                 <option value="6.5">6.5</option>
                                 <option value="7">7 (Light Jog)</option>
                                 <option value="7.5">7.5 (Climb)</option>
@@ -136,7 +136,7 @@ const ExerciseUpdate = ({ exerciseId, workoutType, exerciseData}) => {
                                 <option value="9.5">9.5</option>
                                 <option value="10">10 (Bike,Swim)</option>
                                 <option value="10.5">10.5 </option>
-                                <option value="11">11 (Squat)</option>
+                                <option value="11">11 (Hard Squat)</option>
                                 <option value="11.5">11.5 ()</option>
                                 <option value="12">12 (High Speed Run)</option>
                             </select>

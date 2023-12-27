@@ -130,7 +130,7 @@ const Goal = () => {
                 <form onSubmit={handleSubmit} className='user-info-form'>
                     {/* Render form fields with their corresponding values */}
                         <label>
-                            <strong>Goal intake cals (cals/day)</strong>
+                            <strong className='text-sm'>Goal intake cals (cals/day)</strong>
                             <input
                                 type="number"
                                 name="goal_intake_cals"
@@ -143,7 +143,7 @@ const Goal = () => {
                         </label>
 
                         <label>
-                            <strong>Goal consuming cals (cals/day)</strong>
+                            <strong className='text-sm'>Goal consuming cals (cals/day)</strong>
                             <input
                                 type="number"
                                 name="goal_consuming_cals"
@@ -156,7 +156,7 @@ const Goal = () => {
                         </label>
 
                         <label>
-                            <strong>Goal weight (kg)</strong>
+                            <strong className='text-sm'>Goal weight (kg)</strong>
                             <input
                                 type="number"
                                 name="goal_weight"
@@ -169,7 +169,7 @@ const Goal = () => {
                         </label>
 
                         <label>
-                            <strong>Goal body fat (%)</strong>
+                            <strong className='text-sm'>Goal body fat (%)</strong>
                             <input
                                 type="number"
                                 name="goal_body_fat"
@@ -182,7 +182,7 @@ const Goal = () => {
                         </label>
 
                         <label>
-                            <strong>Goal muscle mass (kg)</strong>
+                            <strong className='text-sm'>Goal muscle mass (kg)</strong>
                             <input
                                 type="number"
                                 name="goal_muscle_mass"

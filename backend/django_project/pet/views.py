@@ -127,10 +127,8 @@ def determine_pet_status(user, pet_date,user_info):
             meal_count_last_30_days -= 1
 
     print('30日で摂取カロリーが消費カロリーよりも多い日',meal_count_last_30_days)
-    if meal_count_last_30_days >= 20: #摂取カロリーが多い日が続く場合
-        # ネスト分岐
-        # 筋トレ全体の総重量を計算
-        total_weight_data = Exercise.objects.filter(account=user.id, exercise_date__range=[thirty_days_ago, pet_date]).aggregate(
+    
+    total_weight_data = Exercise.objects.filter(account=user.id, exercise_date__range=[thirty_days_ago, pet_date]).aggregate(
             total_weight=Coalesce(
                 Cast(
                     Sum(
@@ -144,7 +142,9 @@ def determine_pet_status(user, pet_date,user_info):
                 Cast(0, FloatField())
             )
         )['total_weight']
-        
+    if meal_count_last_30_days >= 20: #摂取カロリーが多い日が続く場合
+        # ネスト分岐
+        # 筋トレ全体の総重量を計算
         if(user.sex == False): #性別が男の場合
             # 分岐4
             if total_weight_data > 100000:

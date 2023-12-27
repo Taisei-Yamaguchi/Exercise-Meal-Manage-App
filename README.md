@@ -1,9 +1,15 @@
 # Exercise-Meal-Manage-App
 using Django &amp; React
 
-・最初に、export でDB_USER,DB_PASSWORDを設定する。これによりDBにアクセスできるようにする。<br>
-・FOOD_API_CONSUMER_KEY, FOOD_API_CONSUMER_SECRETを同様に設定する。
-<br>
+・最初に、export でDB_USER,DB_PASSWORDを設定する。これによりDBにアクセスできるようにする。<br
+・FOOD_API_CONSUMER_KEY, FOOD_API_CONSUMER_SECRETを同様に設定する。<br>
+・EMAIL_HOST_PASSWORDを設定
+・package install<br>
+
+・SECRET_KEYの作成<br>
+・react settings.jsxの作成<br>
+・django settings_prod.pyのimport<br>
+
 
 1. やること <br>
 
@@ -50,14 +56,17 @@ using Django &amp; React
 ー＞trueなら、すでに利用されてる旨を返す。<del><br>
 
 <del>・バックエンドテストケースの作成 <br></del>
-・フロントエンドのテスト　<br>
-・setting (back,front)<br>
-・データベースバックアップバッチ<br>
-・デプロイ用設定 <br>
-・詳細設定 <br>
-・SSL<br>
-・ドキュメント
+<del>・データベースバックアップバッチ<br></del>
 
+
+<del>・詳細設定 <br></del>
+
+・SSL (front, back)<br>
+・デプロイ用設定 (front, back)<br>
+・email送信<br>
+
+・ドキュメント<br>
+・フロントエンドのテスト　<br>
 ・authページデザイン<br>
 ・garden app <br>
 

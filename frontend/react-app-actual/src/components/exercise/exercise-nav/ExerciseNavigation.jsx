@@ -89,7 +89,9 @@ const ExerciseNavigation = () => {
             {/* カレンダー */}
             <NavCalendar selectedDate={date}  btnColorClass={'btn-accent'}/>
             {/* メッセージ */}
-            <p className='text-xs'>*Metsはカロリー計算の指標です。mins,sets,repsおよびUser Infoの最新の体重データ、性別から計算しています。</p>
+            <p className='text-xs'>*Mets is a calorie calculation index. 
+            Calorie is calculated from the latest weight data from mins,sets,reps and User Info, and gender and mets.
+            </p>
 
             {/* Select 　Show*/}
             <div role="tablist" className="z-0 tabs tabs-lifted">
