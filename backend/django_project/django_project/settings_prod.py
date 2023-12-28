@@ -6,7 +6,7 @@ DEBUG = False
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 ALLOWED_HOSTS =[os.environ.get('ALLOWED_HOSTS')]
 
-STATIC_URL = "backend/static/"
+STATIC_URL = "static/"
 
 # Amazon SES 代わりにGmailを使う
 # AWS_SES_ACCESS_KEY_ID = os.environ.get("AWS_SES_ACCESS_KEY_ID")
