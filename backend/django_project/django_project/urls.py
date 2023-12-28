@@ -18,15 +18,14 @@ from django.contrib import admin
 from django.urls import path,include
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path('api/', include('manage_app.urls')),
-    path('accounts/', include('accounts.urls')),  
-    path('meal/',include('meal.urls')),
-    path('user_info/',include('user_info.urls')),
-    path('exercise/',include('exercise.urls')),
-    path('graph/',include('graph.urls')),
-    path('main/',include('main.urls')),
-    path('pet/',include('pet.urls')),
-    path('goal/',include('goal.urls')),
-    
+    path("backend/admin/", admin.site.urls),
+    path('backend/api/', include('manage_app.urls')),
+    path('backend/accounts/', include('accounts.urls')),  
+    path('backend/meal/',include('meal.urls')),
+    path('backend/user_info/',include('user_info.urls')),
+    path('backend/exercise/',include('exercise.urls')),
+    path('backend/graph/',include('graph.urls')),
+    path('backend/main/',include('main.urls')),
+    path('backend/pet/',include('pet.urls')),
+    path('backend/goal/',include('goal.urls')),
 ]
