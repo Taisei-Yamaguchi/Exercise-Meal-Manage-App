@@ -7,6 +7,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 ALLOWED_HOSTS =[os.environ.get('ALLOWED_HOSTS')]
 
 STATIC_URL = "static/"
+STATIC_ROOT="/usr/share/nginx/html/static"
 
 # Amazon SES 代わりにGmailを使う
 # AWS_SES_ACCESS_KEY_ID = os.environ.get("AWS_SES_ACCESS_KEY_ID")
