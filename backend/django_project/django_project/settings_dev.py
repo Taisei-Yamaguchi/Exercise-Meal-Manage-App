@@ -87,3 +87,5 @@ DATABASES = {
         "PORT":"",
     }
 }
+
+STATIC_URL = "static/"
