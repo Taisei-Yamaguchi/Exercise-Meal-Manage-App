@@ -1,9 +1,10 @@
 import React  from 'react';
 import { useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import NavCalendar from '../../sub/navCalendar';
+
 import CalsByDate from '../../sub/CalsByDate';
 import Navigation from '../../Navigation';
+import NavCalendar from '../../sub/navCalendar';
 
 
 const ExerciseNavigation = () => {
