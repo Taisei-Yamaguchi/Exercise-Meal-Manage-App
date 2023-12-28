@@ -73,7 +73,7 @@ LOGGING={
     #setting of handler
     'handlers': {
         'console': {
-            'level': "INFO",
+            'level': "DEBUG",
             'class': 'logging.StreamHandler',
             'formatter': 'dev'
         },
