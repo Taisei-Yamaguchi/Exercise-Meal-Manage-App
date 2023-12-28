@@ -201,7 +201,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587  # GmailのSMTPポート 587
 EMAIL_USE_SSL = False  
 EMAIL_USE_TLS = True # GmailはTLSを使用するためTrueに設定
-EMAIL_HOST_USER = 'aries0326business@gmail.com'  # Gmailのメールアドレス
+EMAIL_HOST_USER =  'emma.with.pet@gmail.com' # Gmailのメールアドレス
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
-DEFAULT_FROM_EMAIL = 'aries0326business@gmail.com'#os.environ.get('FROM_EMAIL')
+DEFAULT_FROM_EMAIL = 'emma.with.pet@gmail.com'
