@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 
 import CalsByDate from '../../sub/CalsByDate';
 import Navigation from '../../Navigation';
-import NavCalendar from '../../sub/navCalendar';
+import NavCalendar from '../../sub/NavCalendar';
 
 
 const ExerciseNavigation = () => {

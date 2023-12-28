@@ -6,7 +6,7 @@ import PFCByDate from './PFCByDate';
 import CalsByDate from '../../sub/CalsByDate';
 import FoodCreate from '../FoodCreate';
 import Navigation from '../../Navigation';
-import NavCalendar from '../../sub/navCalendar';
+import NavCalendar from '../../sub/NavCalendar';
 
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { useDispatch } from 'react-redux';
