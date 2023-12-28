@@ -1,11 +1,12 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import NavCalendar from '../../sub/navCalendar';
+
 import PFCByDate from './PFCByDate';
 import CalsByDate from '../../sub/CalsByDate';
 import FoodCreate from '../FoodCreate';
 import Navigation from '../../Navigation';
+import NavCalendar from '../../sub/navCalendar';
 
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { useDispatch } from 'react-redux';
