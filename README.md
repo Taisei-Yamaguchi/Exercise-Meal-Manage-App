@@ -1,8 +1,8 @@
 # Exercise-Meal-Manage-App
 using Django &amp; React
 
-・最初に、export でDB_USER,DB_PASSWORDを設定する。これによりDBにアクセスできるようにする。<br
-・FOOD_API_CONSUMER_KEY, FOOD_API_CONSUMER_SECRETを同様に設定する。<br>
+・最初に、export でDB_USER,DB_PASSWORD,<br
+・FOOD_API_CONSUMER_KEY, FOOD_API_CONSUMER_SECRET,<br>
 ・EMAIL_HOST_PASSWORD,FRONTEND_ENDPOINT,DJANGO_SECRET_KEY,ALLOWED_HOSTS,を設定
 ・package install<br>
 

@@ -12,7 +12,7 @@ ALLOWED_HOSTS =[os.environ.get('ALLOWED_HOSTS')]
 # AWS_SES_SECRET_ACCESS_KEY = os.environ.get("AWS_SES_SECRET_ACCESS_KEY")
 # EMAIL_BACKEND ='django_ses.SESBackend'
 
-# # logging
+# # # logging
 # LOGGING ={
 #     'version':1,
 #     'disable_existing_loggers': False,
@@ -50,6 +50,45 @@ ALLOWED_HOSTS =[os.environ.get('ALLOWED_HOSTS')]
 #     }
 # }
 
+LOGGING={
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    #setting of LOGGER
+    'loggers': {
+        #logger for django
+        'django': {
+            'handlers':['console'],
+            'level':'INFO',
+        },
+        #logger for diary app 
+        # 'dairy': {
+        #     'handlers':['console'],
+        #     'level':'DEBUG',
+        # },
+    },
+
+    #setting of handler
+    'handlers': {
+        'console': {
+            'level': "DEBUG",
+            'class': 'logging.StreamHandler',
+            'formatter': 'dev'
+        },
+    },
+
+    #setting of formatters
+    'formatters': {
+        'dev': {
+            'format': '\t'.join([
+                '%(asctime)s',
+                '[%(levelname)s]',
+                '%(pathname)s(LINE:%(lineno)d)',
+                '%(message)s'
+            ])
+        },
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
