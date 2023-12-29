@@ -56,8 +56,12 @@ class SignupAPIView(APIView):
             })
             
             # 実際にはここでメール送信
-            send_mail('EMMA Activate Account', message, settings.DEFAULT_FROM_EMAIL, [user.email])
-            return Response({'detail': 'Success! Check your email for confirmation.'}, status=status.HTTP_201_CREATED)
+            send_result = send_mail('EMMA Activate Account', message, settings.DEFAULT_FROM_EMAIL, [user.email])
+
+            if send_result == 1:
+                return Response({'detail': 'Success! Check your email for confirmation.'}, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'detail': 'Failed to send confirmation email.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
