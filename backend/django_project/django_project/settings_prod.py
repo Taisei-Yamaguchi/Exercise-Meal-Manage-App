@@ -112,7 +112,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 # ENDPOINT
-FRONTEND_ENDPOINT = 'https://emma.emmapet.net/' #os.environ.get('FRONTEND_ENDPOINT')
+FRONTEND_ENDPOINT = 'https://emma.emmapet.net' #os.environ.get('FRONTEND_ENDPOINT')
 
 CSRF_COOKIE_SAMESITE = None
 CORS_ALLOW_CREDENTIALS = True
