@@ -14,83 +14,85 @@ STATIC_ROOT="/usr/share/nginx/html/static"
 # AWS_SES_SECRET_ACCESS_KEY = os.environ.get("AWS_SES_SECRET_ACCESS_KEY")
 # EMAIL_BACKEND ='django_ses.SESBackend'
 
-# # # logging
-# LOGGING ={
-#     'version':1,
-#     'disable_existing_loggers': False,
-    
-#     # Logger Setting
-#     'loggers': {
-#         'django':{
-#             'handlers':['file'],
-#             'level':'INFO',
-#         },
-#     },
-    
-#     # handler
-#     'handlers':{
-#         'file':{
-#             'level':'INFO',
-#             'class': 'logging.handlers.TimedRotatingFileHandler',
-#             'filename':os.path.join(BASE_DIR,'logs/django.log'),
-#             'formatter':'prod',
-#             'when':'D',
-#             'interval':1,
-#             'backupCount':7,
-#         },
-#     },
-    
-#     'formatters':{
-#         'prod':{
-#             'format':'\t'.join([
-#                 '%(asctime)s',
-#                 '[%(levelname)s]',
-#                 '%(pathname)s(Line:%(lineno)d)',
-#                 '%(message)s'
-#             ])
-#         }
-#     }
-# }
-
-LOGGING={
-    'version': 1,
+# 本番logging
+LOGGING ={
+    'version':1,
     'disable_existing_loggers': False,
-
-    #setting of LOGGER
+    
+    # Logger Setting
     'loggers': {
-        #logger for django
-        'django': {
-            'handlers':['console'],
+        'django':{
+            'handlers':['file'],
             'level':'INFO',
         },
-        #logger for diary app 
-        # 'dairy': {
-        #     'handlers':['console'],
-        #     'level':'DEBUG',
-        # },
     },
-
-    #setting of handler
-    'handlers': {
-        'console': {
-            'level': "INFO",
-            'class': 'logging.StreamHandler',
-            'formatter': 'dev'
+    
+    # handler
+    'handlers':{
+        'file':{
+            'level':'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename':os.path.join(BASE_DIR,'logs/django.log'),
+            'formatter':'prod',
+            'when':'D',
+            'interval':1,
+            'backupCount':7,
         },
     },
-
-    #setting of formatters
-    'formatters': {
-        'dev': {
-            'format': '\t'.join([
+    
+    'formatters':{
+        'prod':{
+            'format':'\t'.join([
                 '%(asctime)s',
                 '[%(levelname)s]',
-                '%(pathname)s(LINE:%(lineno)d)',
+                '%(pathname)s(Line:%(lineno)d)',
                 '%(message)s'
             ])
-        },
+        }
     }
 }
+
+
+# 開発log
+# LOGGING={
+#     'version': 1,
+#     'disable_existing_loggers': False,
+
+#     #setting of LOGGER
+#     'loggers': {
+#         #logger for django
+#         'django': {
+#             'handlers':['console'],
+#             'level':'INFO',
+#         },
+#         #logger for diary app 
+#         # 'dairy': {
+#         #     'handlers':['console'],
+#         #     'level':'DEBUG',
+#         # },
+#     },
+
+#     #setting of handler
+#     'handlers': {
+#         'console': {
+#             'level': "INFO",
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'dev'
+#         },
+#     },
+
+#     #setting of formatters
+#     'formatters': {
+#         'dev': {
+#             'format': '\t'.join([
+#                 '%(asctime)s',
+#                 '[%(levelname)s]',
+#                 '%(pathname)s(LINE:%(lineno)d)',
+#                 '%(message)s'
+#             ])
+#         },
+#     }
+# }
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

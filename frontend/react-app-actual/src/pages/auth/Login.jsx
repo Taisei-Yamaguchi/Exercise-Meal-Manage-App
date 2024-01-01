@@ -33,7 +33,7 @@ const Login = () => {
                 const userData = await response.json();
                 // setAuthToken(userData.token);
                 localStorage.setItem('authToken', userData.token);
-                console.log(localStorage.getItem('authToken'));
+                // console.log(localStorage.getItem('authToken'));
                 navigate('/dashboard');
             } else {
                 // ログイン失敗時の処理

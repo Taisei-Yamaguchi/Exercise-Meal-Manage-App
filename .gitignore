@@ -3,4 +3,6 @@ backend/django_project/backup
 backend/django_project/key.pem
 backend/django_project/csr.pem
 backend/django_project/cert.pem
+backend/django_project/logs
+
 

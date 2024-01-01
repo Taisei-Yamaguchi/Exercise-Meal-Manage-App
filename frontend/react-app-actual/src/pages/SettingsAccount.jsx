@@ -45,7 +45,7 @@ const SettingsAccount = () => {
             const data = await response.json();
 
             if(response.ok){
-                console.log(data);
+                // console.log(data);
                 setName(data.name);
                 setPicture(data.picture);
                 setSex(data.sex);
@@ -77,7 +77,7 @@ const SettingsAccount = () => {
 
             const data = await response.json();
             if(response.ok){
-                console.log('User Account saved successfully:', data);
+                console.log('User Account saved successfully');
                 fetchAccount()
 
                 dispatch(setToastMes('Update Success!'))
