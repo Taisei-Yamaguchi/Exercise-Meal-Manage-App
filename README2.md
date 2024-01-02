@@ -61,14 +61,13 @@ using Django &amp; React
 
 <del>・詳細設定 <br></del>
 
-・SSL (front, back)<br>
-・デプロイ用設定 (front, back)<br>
+<del>・SSL (front, back)<br></del>
+<del>・デプロイ用設定 (front, back)<br></del>
 <del>・email送信<br> </del>
 
 ・ドキュメント<br>
-・フロントエンドのテスト　<br>
 ・authページデザイン<br>
 ・garden app <br>
 
-・デプロイ<br>
+<del>・デプロイ<br></del>
 
