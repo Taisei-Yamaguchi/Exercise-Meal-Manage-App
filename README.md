@@ -49,7 +49,7 @@ HealthTrackerは、運動、食事、日々の生活に関連するカロリー�
 ### 必要操作：
 1. cd frontend/react-app-actual
 - npm i
-- 他 install
+- 他 install (package.json参照)
 - npm run build
 - 起動
 
@@ -58,7 +58,7 @@ HealthTrackerは、運動、食事、日々の生活に関連するカロリー�
 3. venv作成。activate
 4. cd backend/django_project
 - django install
-- 他 install
+- 他 install (settings_common.py参照)
 - migrate
 - 起動
 
@@ -228,7 +228,7 @@ workoutモデルを使って、exerciseを登録。default_workoutもworkoutモ�
 
 ### 1. Create or Update UserInfo
 - **ENDPOINT:** `/user_info/create-update/`
-- **役割:** User Infoを作成する。もし、同日(dateフィールド)すでに登録してる場合、新規作成ではなくupdateする。 
+- **役割:** User Infoを作成する。もし、同日(dateフィールド)すでに登録してる場合、新規作成ではなくupdateする。weight,height,metabolismは必須だが、metabolismが渡されなかった場合、height,weight,account.sex,accountbirthdayから計算して代入。
 
 ### 2. Get Latest UserInfo
 - **ENDPOINT:** `/user_info/get-latest/`
@@ -315,8 +315,79 @@ workoutモデルを使って、exerciseを登録。default_workoutもworkoutモ�
 - **View:** `CalGraphAPIView`
 - **役割:** 日別カロリーデータ(intake_cals,food_cals,exercise_cals,bm_cals)を返すためのエンドポイント。
 
+<hr></hr><hr></hr>
 
 ## Frontend:
+### 1. Account
+- component/account/Logout
+- pages/auth/Login
+- pages/auth/SignUp
+- pages/auth/SignUpConfirmation
+- pages/auth/PasswordReset
+- pages/auth/PasswordResetRequest
+- pages/SettingsAccount
+- *Loginで取得したtokenはlocalstorageに保存。Logoutで削除。
+
+### 2. Calendar
+- components/MainCalendar: main/registration-status-check/で取得したデータをカレンダーに反映。meal,exerciseそれぞれについて、入力がある日は ☑️。
+
+### 3. Dashboard
+- pages/Dashboard
+- components/dashbord/pet/Pet: pet/getで取得した pet データに応じた画像をレンダリング。
+
+### 4. Meal
+- pages/meal/MealsByDate: クエリで指定したdateで取得。
+- components/meal/meal-nav/MealNavigation
+- components/meal/meal-nav/PFCByDate:PFCの量と、バランス比を示す横バーグラフ。
+- components/meal/FoodCreate
+- components/meal/FoodSearch: search expressionをバックエンドに渡すと検索結果が取得できる。そのfoodを利用してmeal登録できる。
+- components/meal/LatestMealsByType
+- components/meal/MealCreateForm
+- components/meal/MealCreateWithHistory: 検索履歴からmeal作成
+- components/meal/MealDelete
+- components/meal/MealUpdate
+
+### 5. Exercise
+- pages/exercise/ExerciseByDate: クエリでしていした日付のexerciseを取得。
+- pages/exercise/ExerciseTotalWeightGraph: exerciseの総重量を部位別に棒グラフで表示。全部位の総量も表示。
+- pages/exercise/DailyExerciseWeightGraph: クエリで指定したtypeの日別重量を棒グラフで表示。
+- components/exercise/exercise-nav/ExerciseNavigation
+- components/exercise/ExerciseCreate
+- components/exercise/ExerciseDelete
+- components/exercise/ExerciseLivingCreate: workout_type=Livingのものを使ってexerciseを作成。mets,durationminutesのみを渡す。
+- components/exercise/ExerciseLivingUpdate: workout_type=Livingのexerciseを更新。durationminutesのみを渡す。
+- components/exercise/ExerciseUpdate
+- components/exercise/LatestExerciseByType: type別に最新のexerciseを取得。ワンクリックで再利用。
+- components/exercise/WorkoutCreate
+
+### 6. Goal
+- components/goal/GoalNavigation
+- pages/goal/Goal: userのgoalを取得しformにレンダリング。更新できる。
+
+### 7. User Info
+- components/user_info/user_info-nav/UserInfoNavigation
+- pages/user_info/UserInfo:最新のuser_infoを取得しformにレンダリング。作成、更新できる。
+- pages/user_info/BodyFatPercentageGraph: body_fat_percentageの変化を表す折れ線グラフ。goal_body_fatもグラフに描画。
+- pages/user_info/MuscleMassGraph: muscle_massの変化を表す折れ線グラフ。goal_muscle_massもグラフに描画。
+- pages/user_info/WeightGraph: weightの変化を表す折れ線グラフ。goal_weightもグラフに描画。
+- pages/user_info/CalsGraph: カロリーバランスの変遷を表すグラフ。intake_calsは折れ線。exercise_cals,food_cals,bm_calsからなるconsuming_calsはstackされた棒グラフ。
+
+### 8. Sub
+- components/sub/NavCalendar: meal,exerciseのnavで利用。useParamsでcolorを渡して色を変える。
+- components/sub/CalsByDate: meal,exercise のnavで使う。指定した日付のintake_cals,exercise_cals,bm_cals,food_calsおよび、goal_intake,goal_consumingをグラフに描画。
+
+### 9. Helper
+- helpers/getCookie
+- helpers/getToday
+- helpers/useAuthCheck: 認証が必要なページファイルの冒頭で実行。localstorageのauthTokenの有無を確認。
+
+### 10. Redux
+- redux/store/ToastSlice
+- redux/store/LoadingSlice 
+
+
+
+
 ## Reference:
 ### 1. Fat Secret API
 
@@ -327,24 +398,37 @@ workoutモデルを使って、exerciseを登録。default_workoutもworkoutモ�
 
 - **概要:** ペットイラストのデザインに使用。
 
-### 3. Xserver
+### 3. Icooon-mono
+
+- **概要:** フリーアイコンの利用に使用。
+- **リンク:** [Icooon-mono](https://icooon-mono.com/)
+
+### 4. tailwind
+
+- **概要:** tailwindに使用。
+- **リンク:** [tailwindcss](https://tailwindcss.com/)
+
+### 5. tailwind
+
+- **概要:** tailwindに使用。
+- **リンク:** [daisyUI](https://daisyui.com/)
+
+### 6. Xserver
 
 - **概要:** ドメイン取得に使用。
 - **リンク:** [Xserver](https://www.xserver.ne.jp/)
 
-### 4. AWS EC2
+### 7. AWS EC2
 
 - **概要:** アプリケーションのデプロイに使用。
 - **リンク:** [Amazon EC2](https://aws.amazon.com/ec2/)
 
-### 5. Let's Encrypt
+### 8. Let's Encrypt
 
 - **概要:** SSL証明書の取得に使用。
 
-### 6. Icooon-mono
 
-- **概要:** フリーアイコンの利用に使用。
-- **リンク:** [Icooon-mono](https://icooon-mono.com/)
+
 
 
 
