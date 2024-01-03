@@ -22,7 +22,7 @@ function MealUpdate({ meal }) {
             return
         }
         try {
-            dispatch(setUpdateContentLoading(true))
+            // dispatch(setUpdateContentLoading(true))
             dispatch(setUpdateContentId(meal.id))
             dispatch(setMealLoading(true))
 
@@ -49,7 +49,7 @@ function MealUpdate({ meal }) {
         } catch (error) {
             console.error('Error updating meal:', error.message);
         } finally{
-            dispatch(setUpdateContentLoading(false))
+            // dispatch(setUpdateContentLoading(false))
             dispatch(setUpdateContentId(meal.id))
             dispatch(setMealLoading(false))
         }

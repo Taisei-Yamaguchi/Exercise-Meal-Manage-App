@@ -91,7 +91,8 @@ const CalsByDate = ({ selectedDate}) => {
     const handleWindowResize = () => {
         // Windowのサイズに基づいてaspectRatioを計算する        
         const width = window.innerWidth;
-        if(width<=400){
+        
+        if(width<=440){
             setAspectRatio(2)
         }
         else if (width <= 510) {
@@ -111,7 +112,7 @@ const CalsByDate = ({ selectedDate}) => {
         labels: [' '],
         datasets: [
             {
-                label: 'goal intake cal',
+                label: 'Goal Intake',
                 type: 'line',
                 borderColor: 'blue',
                 pointBackgroundColor: 'blue', // ドットの内側の色を設定
@@ -122,7 +123,7 @@ const CalsByDate = ({ selectedDate}) => {
                 fill: false,
             },
             {
-                label: 'goal consuming cal',
+                label: 'Goal Consum',
                 type: 'line',
                 borderColor: 'red',
                 pointBackgroundColor: 'red', // ドットの内側の色を設定
@@ -133,7 +134,7 @@ const CalsByDate = ({ selectedDate}) => {
                 fill: false,
             },
             {
-                label: 'Intake Cals',
+                label: 'Intake',
                 data: [calsData.intake_cals],
                 backgroundColor: '#a2ecc5',
                 barThickness: 40,
@@ -148,14 +149,14 @@ const CalsByDate = ({ selectedDate}) => {
                 barThickness: 40
             },
             {
-                label: 'dietary heat production',
+                label: 'Dietary Heat',
                 data: [calsData.food_cals],
                 backgroundColor: '#FF9966',
                 stack: 'stack2',
                 barThickness: 40
             },
             {
-                label: 'activity level',
+                label: 'Activity',
                 data: [calsData.exercise_cals],
                 backgroundColor: '#FF6633',
                 stack: 'stack2',
